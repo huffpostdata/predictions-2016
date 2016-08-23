@@ -50,7 +50,7 @@ individually; we publish the biases in a CSV with the following columns:
 | --- | --- | --- |
 | `state_code` | `AL`, `NY` | Two-letter, capitalized state code |
 | `pollster` | `ARG` | Pollster name |
-| `sample_subpopulation | `Adults`, `Registered Voters` or `Likely Voters` | Subpopulation |
+| `sample_subpopulation` | `Adults`, `Registered Voters` or `Likely Voters` | Subpopulation |
 | `estimate` | `0.001`, `-0.03` | Amount that we'd need to skew the outcome of this pollster's polls in _favor_ of the _Democratic_ candidate to meet the average among all pollsters (`0.01` means "one percentage point") (FIXME is this right?) |
 | `estimate_low` | `-0.002`, `-0.0303` | The `estimate` we would need so our results favor the _Dem_ candidate 97.5% of the time (FIXME Democratic? FIXME 97.5%?) |
 | `estimate_high` | `0.004`, `-0.0297` | The `estimate` we would need so our results favor the _GOP_ candidate 97.5% of the time (FIXME Democratic? FIXME 97.5%?) |
