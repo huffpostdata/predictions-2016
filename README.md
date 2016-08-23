@@ -91,6 +91,7 @@ Republicans.
 | --- | --- | --- |
 | `state` | `AL`, `NY` | Two-letter, capitalized state code |
 | `pollster_slug` | `2016-indiana-senate-young-vs-bayh` | Pollster chart for this race |
+| `cook_rating_2016-07-01` | `D-Solid`, `D-Likely`, `R-Lean`, `Toss Up` | Cook Political Report [ratings](http://cookpolitical.com/senate/charts/race-ratings/9732) from July 1, 2016 |
 | `dem_name` | `Michael Bennet` | Full name of Democratic nominee |
 | `dem_label` | `Bennet` | Brief name we assign the Democratic nominee on Pollster charts |
 | `gop_name` | `Darryl Glenn` | Full name of Republican nominee |
