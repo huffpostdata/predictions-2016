@@ -30,13 +30,13 @@ distribution.
 | --- | --- | --- |
 | `state_code` | `AL`, `NY` | Two-letter, capitalized state code |
 | `date` | `2016-10-10` | Date of the prediction (past, today, or future) in YYYY-MM-DD format |
-| `dem_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?\bar{x_i}) -- the mean (FIXME median?) for the Dem candidate |
-| `dem_low` | `0.1`, `0.7` | the value the Dem candidate exceeds 97.5% of the time (FIXME exactly 97.5?) |
-| `dem_high` | `0.3`, `0.9` |the value the Dem candidate misses 97.5% of the time (FIXME exactly 97.5?) |
-| `gop_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?\bar{x_i}) -- the mean (FIXME median?) for the GOP candidate |
-| `gop_low` | `0.1`, `0.7` | the value the GOP candidate exceeds 97.5% of the time (FIXME exactly 97.5?) |
-| `gop_high` | `0.3`, `0.9` | the value the GOP candidate misses 97.5% of the time (FIXME exactly 97.5?) |
-| `dem_win_prob` | `0.4` | the fraction of the time the Dem candidate beats the GOP candidate (there are no ties) |
+| `dem_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?%5Cbar%7B%5Cxi%7D) -- Out of lots of simulated elections, the mean fraction of votes for the Dem candidate |
+| `dem_low` | `0.1`, `0.7` | the fraction of votes the Dem candidate exceeds 97.5% of the time |
+| `dem_high` | `0.3`, `0.9` |the fraction of votes the Dem candidate misses 97.5% of the time |
+| `gop_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?%5Cbar%7B%5Cxi%7D) -- Out of lots of simulated elections, the mean fraction of votes for the GOP candidate |
+| `gop_low` | `0.1`, `0.7` | the fraction of votes the GOP candidate exceeds 97.5% of the time |
+| `gop_high` | `0.3`, `0.9` | the fraction of votes the GOP candidate misses 97.5% of the time |
+| `dem_win_prob` | `0.4` | Out of lots of simulated elections, the fraction times the Dem candidate beats the GOP candidate (we don't model ties) |
 
 All values are rounded to four decimal points and truncated so they are between
 `0.0000` and `1.0000` (inclusive).
@@ -51,9 +51,9 @@ individually; we publish the biases in a CSV with the following columns:
 | `state_code` | `AL`, `NY` | Two-letter, capitalized state code |
 | `pollster` | `ARG` | Pollster name |
 | `sample_subpopulation` | `Adults`, `Registered Voters` or `Likely Voters` | Subpopulation |
-| `estimate` | `0.001`, `-0.03` | Amount that we'd need to skew the outcome of this pollster's polls in _favor_ of the _Democratic_ candidate to meet the average among all pollsters (`0.01` means "one percentage point") (FIXME is this right?) |
-| `estimate_low` | `-0.002`, `-0.0303` | The `estimate` we would need so our results favor the _Dem_ candidate 97.5% of the time (FIXME Democratic? FIXME 97.5%?) |
-| `estimate_high` | `0.004`, `-0.0297` | The `estimate` we would need so our results favor the _GOP_ candidate 97.5% of the time (FIXME Democratic? FIXME 97.5%?) |
+| `estimate` | `0.001`, `-0.03` | Amount that we'd need to skew the outcome of this pollster's polls in _favor_ of the _Republican_ candidate to meet the average among all pollsters (`0.01` means "one percentage point") |
+| `estimate_low` | `-0.002`, `-0.0303` | The `estimate` that would favor the _Dem_ candidate 97.5% of the time |
+| `estimate_high` | `0.004`, `-0.0297` | The `estimate` that would favor the _GOP_ candidate 97.5% of the time |
 
 ## senate/seat-counts.tsv
 
@@ -91,7 +91,7 @@ Republicans.
 | --- | --- | --- |
 | `state` | `AL`, `NY` | Two-letter, capitalized state code |
 | `pollster_slug` | `2016-indiana-senate-young-vs-bayh` | Pollster chart for this race |
-| `cook_rating_2016-07-01` | `D-Solid`, `D-Likely`, `R-Lean`, `Toss Up` | Cook Political Report [ratings](http://cookpolitical.com/senate/charts/race-ratings/9732) from July 1, 2016 |
+| `cook_rating` | `D-Solid`, `D-Likely`, `R-Lean`, `Toss Up` | Latest Cook Political Report [ratings](http://cookpolitical.com/senate/charts/race-ratings) |
 | `dem_name` | `Michael Bennet` | Full name of Democratic nominee |
 | `dem_label` | `Bennet` | Brief name we assign the Democratic nominee on Pollster charts |
 | `gop_name` | `Darryl Glenn` | Full name of Republican nominee |
