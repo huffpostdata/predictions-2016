@@ -1,0 +1,15 @@
+index:
+  path: _root
+  redirect: senate
+
+senate:
+  path: senate
+  model: senate
+
+senate-rail:
+  path: senate/right-rail
+  model: senate
+
+senate-embed:
+  path: senate/embed
+  model: senate

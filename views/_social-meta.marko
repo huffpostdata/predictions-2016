@@ -1,0 +1,28 @@
+var model=data.model
+var meta=model.metadata
+
+<!-- Google+, SEO -->
+meta name="description" content="${meta.description}"
+
+<!-- Facebook -->
+meta property="og:type" content="article"
+meta property="og:site_name" content="The Huffington Post"
+meta property="og:url" content="${data.url_to(meta.url_route)}"
+meta property="og:description" content="${meta.facebook_description}"
+meta property="og:title" content="${meta.facebook_title}"
+meta property="og:image" content="${data.url_to_asset('digest', 'images/' + meta.facebook_image)}"
+meta property="article:author" content="${meta.author}"
+meta property="article:publisher" content="HuffingtonPost"
+meta property="fb:app_id" content="46744042133"
+
+<!-- Twitter -->
+meta name="twitter:card" content="summary_large_image"
+meta name="twitter:site" content="@HuffPostData"
+meta name="twitter:creator" content="${meta.twitter_author}"
+if(meta.twitter_title !== meta.facebook_title)
+  meta name="twitter:title" content="${meta.twitter_title}"
+if(meta.twitter_description !== meta.facebook_description)
+  meta name="twitter:description" content="${meta.twitter_description}"
+if(meta.twitter_image !== meta.facebook_image)
+  meta name="twitter:image" content="${data.url_to_asset('digest', 'images/' + meta.twitter_image)}"
+meta property="suggested-tweet" content="${meta.suggested_tweet}"

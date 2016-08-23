@@ -1,0 +1,35 @@
+body {
+  background-color: $background;
+  color: $color;
+  font-family: $body-font-family;
+  font-size: 1;
+  line-height: 1.85;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
+h2 {
+  font-family: $header-font-family;
+  font-size: 1.8rem;
+  line-height: (2.6/1.8); 
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+}
+
+h4 {
+  font-size: 1.1rem;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}

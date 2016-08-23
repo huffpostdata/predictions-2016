@@ -1,0 +1,13 @@
+scss:
+  index.css: stylesheets/index.scss
+
+plain:
+  javascripts/pym.min.js: assets/javascripts/pym.min.js
+
+digest:
+  -
+    pattern: javascripts/*.js
+    max_age: 8640000000
+  -
+    pattern: images/**/*.{png,jpg,gif,svg,ico}
+    max_age: 8640000000

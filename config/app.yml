@@ -1,0 +1,31 @@
+# The base_path is the root of all pages.
+# For instance, "/foo" will make all URLs start with "/foo".
+#
+# This base_path will be the same on dev and production.
+base_path: '/2016/forecast'
+
+# The base_url describes where this site will be when it's live.
+# Start it off with "http://" unless you're certain Twitter, Facebook and
+# Google+ are all okay with schema-relative URLs.
+base_url: 'http://elections.huffingtonpost.com'
+
+# The helpers are the functions you can call from within templates. You
+# define them as part of your app.
+#
+# If you don't call functions from within your templates, don't bother
+# with helpers.
+#
+# If you do, the file should look like this:
+#
+#     'use strict'
+#
+#     module.exports = class Helpers {
+#       constructor(context) {
+#         this.context = context
+#       }
+#
+#       database_json() {
+#         return JSON.dump(this.context.database)
+#       }
+#     }
+helpers: 'app/Helpers'

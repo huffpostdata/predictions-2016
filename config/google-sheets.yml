@@ -1,0 +1,20 @@
+# Where we'll write the CSV files from Google Sheets.
+#
+# You'll add these CSVs to the Git repository, and we'll generate pages from
+# the CSV data. When journalists edit and publish the Google Sheet, that
+# won't affect the repository until a developer refreshes it.
+#
+# If the code path is "app/sheets" and the slug is "index", the syntax tree will
+# go in "app/sheets/index.csv".
+code_path: data/sheets/input
+
+sheets:
+  # Put Google Sheets documents here. They must be published to the public and
+  # their URLs must end with "?format=csv".
+  -
+    slug: senate-before-election
+    url: 'https://docs.google.com/spreadsheets/d/13hOtwzNtgnVlATczxMgbV2a-W06hMBP8jlhK5cmCihg/pub?output=tsv'
+
+  -
+    slug: senate-races
+    url: 'https://docs.google.com/spreadsheets/d/1JPWFj9tbSat_wGd5yJ-3-X5w03R1zwtxStO2jITGLEo/pub?output=tsv'

@@ -1,0 +1,101 @@
+state	class	bio_id	name	label	party
+AK	3	M001153	Lisa Murkowski	Murkowski	GOP
+AK	2	S001198	Daniel Sullivan	Sullivan	GOP
+AL	3	S000320	Richard C. Shelby	Shelby	GOP
+AL	2	S001141	Jeff Sessions	Sessions	GOP
+AR	3	B001236	John Boozman	Boozman	GOP
+AR	2	C001095	Tom Cotton	Cotton	GOP
+AZ	3	M000303	John McCain	McCain	GOP
+AZ	1	F000444	Jeff Flake	Flake	GOP
+CA	3	B000711	Barbara Boxer	Boxer	Dem
+CA	1	F000062	Dianne Feinstein	Feinstein	Dem
+CO	3	B001267	Michael F. Bennet	Bennet	Dem
+CO	2	G000562	Cory Gardner	Gardner	GOP
+CT	3	B001277	Richard Blumenthal	Blumenthal	Dem
+CT	1	M001169	Christopher Murphy	Murphy	Dem
+DE	2	C001088	Christopher A. Coons	Coons	Dem
+DE	1	C000174	Thomas R. Carper	Carper	Dem
+FL	3	R000595	Marco Rubio	Rubio	GOP
+FL	1	N000032	Bill Nelson	Nelson	Dem
+GA	3	I000055	Johnny Isakson	Isakson	GOP
+GA	2	P000612	David Perdue	Perdue	GOP
+HI	3	S001194	Brian Schatz	Schatz	Dem
+HI	1	H001042	Mazie K. Hirono	Hirono	Dem
+IA	3	G000386	Chuck Grassley	Grassley	GOP
+IA	2	E000295	Joni Ernst	Ernst	GOP
+ID	3	C000880	Mike Crapo	Crapo	GOP
+ID	2	R000584	James E. Risch	Risch	GOP
+IL	3	K000360	Mark Kirk	Kirk	GOP
+IL	2	D000563	Richard J. Durbin	Durbin	Dem
+IN	3	C000542	Daniel Coats	Coats	GOP
+IN	1	D000607	Joe Donnelly	Donnelly	Dem
+KS	3	M000934	Jerry Moran	Moran	GOP
+KS	2	R000307	Pat Roberts	Roberts	GOP
+KY	3	P000603	Rand Paul	Paul	GOP
+KY	2	M000355	Mitch McConnell	McConnell	GOP
+LA	3	V000127	David Vitter	Vitter	GOP
+LA	2	C001075	Bill Cassidy	Cassidy	GOP
+MA	2	M000133	Edward J. Markey	Markey	Dem
+MA	1	W000817	Elizabeth Warren	Warren	Dem
+MD	3	M000702	Barbara A. Mikulski	Mikulski	Dem
+MD	1	C000141	Benjamin L. Cardin	Cardin	Dem
+ME	2	C001035	Susan M. Collins	Collins	GOP
+ME	1	K000383	Angus S., Jr. King	King	Ind
+MI	2	P000595	Gary C. Peters	Peters	Dem
+MI	1	S000770	Debbie Stabenow	Stabenow	Dem
+MN	2	F000457	Al Franken	Franken	Dem
+MN	1	K000367	Amy Klobuchar	Klobuchar	Dem
+MO	3	B000575	Roy Blunt	Blunt	GOP
+MO	1	M001170	Claire McCaskill	McCaskill	Dem
+MS	2	C000567	Thad Cochran	Cochran	GOP
+MS	1	W000437	Roger F. Wicker	Wicker	GOP
+MT	2	D000618	Steve Daines	Daines	GOP
+MT	1	T000464	Jon Tester	Tester	Dem
+NC	3	B001135	Richard Burr	Burr	GOP
+NC	2	T000476	Thom Tillis	Tillis	GOP
+ND	3	H001061	John Hoeven	Hoeven	GOP
+ND	1	H001069	Heidi Heitkamp	Heitkamp	Dem
+NE	2	S001197	Ben Sasse	Sasse	GOP
+NE	1	F000463	Deb Fischer	Fischer	GOP
+NH	3	A000368	Kelly Ayotte	Ayotte	GOP
+NH	2	S001181	Jeanne Shaheen	Shaheen	Dem
+NJ	2	B001288	Cory A. Booker	Booker	Dem
+NJ	1	M000639	Robert Menendez	Menendez	Dem
+NM	2	U000039	Tom Udall	Udall	Dem
+NM	1	H001046	Martin Heinrich	Heinrich	Dem
+NV	3	R000146	Harry Reid	Reid	Dem
+NV	1	H001041	Dean Heller	Heller	GOP
+NY	3	S000148	Charles E. Schumer	Schumer	Dem
+NY	1	G000555	Kirsten E. Gillibrand	Gillibrand	Dem
+OH	3	P000449	Rob Portman	Portman	GOP
+OH	1	B000944	Sherrod Brown	Brown	Dem
+OK	3	L000575	James Lankford	Lankford	GOP
+OK	2	I000024	James M. Inhofe	Inhofe	GOP
+OR	3	W000779	Ron Wyden	Wyden	Dem
+OR	2	M001176	Jeff Merkley	Merkley	Dem
+PA	3	T000461	Patrick J. Toomey	Toomey	GOP
+PA	1	C001070	Robert P., Jr. Casey	Casey	Dem
+RI	2	R000122	Jack Reed	Reed	Dem
+RI	1	W000802	Sheldon Whitehouse	Whitehouse	Dem
+SC	3	S001184	Tim Scott	Scott	GOP
+SC	2	G000359	Lindsey Graham	Graham	GOP
+SD	3	T000250	John Thune	Thune	GOP
+SD	2	R000605	Mike Rounds	Rounds	GOP
+TN	2	A000360	Lamar Alexander	Alexander	GOP
+TN	1	C001071	Bob Corker	Corker	GOP
+TX	2	C001056	John Cornyn	Cornyn	GOP
+TX	1	C001098	Ted Cruz	Cruz	GOP
+UT	3	L000577	Mike Lee	Lee	GOP
+UT	1	H000338	Orrin G. Hatch	Hatch	GOP
+VA	2	W000805	Mark R. Warner	Warner	Dem
+VA	1	K000384	Tim Kaine	Kaine	Dem
+VT	3	L000174	Patrick J. Leahy	Leahy	Dem
+VT	1	S000033	Bernard Sanders	Sanders	Ind
+WA	3	M001111	Patty Murray	Murray	Dem
+WA	1	C000127	Maria Cantwell	Cantwell	Dem
+WI	3	J000293	Ron Johnson	Johnson	GOP
+WI	1	B001230	Tammy Baldwin	Baldwin	Dem
+WV	2	C001047	Shelley Moore Capito	Capito	GOP
+WV	1	M001183	Joe, III Manchin	Manchin	Dem
+WY	2	E000285	Michael B. Enzi	Enzi	GOP
+WY	1	B001261	John Barrasso	Barrasso	GOP

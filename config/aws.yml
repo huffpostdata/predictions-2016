@@ -1,0 +1,5 @@
+# If you're uploading to an S3 bucket, this is the bucket name.
+#
+# We assume you've organized the credentials through environment variables or
+# you're running this code on a machine with the proper instance role.
+upload_to_s3_bucket: elections.huffingtonpost.com

@@ -1,0 +1,62 @@
+nav {
+  background: $nav-background;
+  color: $nav-color;
+  font-family: $nav-font-family;
+  padding: .5rem;
+  height: 2rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+
+  a {
+    font-size: 0; // We show image, not text
+    line-height: 0; // Also because we show image, not text
+    display: inline-block;
+  }
+
+  .nav-logo {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    display: -webkit-flex;
+    display: flex;
+
+    a {
+      max-height: 2rem;
+      padding: 0 .5rem;
+
+      // center the <img> vertically
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-justify-content: center;
+      justify-content: center;
+
+      // only show "desktop" or "mobile" logo, never both
+      &.only-desktop { display: none; }
+      @media (min-width: $min-desktop-width) {
+        &.only-desktop { display: -webkit-flex; display: flex; }
+        &.only-mobile { display: none; }
+      }
+    }
+
+    img {
+      display: block;
+      max-height: 2rem;
+      max-width: 100%;
+      width: auto;
+    }
+  }
+
+  .share-buttons {
+    padding-top: .1rem;
+    line-height: 1.7rem;
+    white-space: nowrap;
+
+    button {
+      background: #181818;
+      margin-right: .5rem;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+var meta=data.model.metadata
+
+footer
+  ul
+    li - &copy; 2016 TheHuffingtonPost.com, Inc.
+    li
+     a href="http://privacy.aol.com" - Privacy
+    li
+     a class="feedback" href="mailto:interactive-feedback@huffingtonpost.com?subject=${encodeURIComponent('Feedback on ' + meta.title)}&body=${encodeURIComponent("\n\n\n\n-\nURL: ${data.url_to(meta.url_route)}")}" - Send Feedback
+    li
+     a href="//data.huffingtonpost.com" - HuffPost Data
+    li - Part of <strong>HPMG News</strong>

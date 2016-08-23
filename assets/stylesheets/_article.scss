@@ -1,0 +1,15 @@
+article>footer {
+  background: $alt-background;
+  margin: 2rem 0;
+  padding: 1.5rem 0; // the <p> has a .5rem margin, so total is 2rem
+  @include full-width();
+
+  p {
+    font-family: $nav-font-family;
+    font-size: .8rem;
+    font-style: italic;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    @include page_width();
+  }
+}

@@ -1,0 +1,73 @@
+// Makes the site follow these general rules:
+//
+// * <nav> at the top, followed by <article> and <footer>. They're all in a
+//   flexbox, so the footer is at the bottom no matter the size of the page.
+// * max width is 960px, but it's only applied to <article> children. That lets
+//   us publish full-width images without fiddling with margins. (Give them the
+//   class "full-width" to achieve that.)
+// * Sets $max-mobile-width and $min-desktop-width
+// * Creates the page-width() mixin, to set things to 960px
+
+$page-width: 600px;
+$wide-width: 960px;
+$max-mobile-width: 639px;
+$min-desktop-width: 640px;
+$min-margin: 16px; // (used in max-width calculations) -- We're assuming 16px == 1rem, though it isn't strictly necessary
+
+@mixin with-width($width) {
+  max-width: $width;
+  margin-left: auto;
+  margin-right: auto;
+
+  @if $width != 100% {
+    // left/right margins are min 16px, max auto.
+    @media (max-width: ($width + (2 * $min-margin))) {
+      margin-left: $min-margin;
+      margin-right: $min-margin;
+    }
+  }
+}
+
+@mixin full-width() {
+  @include with-width(100%);
+}
+
+@mixin page-width() {
+  @include with-width($page-width);
+}
+
+html, body {
+  min-height: 100%; // when in an iframe, need min-height: otherwise height is set by parent
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+nav, footer {
+  -webkit-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+
+article {
+  -webkit-flex: 1 0 auto;
+  flex: 1 0 auto;
+}
+
+article {
+  &>* {
+    @include page-width();
+  }
+  &>*.full-width {
+    @include full-width();
+  }
+}
+
+footer {
+  margin-top: 6rem;
+}

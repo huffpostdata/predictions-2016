@@ -1,0 +1,49 @@
+button.facebook-share, button.twitter-share {
+  &, &::before {
+    font-family: $nav-font-family;
+    display: inline-block;
+    box-sizing: border-box; // dunno why this makes a difference
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    width: 1.7rem;
+    height: 1.7rem;
+    cursor: pointer;
+    font-size: 0;
+    line-height: 0;
+    vertical-align: bottom;
+  }
+
+  &::before {
+    content: '​'; // zero-width space
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &:hover {
+    opacity: .8;
+  }
+}
+
+button.facebook-share {
+  &::before {
+    // adamhooper6 downloaded and shrank this from Facebook 2016-04-25
+    // Since it looks so huge, we shrink it a bit relative to its parent.
+    box-sizing: border-box;
+    border: .125rem solid transparent;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 333.61749 333.61749"><path transform="matrix(1.25,0,0,-1.25,-215.33617,550.80875)" style="fill:white;stroke:none" d="m 424.43294,440.647 -237.434,0 c -8.137,0 -14.73,-6.593 -14.73,-14.73 l 0,-237.434 c 0,-8.135 6.593,-14.73 14.73,-14.73 l 127.826,0 0,103.355 -34.781,0 0,40.28 34.781,0 0,29.705 c 0,34.473 21.055,53.244 51.807,53.244 14.73,0 27.391,-1.097 31.08,-1.587 l 0,-36.026 -21.328,-0.01 c -16.725,0 -19.963,-7.947 -19.963,-19.609 l 0,-25.717 39.887,0 -5.194,-40.28 -34.693,0 0,-103.355 68.012,0 c 8.135,0 14.73,6.595 14.73,14.73 l 0,237.434 c 0,8.137 -6.595,14.73 -14.73,14.73"/></svg>');
+  }
+}
+
+button.twitter-share {
+  &::before {
+    // adamhooper6 downloaded and shrank this from Twitter 2016-04-26
+    // The aspect ratio is 0.81:1. These borders align it such that it looks
+    // nice next to the Facebook logo.
+    border-top: .19rem solid transparent;
+    border-bottom: .19rem solid transparent;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 342 278"><path d="m2733.9,1958.77 c-100.59,-44.61 -208.69,-74.76 -322.15,-88.32 115.81,69.42 204.74,179.34 246.62,310.32 -108.37,-64.28 -228.41,-110.96 -356.17,-136.12 -102.32,109.01 -248.09,177.13 -409.41,177.13 -309.77,0 -560.91,-251.13 -560.91,-560.88 0,-43.96 4.97,-86.77 14.53,-127.82 -466.156,23.39 -879.445,246.69 -1156.09,586.03 -48.281,-82.84 -75.933,-179.18 -75.933,-281.98 0,-194.59 99.019,-366.27 249.519,-466.85 -91.941,2.91 -178.426,28.14 -254.051,70.15 -0.042,-2.34 -0.05,-4.68 -0.05,-7.05 0,-271.76 193.34,-498.458 449.929,-549.982 -47.066,-12.816 -96.621,-19.668 -147.769,-19.668 -36.145,0 -71.281,3.508 -105.527,10.059 71.375,-222.84 278.511,-385 523.953,-389.527 C 638.43,333.832 396.582,244.16 133.801,244.16 88.5273,244.16 43.8789,246.809 0,251.988 248.223,92.8516 543.047,0 859.797,0 1891.48,0 2455.64,854.672 2455.64,1595.86 c0,24.32 -0.54,48.51 -1.62,72.56 109.58,79.08 204.68,177.87 279.88,290.35" transform="matrix(0.125,0,0,-0.125,0,277.725)" style="fill:%23ffffff;stroke:none"/></svg>');
+  }
+}

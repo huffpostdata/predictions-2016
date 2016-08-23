@@ -1,0 +1,29 @@
+{
+  "name": "predictions-2016",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "update-google-docs": "node generator/GoogleDocs.js",
+    "update-google-sheets": "node generator/GoogleSheets.js"
+  },
+  "author": "",
+  "repository": "https://git.huffpo.net/huffpostdata/predictions-2016.git",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.3.5",
+    "csv-parse": "^1.0.4",
+    "glob": "^7.0.5",
+    "js-yaml": "^3.6.0",
+    "marko": "^3.1.6",
+    "node-sass": "^3.5.3"
+  },
+  "devDependencies": {
+    "chokidar": "^1.4.3",
+    "compression": "^1.6.1",
+    "express": "^4.13.4",
+    "google-docs-markup": "^0.2.0",
+    "morgan": "^1.7.0",
+    "sync-request": "^3.0.0"
+  }
+}

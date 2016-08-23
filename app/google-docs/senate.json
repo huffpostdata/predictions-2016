@@ -1,0 +1,59 @@
+[
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Hed: 2016 Senate Forecast",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Dek: And the winners may be...",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Author: By ",
+        "underline": true
+      },
+      {
+        "text": "Natalie Jackson",
+        "href": "http://www.huffingtonpost.com/author/natalie-jackson"
+      },
+      {
+        "text": " and ",
+        "underline": true
+      },
+      {
+        "text": "Adam Hooper",
+        "href": "http://www.huffingtonpost.com/author/adamhooper"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Twitter-author: @HuffPostData",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Date-published: TKweekday, August TKday, 2016 9:01 AM EDT",
+        "underline": true
+      }
+    ]
+  }
+]
