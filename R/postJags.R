@@ -2,9 +2,40 @@
 options(stringsAsFactors=FALSE)
 library(rjags)
 
-postProcess <- function(fname){
-    load(file=fname)
+debug_plot <- function(forJags, firstDay, xi) {
+  ## rough plot
+  plotData <- data.frame(y=forJags$y, date=dateSeq[forJags$date+firstDay])
+  par(lend=2)
 
+  M <- 250
+  s <- sample(size=M,x=1:nrow(xi))
+  chain <- sample(size=M,x=1:dim(xi)[3],replace=TRUE)
+  ylims <- range(c(as.vector(xi[s,,]), forJags$y))
+
+  gname <- paste(paste(who,collapse=""),".pdf",sep="")
+  quartz(file=gname, type="pdf", bg="white")
+  plot(y ~ date,
+       data=plotData,
+       type="n",
+       ylim=ylims,
+       xlab="",ylab="",
+       axes=FALSE)
+
+  title(paste(who,collapse=" minus "), adj=0, line=2.67)
+  axis.Date(side=1,x=as.Date(theDateSeq), lwd=0, lwd.tick=.5, cex.axis=.65)
+  axis.Date(side=3,x=as.Date(theDateSeq), lwd=0, lwd.tick=.5, cex.axis=.65)
+  axis(2, lwd=0, lwd.tick=.5, las=1, cex.axis=.65)
+
+  for(j in 1:M){
+      lines(as.Date(theDateSeq),xi[s[j],,chain[j]], lwd=.25, col=rgb(0,0,0,.10))
+  }
+  lines(as.Date(theDateSeq),xibar[,"mean"], lwd=4,col=gray(.25))
+
+  points(plotData$date,plotData$y)
+  graphics.off()
+}
+
+postProcess <- function(out, thePollsters, dateSeq, firstDay){
     out2 <- as.array(out)
     xi <- out2[,grep("^xi",dimnames(out2)[[2]]),]
     xibar <- apply(xi,2,
@@ -14,55 +45,9 @@ postProcess <- function(fname){
                        sd(x))
                    })
     xibar <- t(xibar)
-    theDateSeq <- as.character(dateSeq)[seq(from=firstDay,
-                                            length=dim(xibar)[1],by=1)]
+    theDateSeq <- as.character(dateSeq)[seq(from=firstDay, length=dim(xibar)[1],by=1)]
     dimnames(xi) <- list(NULL,theDateSeq,1:dim(xi)[3])
-    dimnames(xibar) <- list(theDateSeq,
-                            c("mean","2.5","97.5","sd"))
-
-    ## rough plot
-    plotData <- data.frame(y=forJags$y,
-                           date=dateSeq[forJags$date+firstDay])
-    par(lend=2)
-
-    M <- 250
-    s <- sample(size=M,x=1:nrow(xi))
-    chain <- sample(size=M,x=1:dim(xi)[3],replace=TRUE)
-    ylims <- range(c(as.vector(xi[s,,]),
-                     forJags$y))
-
-if (FALSE) {
-    gname <- paste(paste(who,collapse=""),".pdf",sep="")
-    quartz(file=gname,
-           type="pdf",
-           bg="white")
-    plot(y ~ date,
-         data=plotData,
-         type="n",
-         ylim=ylims,
-         xlab="",ylab="",
-         axes=FALSE)
-
-    title(paste(who,collapse=" minus "),
-          adj=0,line=2.67)
-    axis.Date(side=1,x=as.Date(theDateSeq),
-              lwd=0,lwd.tick=.5,cex.axis=.65)
-    axis.Date(side=3,x=as.Date(theDateSeq),
-              lwd=0,lwd.tick=.5,cex.axis=.65)
-    axis(2,lwd=0,lwd.tick=.5,
-         las=1,cex.axis=.65)
-
-    for(j in 1:M){
-        lines(as.Date(theDateSeq),xi[s[j],,chain[j]],
-              lwd=.25,
-              col=rgb(0,0,0,.10))
-    }
-    lines(as.Date(theDateSeq),xibar[,"mean"],
-          lwd=4,col=gray(.25))
-
-    points(plotData$date,plotData$y)
-    graphics.off()
-}
+    dimnames(xibar) <- list(theDateSeq, c("mean","2.5","97.5","sd"))
 
     ## delta processing to come here too
     delta <- out2[,grep("^delta",dimnames(out2)[[2]]),]
@@ -144,11 +129,10 @@ combine <- function(tmp){
     }
 
     ## renormalize (and check)
-    tmpArray.renorm <- apply(tmpArray,c(1,2,3),
-                             function(x)x/sum(x,na.rm=TRUE)*100)
+    tmpArray.renorm <- apply(tmpArray, c(1,2,3), function(x)x/sum(x,na.rm=TRUE))
     rm(tmpArray)   ## give back some memory
     tmpArray <- aperm(tmpArray.renorm,perm=c(2,3,4,1))
-    save("tmpArray",file=paste(dataDir,"/tmpArray.RData",sep=""))
+    #save("tmpArray",file='tmp/tmpArray.RData')
     ##all.sum <- apply(tmpArray,c(1,2,3),sum,na.rm=TRUE)
 
     ## average over iterations and chains
@@ -176,14 +160,12 @@ combine <- function(tmp){
                             up=xiq.out[,2],
                             prob=rep(NA,nrecs))
 
-    return(xibar.out)
-
+    return(list(xibar=xibar.out, tmpArray=tmpArray))
 }
-
 
 #################################################
 ## difference function, produces non-jittered probabilities with "2" designator
-diffSummary2 <- function(a,b){
+diffSummary2 <- function(tmpArray,a,b){
   load(file=paste(dataDir,"/tmpArray.RData",sep=""))
 
   theOnes <- match(c(a,b),dimnames(tmpArray)[[4]])
@@ -206,12 +188,12 @@ diffSummary2 <- function(a,b){
                   })
   zbar2 <- t(zbar2)
   nrecs <- dim(zbar2)[1]
-  return(data.frame(who=rep(paste(a,"minus",b),nrecs),
-                    date=theRows,
+  return(data.frame(who2=rep(paste(a,"minus",b),nrecs),
+                    date16=theRows,
                     xibar2=zbar2[,1],
                     lo2=zbar2[,2],
                     up2=zbar2[,3],
-                    prob2=zbar2[,4]*100))
+                    prob2=zbar2[,4]))
 }
 
 
@@ -219,9 +201,7 @@ diffSummary2 <- function(a,b){
 ##Diff summary--jittering the margins to jitter the probabilities
 
 
-diffSummary <- function(a,b){
-  load(file=paste(dataDir,"/tmpArray.RData",sep=""))
-
+diffSummary <- function(tmpArray, a,b){
   theOnes <- match(c(a,b),dimnames(tmpArray)[[4]])
   d <- list(tmpArray[,,,theOnes[1]],
             tmpArray[,,,theOnes[2]])
@@ -258,85 +238,26 @@ diffSummary <- function(a,b){
                     xibar=zbar[,1],
                     lo=zbar[,2],
                     up=zbar[,3],
-                    prob=zbar[,4]*100))
+                    prob=zbar[,4]))
 }
 
 
 
-combineHouse <- function(tmp){
+combineHouse <- function(tmp, thePollsters){
     n <- length(tmp)
     nms <- names(tmp)
 
-    out <- data.frame(who=rep(nms,each=length(thePollsters)),
-                      pollster=rep(thePollsters,n))
+    out <- data.frame(who=rep(nms,each=length(thePollsters)), pollster=rep(thePollsters,n))
 
     for(i in 1:nrow(out)) {
-      out[i,"est"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "Estimate"], 4)
-      out[i,"lo"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "2.5%"], 4)
-      out[i,"hi"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "97.5%"], 4)
-      out[i,"dev"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "StdDev"], 4)
+      out[i,"est"] <- tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "Estimate"]
+      out[i,"lo"] <- tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "2.5%"]
+      out[i,"hi"] <- tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "97.5%"]
+      out[i,"dev"] <- tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "StdDev"]
     }
 
     return(out)
 }
-
-#########################################
-
-## process jags output
-tmp <- list()
-for(who in theResponses){
- 	who <- unlist(who)
- 		cat(sprintf(
- 			"n\nPost-processing for candidate %s\n",
- 			paste(who, collapse=" minus ")
- 		))
-    fname <- paste(dataDir,'/',paste(who,collapse=""),".jags.RData",sep="")
- 	cat(paste("reading JAGS output and data from file",fname,"\n|"))
- 	tmp[[paste(who,collapse=" minus ")]] <- postProcess(fname)
-}
-
-## combine response options
-out <- combine(tmp)
-
-## process contrasts with jitter
-theContrasts <- grep("minus",names(tmp))
-n.Contrasts <- length(theContrasts)
-if(n.Contrasts>0){
-  outContrasts <- list()
-  for(j in 1:n.Contrasts){
-    thisContrast.name <- names(tmp)[theContrasts[j]]
-    nms <- strsplit(thisContrast.name,split=" minus ")[[1]]
-    outContrasts[[j]] <- diffSummary(nms[1],nms[2])
-  }
-  outContrasts <- do.call("rbind",outContrasts)
-  out <- rbind(out,outContrasts)
-}
-
-## process contrasts without jitter
-theContrasts2 <- grep("minus",names(tmp))
-n.Contrasts2 <- length(theContrasts2)
-if(n.Contrasts2>0){
-  outContrasts2 <- list()
-  for(j in 1:n.Contrasts2){
-    thisContrast.name2 <- names(tmp)[theContrasts2[j]]
-    nms <- strsplit(thisContrast.name2,split=" minus ")[[1]]
-    outContrasts2[[j]] <- diffSummary2(nms[1],nms[2])
-  }
-  outContrasts2 <- do.call("rbind",outContrasts2)
-  names(outContrasts2)[names(outContrasts2)=="who"] <- "who2"
-  names(outContrasts2)[names(outContrasts2)=="date"] <- "date16"
-  out <- cbind(out,outContrasts2)
-}
-
-##########################################
-
-write.csv(out, file=paste(dataDir,"/out.csv",sep=""))
-
-write.csv(combineHouse(tmp),
-          file=paste(dataDir,"/house.csv",sep=""))
-
-
-unlink(paste(dataDir,"/*.RData",sep=""))
 
 ###################Line charts #########################
 

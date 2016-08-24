@@ -36,10 +36,15 @@ distribution.
 | `gop_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?%5Cbar%7B%5Cxi%7D) -- Out of lots of simulated elections, the mean fraction of votes for the GOP candidate |
 | `gop_low` | `0.1`, `0.7` | the fraction of votes the GOP candidate exceeds 97.5% of the time |
 | `gop_high` | `0.3`, `0.9` | the fraction of votes the GOP candidate misses 97.5% of the time |
+| `undecided_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?%5Cbar%7B%5Cxi%7D) -- Out of lots of simulated elections, the mean fraction of votes for the Undecided candidate (that is, assuming elections are like polls and "Undecided" is a choice) |
 | `dem_win_prob` | `0.4` | Out of lots of simulated elections, the fraction times the Dem candidate beats the GOP candidate (we don't model ties) |
+| `dem_win_prob_counting_undecided` | `0.45` | Like `dem_win_prob`, but nudged closer towards `0.5`, depending on how large `undecided_xibar` is |
 
 All values are rounded to four decimal points and truncated so they are between
 `0.0000` and `1.0000` (inclusive).
+
+For charts that don't have enough polling data, we may assign a `dem_win_prob`
+while leaving `dem_xibar` and company blank.
 
 ## senate/house-effects.tsv
 
