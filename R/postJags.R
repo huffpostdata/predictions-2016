@@ -166,7 +166,7 @@ combine <- function(tmp){
 #################################################
 ## difference function, produces non-jittered probabilities with "2" designator
 diffSummary2 <- function(tmpArray,a,b){
-  load(file=paste(dataDir,"/tmpArray.RData",sep=""))
+  #load(file=paste(dataDir,"/tmpArray.RData",sep=""))
 
   theOnes <- match(c(a,b),dimnames(tmpArray)[[4]])
   d <- list(tmpArray[,,,theOnes[1]],
