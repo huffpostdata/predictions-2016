@@ -2,3 +2,4 @@
 *.marko.js
 __MACOSX
 R/tmp/
+data/sheets/output/*.tsv
