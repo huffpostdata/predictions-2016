@@ -1,0 +1,13 @@
+var seat_counts=data.model.seat_counts
+
+#senate-summary
+  h1 - Senate Forecast 2016
+
+  p
+    - We predict that on Election day, there is a
+    - <strong class="prob-dem">${Math.round(100 * seat_counts.prob_dem)}%</strong> chance
+    - Democrats will gain control of the senate, a
+    - <strong class="prob-gop">${Math.round(100 * seat_counts.prob_gop)}%</strong> chance
+    - Republicans will keep control of the senate, and a
+    - <strong class="prob-tie">${Math.round(100 * seat_counts.prob_tie)}%</strong> chance
+    - of a tie.

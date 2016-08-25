@@ -13,7 +13,11 @@ html lang="en"
     $!{data.render_template('_nav', data)}
 
     article
+      $!{data.render_template('_senate-summary', data)}
+
       $!{data.render_template('_senate-races', data)}
+
+      $!{data.render_template('_senate-seat-counts', data)}
 
       <!--
       .comments
