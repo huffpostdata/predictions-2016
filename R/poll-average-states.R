@@ -13,7 +13,7 @@ cook_priors <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
   prior1=c(0.4823, 0.4881, NA, 0.4792, 0.4746, 0.4879, 0.4783),
   prior2=c(0.1584, 0.1205, NA, 0.0619, 0.0824, 0.0824, 0.1807),
-  dem_win_prob=c(0.95, 0.75, 0.55, 0.5, 0.45, 0.25, 0.05)
+  dem_win_prob=c(1.0, 0.90, 0.80, 0.5, 0.20, 0.10, 0.99)
 )
 
 get_pollster_csv <- function(slug) {
