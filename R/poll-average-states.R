@@ -133,7 +133,7 @@ calculate_dem_gop_curves <- function(state_code, cook_rating, pollster_slug, dem
 
     initFunc <- function() { makeInits(forJags, cookPrior1, cookPrior2) }
     if(length(who)==2){
-      initFunc <- function() { makeInitsContrasts(forJags, cookPrior1, cookPrior2) }
+      initFunc <- function() { makeInitsContrasts(forJags) }
     }
 
     ## call JAGS
@@ -283,7 +283,7 @@ makeJagsObject <- function(data, thePollsters, dateSeq, who, offset=0) {
 makeInits <- function(forJags, cookPrior1, cookPrior2){
     sigma <- runif(n=1,0,.003)
     xi <- rep(NA,forJags$NPERIODS)
-    xi[1] <- rnorm(n=1, cookPrior1,cookPrior2)
+    xi[1] <- rnorm(n=1, cookPrior1, cookPrior2)
     for(i in 2:forJags$NPERIODS){
         xi[i] <- rnorm(n=1,xi[i-1],sd=sigma)
     }
@@ -299,10 +299,10 @@ makeInits <- function(forJags, cookPrior1, cookPrior2){
     return(out)
 }
 
-makeInitsContrasts <- function(forJags, cookPrior1, cookPrior2){
+makeInitsContrasts <- function(forJags) {
   sigma <- runif(n=1,0,.003)
   xi <- rep(0,forJags$NPERIODS)
-  xi[1] <- rnorm(n=1,cookPrior1,cookPrior2)
+  xi[1] <- rnorm(n=1, 0, 0.5)
   for(i in 2:forJags$NPERIODS) {
     xi[i] <- rnorm(n=1,xi[i-1],sd=sigma)
   }
