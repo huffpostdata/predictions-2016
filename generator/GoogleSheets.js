@@ -1,7 +1,6 @@
 'use strict'
 
 const fs = require('fs')
-const yaml = require('js-yaml')
 const csv_parse = require('csv-parse/lib/sync')
 
 class GoogleSheets {
