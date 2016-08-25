@@ -1,0 +1,14 @@
+#senate-races
+  h1 - State By state
+
+  p - Our <a href="#">FIXME algorithm</a> calculated the probabile outcome in each state. Here’s the breakdown.
+
+  .container
+    .axis-50
+    .balance-of-power
+    ul
+      li data-state-code="${race.state_code}" for(race in data.model.races.sorted_by('dem-win-probability'))
+        .state-code - ${race.state_code}
+        .probability
+          .box
+            .marker.${race.dem_win_probability > 0.5 ? 'lean-dem' : (race.dem_win_probability == 0.5 ? 'toss-up' : 'lean-gop')} style="left: ${100 * (1 - race.dem_win_probability)}%"

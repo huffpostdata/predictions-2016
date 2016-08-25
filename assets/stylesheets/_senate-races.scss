@@ -1,0 +1,95 @@
+#senate-races {
+  $line-height: 2rem;
+  $marker-width: .5rem;
+  $half-marker-width: $marker-width / 2;
+  $state-width: 2rem;
+
+  .container {
+    position: relative;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: $line-height;
+  }
+
+  li {
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  .state-code {
+    width: $state-width;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+  }
+
+  .probability {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding-left: $half-marker-width + .5rem;
+    padding-right: $half-marker-width + .5rem;
+
+    .box {
+      height: 2 * $marker-width;
+      position: relative;
+    }
+
+    .marker {
+      position: absolute;
+      display: inline-block;
+      top: ($line-height / 2) - $half-marker-width - .1rem;
+      height: $marker-width;
+      width: $marker-width;
+      margin-left: -$half-marker-width;
+      border-radius: $half-marker-width;
+
+      &.lean-dem {
+        background: $strong-dem;
+      }
+
+      &.lean-gop {
+        background: $strong-gop;
+      }
+
+      &.toss-up {
+        background: $toss-up;
+      }
+    }
+  }
+
+  .axis-50 {
+    position: absolute;
+    z-index: -1;
+    left: $state-width;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      margin-left: -1px;
+      width: 2px;
+      background: $alt-background;
+    }
+  }
+
+  .balance-of-power {
+    position: absolute;
+    z-index: -1;
+    // XXX hard-coded: 36 Dem+Ind seats in class 1 and 2; 30 GOP seats in class 1 and 2
+    // ... and both Ind senators caucus with Dem
+    top: 14 * $line-height;
+    margin-top: -1px;
+    height: 2px;
+    left: $state-width;
+    right: 0;
+    background: $alt-background;
+  }
+}
