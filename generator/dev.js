@@ -14,7 +14,7 @@ function queue_rebuild() {
   }
 }
 
-chokidar.watch('app assets config generator views'.split(' '), {
+chokidar.watch('app assets config data generator views'.split(' '), {
   ignored: /([\/\\]\.|.*.marko.js$)/
 })
   .on('change', queue_rebuild)
