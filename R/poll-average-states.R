@@ -43,6 +43,7 @@ stub_dem_gop_curves <- function(state_code, cook_rating, last_date) {
       gop_xibar=na,
       gop_low=na,
       gop_high=na,
+      undecided_xibar=na,
       dem_win_prob=rep(dem_win_prob, n)
     ),
     house_effects=data.frame(pollster=c(), est=c(), lo=c(), hi=c(), dev=c())
