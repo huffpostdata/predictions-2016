@@ -132,19 +132,26 @@ calculate_dem_gop_curves <- function(state_code, cook_rating, pollster_slug, dem
     forJags <- tmp$forJags
     firstDay <- tmp$firstDay
 
-    initFunc <- function() { makeInits(forJags, cookPrior1, cookPrior2) }
     if(length(who)==2){
       initFunc <- function() { makeInitsContrasts(forJags) }
+      foo <- jags.model(
+        file="minus.bug",
+        data=forJags,
+        n.chains=4,
+        inits=initFunc,
+        quiet=TRUE
+      )
+    } else {
+      initFunc <- function() { makeInits(forJags, cookPrior1, cookPrior2) }
+      foo <- jags.model(
+        file="singleTarget.bug",
+        data=forJags,
+        n.chains=4,
+        inits=initFunc,
+        quiet=TRUE
+      )
     }
 
-    ## call JAGS
-    foo <- jags.model(
-      file="singleTarget.bug",
-      data=forJags,
-      n.chains=4,
-      inits=initFunc,
-      quiet=TRUE
-    )
     update(foo,M/5)
 
     out <- coda.samples(
@@ -288,11 +295,7 @@ makeInits <- function(forJags, cookPrior1, cookPrior2){
     for(i in 2:forJags$NPERIODS){
         xi[i] <- rnorm(n=1,xi[i-1],sd=sigma)
     }
-    xi.bad <- xi < .01
-    xi[xi.bad] <- .01
-    xi.bad <- xi > .99
-    xi[xi.bad] <- .99
-
+    xi <- pmax(0.01, pmin(0.99, xi))
 
     ## house effect delta inits
     delta <- rnorm(n=forJags$NHOUSES,mean=0,sd=.02)
@@ -307,6 +310,7 @@ makeInitsContrasts <- function(forJags) {
   for(i in 2:forJags$NPERIODS) {
     xi[i] <- rnorm(n=1,xi[i-1],sd=sigma)
   }
+  xi <- pmax(-1, pmin(1, xi))
 
   ## house effect delta inits
   delta <- rnorm(n=forJags$NHOUSES,mean=0,sd=.02)
