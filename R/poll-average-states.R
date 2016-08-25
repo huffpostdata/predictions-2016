@@ -43,6 +43,9 @@ stub_dem_gop_curves <- function(state_code, cook_rating, last_date) {
       gop_xibar=na,
       gop_low=na,
       gop_high=na,
+      diff_xibar=na,
+      diff_low=na,
+      diff_high=na,
       undecided_xibar=na,
       dem_win_prob=rep(dem_win_prob, n)
     ),
@@ -174,6 +177,8 @@ calculate_dem_gop_curves <- function(state_code, cook_rating, pollster_slug, dem
   combined_out <- combined$xibar
   tmpArray <- combined$tmpArray
 
+  diff_label <- paste0(dem_label, ' minus ', gop_label)
+
   ## process contrasts with jitter
   combined_out <- rbind(combined_out, diffSummary(tmpArray, dem_label, gop_label))
   combined_out <- cbind(combined_out, diffSummary2(tmpArray, dem_label, gop_label))
@@ -203,6 +208,15 @@ calculate_dem_gop_curves <- function(state_code, cook_rating, pollster_slug, dem
   )
   nice_frame <- merge(nice_frame, gop_frame, by=c('date'))
 
+  diff_frame_t <- combined_out[combined_out$who==diff_label, c('date', 'xibar', 'lo', 'up')]
+  diff_frame <- data.frame(
+    date=as.Date(diff_frame_t$date),
+    diff_xibar=diff_frame_t$xibar,
+    diff_low=diff_frame_t$lo,
+    diff_high=diff_frame_t$up
+  )
+  nice_frame <- merge(nice_frame, diff_frame, by=c('date'))
+
   undecided_frame_t <- combined_out[combined_out$who=='Undecided', c('date', 'xibar')]
   undecided_frame <- data.frame(
     date=as.Date(undecided_frame_t$date),
@@ -210,7 +224,6 @@ calculate_dem_gop_curves <- function(state_code, cook_rating, pollster_slug, dem
   )
   nice_frame <- merge(nice_frame, undecided_frame, by=c('date'))
 
-  diff_label <- paste0(dem_label, ' minus ', gop_label)
   prob_frame_t <- combined_out[combined_out$who==diff_label, c('date', 'prob')]
   prob_frame <- data.frame(date=as.Date(prob_frame_t$date), dem_win_prob=prob_frame_t$prob)
   nice_frame <- merge(nice_frame, prob_frame, by=c('date'))
