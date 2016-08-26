@@ -5,8 +5,9 @@ output_senate_curves_path <- '../data/sheets/output/senate-curves-DATE.tsv'
 output_senate_house_effects_path <- '../data/sheets/output/senate-house-effects-DATE.tsv'
 output_senate_seats_path <- '../data/sheets/output/senate-seat-counts-DATE.tsv'
 
-NMonteCarloSimulations <- 2e6
+NMonteCarloSimulations <- 1e8
 ElectionDay <- as.Date('2016-11-08')
+Today <- sys.Date()
 
 calculate_senate_data_for_race_and_date <- function(race, last_date) {
   return(calculate_dem_gop_curves(
@@ -75,11 +76,11 @@ load_or_calculate_senate_data_for_races_and_date <- function(races, last_date) {
 }
 
 # Monte-Carlo simulation: run lots of election nights for the senate and return
-# the distribution of seats won by Democrats -- e.g.,
-# c(0.01, 0.02, 0.5, 0.03, ...) means zero seats won by Dems 1% of the time; one
-# seat won 2% of the time; two seats won 50% of the time; etc.
+# the distribution of seats won by Democrats -- e.g., c(1, 2, 400, 30, ...)
+# means zero seats won by Dems 1 time; one seat won 2 times; two seats won 400
+# times; etc.
 predict_n_dem_senate_seats <- function(dem_win_probs) {
-  cat('Running', NMonteCarloSimulations, 'senate simulations...')
+  cat('Running', NMonteCarloSimulations, 'senate simulations...\n')
 
   n_seats <- length(dem_win_probs)
 
@@ -92,7 +93,7 @@ predict_n_dem_senate_seats <- function(dem_win_probs) {
     n_seat_event_counts[n_won] <- n_seat_event_counts[n_won] + 1
   }
 
-  return(n_seat_event_counts / NMonteCarloSimulations)
+  return(n_seat_event_counts)
 }
 
 dump_senate_data_for_date <- function(data, last_date) {
@@ -107,11 +108,12 @@ dump_senate_seat_counts <- function(seat_counts, last_date) {
   frame <- data.frame(
     date=rep(ElectionDay, length(seat_counts)),
     n_dem=0:(length(seat_counts) - 1),
-    p=seat_counts
+    n=seat_counts,
+    p=(seat_counts / sum(seat_counts))
   )
 
   seat_counts_path <- sub('DATE', last_date, output_senate_seats_path)
-  write.table(format(frame, digits=4), file=seat_counts_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
+  write.table(format(frame, digits=6), file=seat_counts_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
 }
 
 run_all_senate_for_date <- function(last_date) {
@@ -125,7 +127,7 @@ run_all_senate_for_date <- function(last_date) {
 }
 
 run_all_senate <- function() {
-  run_all_senate_for_date(Sys.Date())
+  run_all_senate_for_date(Today)
 }
 
 main <- function() {
