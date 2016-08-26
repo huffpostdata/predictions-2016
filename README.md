@@ -72,6 +72,7 @@ calculate how probable each distribution of seat counts is.
 | --- | --- | --- |
 | `date` | `2016-11-08` | Date of the election |
 | `n_dem` | `10` | Event: Democrats win exactly `n_dem` races |
+| `n` | `300` | Number of times that event happened (`sum(n)` is the total number of Monte Carlo simulations) |
 | `p` | `0.0300` | Probability of that event |
 
 ## senate/before-election.tsv
