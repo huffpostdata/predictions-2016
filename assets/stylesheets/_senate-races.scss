@@ -92,4 +92,23 @@
     right: 0;
     background: $alt-background;
   }
+
+  svg {
+    path.spread {
+      stroke: none;
+      fill: #eee;
+    }
+
+    path.diff {
+      stroke: black;
+      stroke-width: 5px;
+      fill: none;
+    }
+
+    path.axis {
+      stroke: gray;
+      stroke-width: 3px;
+      fill: none;
+    }
+  }
 }

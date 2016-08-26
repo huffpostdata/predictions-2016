@@ -1,3 +1,5 @@
+var races=data.model.races
+
 #senate-races
   h2 - State By State
 
@@ -7,8 +9,16 @@
     .axis-50
     .balance-of-power
     ul
-      li data-state-code="${race.state_code}" for(race in data.model.races.sorted_by('dem-win-probability'))
+      li data-state-code="${race.state_code}" for(race in races.sorted_by('dem-win-probability'))
         .state-code - ${race.state_code}
         .probability
           .box
             .marker.${race.dem_win_probability > 0.5 ? 'lean-dem' : (race.dem_win_probability == 0.5 ? 'toss-up' : 'lean-gop')} style="left: ${100 * (1 - race.dem_win_probability)}%"
+          if(race.curve.is_plottable)
+            .chart-container
+              h3 - ${race.state_code}
+              .x-axis
+              svg viewBox="0 0 1000 600" width="20rem" height="12rem"
+                path.spread d="${race.curve.svg_polygon('diff_high', 'diff_low')}"
+                path.axis d="M0,300H1000"
+                path.diff d="${race.curve.svg_path('diff_xibar')}"
