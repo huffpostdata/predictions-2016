@@ -1,6 +1,27 @@
+var seat_counts=data.model.seat_counts
+
 #senate-seat-counts
   h2 - Possible Seat Counts
 
   p
-    - To predict what will happen on the <em>real</em> election night, we randomly
-    - generate hundreds of thousands of <em>possible</em> election nights using the probabilities we calculated.
+    - We simulated ${Math.round(seat_counts.n / 1e6)} million
+    - election nights using our per-state probabilities. Here are the outcomes.
+
+  h4 - Number of election nights (millions)
+  .container
+    .x-axis
+      .label
+        .total - Seats by party
+        .dem - ← Democrat majority
+        .gop - Republican majority →
+    ul.bars
+      li.bar.bar-${bar.n_seats === 50 ? 'tie' : (bar.n_seats < 50 ? 'gop' : 'dem')} style="height: ${bar.fraction * 100}%" for(bar in seat_counts.bars.reverse())
+        .n - ${bar.n_million > 5 ? bar.n_million.toFixed(1) : ''}
+        .label
+          .dem - ${bar.n_seats}
+          .gop - ${100 - bar.n_seats}
+
+  .footnotes
+    p
+      - Both independent senators, Bernie Sanders and Angus King, caucus with
+      - the Democratic Party. We count them as Democrats in our calculations.

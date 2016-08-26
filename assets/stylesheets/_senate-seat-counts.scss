@@ -1,2 +1,100 @@
 #senate-seat-counts {
+  .container {
+    position: relative;
+  }
+
+  $area-height: 8rem;
+  $margin-bottom: 5rem;
+
+  // Position ul.bars with some margins for text.
+  // It will set the size of the container. Position axes and other stuff
+  // absolutely.
+  ul.bars {
+    display: -webkit-flex;
+    display: flex;
+
+    height: $area-height;
+    list-style: none;
+    padding: 0 0 $margin-bottom 0;
+    margin: 0;
+
+    // align to bottom of chart
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+  }
+
+  .y-axis {
+    position: absolute;
+    top: 0;
+    height: $area-height;
+  }
+
+  .x-axis {
+    position: absolute;
+    top: $area-height;
+    height: $margin-bottom;
+    width: 100%;
+
+    .total {
+      position: absolute;
+      bottom: 1.5rem;
+      color: $muted-color;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: .85rem;
+    }
+
+    .dem {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      color: $strong-dem;
+    }
+
+    .gop {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      color: $strong-gop;
+    }
+  }
+
+  li.bar {
+    display: block;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+
+    width: 1px; // give each bar equal width
+    position: relative; // so labels go directly below
+    margin: 0 .125rem;
+    text-align: center;
+
+    .label {
+      position: absolute;
+      top: 100%;
+      font-size: .85rem;
+      line-height: 1rem;
+      text-align: center;
+      width: 100%;
+
+      .dem { color: $strong-dem; }
+      .gop { color: $strong-gop; }
+    }
+
+    .n {
+      font-size: .85rem;
+      text-align: center;
+      color: $background;
+    }
+  }
+
+  .bar-dem { background-color: $strong-dem; }
+  .bar-tie { background-color: $toss-up; }
+  .bar-gop { background-color: $strong-gop; }
+
+  .footnotes {
+    font-size: .85rem;
+    color: $muted-color;
+  }
 }
