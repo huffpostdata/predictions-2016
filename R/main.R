@@ -7,7 +7,7 @@ output_senate_seats_path <- '../data/sheets/output/senate-seat-counts-DATE.tsv'
 
 NMonteCarloSimulations <- 1e8
 ElectionDay <- as.Date('2016-11-08')
-Today <- sys.Date()
+Today <- Sys.Date()
 
 calculate_senate_data_for_race_and_date <- function(race, last_date) {
   return(calculate_dem_gop_curves(
