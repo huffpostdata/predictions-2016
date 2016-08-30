@@ -415,11 +415,10 @@ allstates <- rbind(pollstates, nopollstates)
 #write.csv(allstates,"post/allstates.csv")
 
 allstates$prob <- as.numeric(allstates$prob)
-allstates$prob2 <- as.numeric(allstates$prob2)
-allstates$call[allstates$lead=="Democrat lead" & allstates$prob2 >= 50] <- "D"
-allstates$call[allstates$lead=="Republican lead" & allstates$prob2 >= 50] <- "R"
-allstates$call[allstates$lead=="Democrat lead" & allstates$prob2 < 50] <- "R"
-allstates$call[allstates$lead=="Republican lead" & allstates$prob2 < 50] <- "D"
+allstates$call[allstates$lead=="Democrat lead" & allstates$prob >= 50] <- "D"
+allstates$call[allstates$lead=="Republican lead" & allstates$prob >= 50] <- "R"
+allstates$call[allstates$lead=="Democrat lead" & allstates$prob < 50] <- "R"
+allstates$call[allstates$lead=="Republican lead" & allstates$prob < 50] <- "D"
 
 allstates$finalprobA <- ifelse(allstates$lead=="Republican lead" & allstates$call=="D", 100 - allstates$prob, allstates$prob)
 allstates$finalprobA <- ifelse(allstates$lead=="Democrat lead" & allstates$call=="R", 100 - allstates$prob, allstates$finalprobA)
@@ -432,11 +431,9 @@ allstates$undecMargin[allstates$undecMargin > 10] <- 10 #don't allow values abov
 allstates$finalprob <- allstates$finalprobA - allstates$undecMargin
 allstates$finalprob[allstates$finalprob <= 50] <- 50 #truncate at 50 to keep adjustments from flipping the race
 
-allstates$pollprob <- allstates$prob2
-
 #write.csv(allstates,"post/allstates.csv") ##write the whole file only if you need to check everything
 
-outSenate16 <- allstates[, c("state", "call", "finalprob", "pollprob", "democrat", "republican")]
+outSenate16 <- allstates[, c("state", "call", "finalprob", "democrat", "republican")]
 write.csv(outSenate16, "post/outSenate16.csv")
 write.csv(outSenate16, paste("post/outSenate16_",today,".csv",sep=""))
 
@@ -479,20 +476,3 @@ SeatCount <- rbind(countD, count5050D, countR, count5050R, Dtakeover, TieProb)
 
 write.csv(SeatCount, "post/seatcount.csv")
 
-######################################
-#this was for the system -- Jay wrote
-######################################
-#if (file.exists("/var/www/html/elections")) {
-#  write.csv(outSenate16, "/var/www/html/pollster/shared/models/outSenate16.csv")
-#  write.csv(outSenate16, paste("/var/www/html/pollster/shared/models/#outSenate16_",today,".csv",sep=""))
- # write.csv(outSenate16, "/var/www/html/elections/shared/senate_2016/outSenate16.csv")
-#  write.csv(outSenate16, paste("/var/www/html/elections/shared/senate_2016/#outSenate16_",today,".csv",sep=""))
-#}
-
-#if (file.exists("/var/www/html/elections")) {
-#  system(paste("mkdir -p /var/www/html/pollster/shared/models/",today,"/post",sep=""))
-#  system(paste("cp post/2014-*.csv /var/www/html/pollster/shared/models/",today,"/post/",sep=""))
-#  system(paste("cp post/all*.csv /var/www/html/pollster/shared/models/",today,"/post/",sep=""))
-#  system(paste("cp post/pollstates.csv /var/www/html/pollster/shared/models/",today,"/post/",sep=""))
-#  system(paste("cp post/outSenate14.csv /var/www/html/pollster/shared/models/",today,"/post/",sep=""))
-#}

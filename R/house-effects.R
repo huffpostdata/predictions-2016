@@ -315,3 +315,22 @@ write.csv(allhouse,"house/allhouse.csv") ##check to make sure everything s right
 houseSenate16 <- allhouse[, c("state", "pollster", "est2", "lo2", "hi2", "dev")]
 
 write.csv(houseSenate16, "house/houseSenate16.csv") ##may want to put this in a separate location from the other files.
+
+
+######################################
+#this was for the system -- Jay wrote
+######################################
+
+#if (file.exists("/var/www/html/elections")) {
+#  write.csv(houseSenate16, "/var/www/html/pollster/shared/models/houseSenate16.csv")
+#  write.csv(houseSenate16, paste("/var/www/html/pollster/shared/models/houseSenate16_",today,".csv",sep=""))
+#  write.csv(houseSenate16, "/var/www/html/elections/shared/senate_2016/houseSenate16.csv")
+#  write.csv(houseSenate16, paste("/var/www/html/elections/shared/senate_2016/houseSenate16_",today,".csv",sep=""))
+#}
+
+#if (file.exists("/var/www/html/elections")) {
+#  system(paste("mkdir -p /var/www/html/pollster/shared/models/",today,"/house",sep=""))
+#  system(paste("cp house/2016-*.csv /var/www/html/pollster/shared/models/",today,"/house/",sep=""))
+#  system(paste("cp house/allhouse.csv /var/www/html/pollster/shared/models/",today,"/house/",sep=""))
+#  system(paste("cp house/houseSenate16.csv /var/www/html/pollster/shared/models/",today,"/house/",sep=""))
+#}
