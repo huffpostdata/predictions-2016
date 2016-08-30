@@ -13,8 +13,10 @@ options(stringsAsFactors=FALSE)
 args <- commandArgs(TRUE)
 chart_slug <- args[1]
 cook_rating <- args[2]
+dem_label <- args[3]
+gop_label <- args[4]
 
-if (args[3] == 'fast') {
+if (args[5] == 'fast') {
   M <- 1E3
   Keep <- 1E3
 } else {
@@ -38,12 +40,6 @@ CookPriors <- data.frame(
 calculate_labels <- function(col_names) {
   last_choice_index <- match('poll_id', col_names) - 1
   return(col_names[1:last_choice_index])
-}
-
-calculate_contrast <- function(labels) {
-  stable_choices <- setdiff(labels, c("Other","Undecided","Not Voting","Refused","Wouldn't Vote","None"))
-
-  return(stable_choices[1:2])
 }
 
 ## object for jags
@@ -296,7 +292,7 @@ diffSummary <- function(dataDir, a,b){
 
 #########################################
 
-calculate_diff_curve <- function(chart_slug, cook_rating) {
+calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) {
   ## url to the pollster csv
   data <- read.csv(
     file=url(paste0("http://elections.huffingtonpost.com/pollster/api/charts/",chart_slug,".csv")),
@@ -391,8 +387,7 @@ calculate_diff_curve <- function(chart_slug, cook_rating) {
   out <- combine(tmp, dataDir)
 
   ## process contrasts
-  contrast <- calculate_contrast(theResponses)
-  outContrast <- diffSummary(dataDir, contrast[1], contrast[2])
+  outContrast <- diffSummary(dataDir, dem_label, gop_label)
   out <- rbind(out, outContrast)
 
   ##########################################
@@ -402,4 +397,4 @@ calculate_diff_curve <- function(chart_slug, cook_rating) {
   unlink(paste(dataDir,"/*.RData",sep=""))
 }
 
-calculate_diff_curve(chart_slug, cook_rating)
+calculate_diff_curve(chart_slug, cook_rating, dem_label, gop_label)
