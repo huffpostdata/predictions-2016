@@ -185,13 +185,13 @@ if (FALSE) {
 #######################################
 ## combine results for response options
 
-combine <- function(tmp){
-    cat("combining/renormaling output for the following response options\n:")
-    print(names(tmp))
+build_normalized_array <- function(candidate_mcmc_lists) {
+    cat('combining/renormaling output for: ')
+    print(names(candidate_mcmc_lists))
 
-    n <- length(tmp)
-    nms <- names(tmp)
-    xi <- lapply(tmp,function(x)x$xi)
+    n <- length(candidate_mcmc_lists)
+    nms <- names(candidate_mcmc_lists)
+    xi <- lapply(candidate_mcmc_lists,function(x)x$xi)
     d <- dim(xi[[1]])
     niter <- d[1]
     nchains <- d[3]
@@ -199,17 +199,12 @@ combine <- function(tmp){
     dateSpans <- lapply(xi,
                         function(x){
                             n <- ncol(x)
-                            d <- as.Date(colnames(x))
-                            return(d[c(1,n)])
+                            return(colnames(x)[c(1,n)])
                         })
 
     dateSpans <- do.call("rbind",dateSpans)
-    dateRange <- c(dateSpans[which.min(as.Date(dateSpans[,1],origin="1970-01-01")),1],
-                   dateSpans[which.max(as.Date(dateSpans[,2],origin="1970-01-01")),2])
-
-    dateSeq <- seq.Date(from=as.Date(dateRange[1],origin="1970-01-01"),
-                        to=as.Date(dateRange[2],origin="1970-01-01"),
-                        by="day")
+    dateRange <- c(as.Date(min(dateSpans[,1])), as.Date(max(dateSpans[,2])))
+    dateSeq <- seq.Date(from=dateRange[1], to=dateRange[2], by="day")
 
     ## create 4-d master array
     tmpArray <- array(NA,c(niter,length(dateSeq),nchains,n))
@@ -224,38 +219,45 @@ combine <- function(tmp){
     tmpArray.renorm <- apply(tmpArray,c(1,2,3), function(x)x/sum(x,na.rm=TRUE))
     rm(tmpArray)   ## give back some memory
     tmpArray <- aperm(tmpArray.renorm,perm=c(2,3,4,1))
-    #save("tmpArray",file=paste(dataDir,"/tmpArray.RData",sep=""))
+    save('tmpArray',file='tmpArray.RData')
     ##all.sum <- apply(tmpArray,c(1,2,3),sum,na.rm=TRUE)
 
-    ## average over iterations and chains
-    xibar <- apply(tmpArray,c(2,4),mean,na.rm=TRUE)
-    xibar[is.nan(xibar)] <- NA
-
-    ## quantiles
-    xiq <- apply(tmpArray,c(2,4),
-                 quantile,
-                 probs=c(.025,.975),
-                 na.rm=TRUE)
-    xiq <- aperm(xiq,c(2,3,1))
-    xiq.out <- xiq[,1,]
-    for(j in 2:n){
-        xiq.out <- rbind(xiq.out,xiq[,j,])
-    }
-
-    nrecs <- dim(xiq.out)[1]
-
-    ## stack by candidate
-    xibar.out <- data.frame(who=rep(nms,each=length(dateSeq)),
-                            date=rep(as.character(dateSeq),n),
-                            xibar=as.vector(xibar),
-                            lo=xiq.out[,1],
-                            up=xiq.out[,2],
-                            prob=rep(NA,nrecs))
-
-    return(list(xibar=xibar.out, tmpArray=tmpArray))
-
+    return(tmpArray)
 }
 
+# Builds a data.frame with average results by date for the given choice.
+#
+# Example usage:
+#
+#     frame <- build_choice_frame(arr, 'Undecided', list(undecided_xibar='mean'))
+#
+# Parameters:
+#
+# normalized_array: see build_normalized_array()
+# choice: one of the choices in the normalized_array
+# columns_list: desired column names and what they mean. List indexes are
+#               column names in the output frame. Values are their meanings.
+#               'mean' is the only valid meaning, for now.
+build_choice_frame <- function(normalized_array, choice, columns_list) {
+  xi <- normalized_array[,,,choice]
+
+  dates <- as.Date(dimnames(xi)[[2]])
+
+  ret <- data.frame(date=dates)
+  for (index in names(columns_list)) {
+    name = columns_list[[index]]
+
+    if (name == 'mean') {
+      values <- apply(xi, 2, mean)
+    } else {
+      stop('name must be "mean"')
+    }
+
+    ret[[index]] = values
+  }
+
+  return(ret)
+}
 
 #################################################
 ## difference function
@@ -280,12 +282,13 @@ diffSummary <- function(tmpArray, a,b){
                   })
   zbar <- t(zbar)
   nrecs <- dim(zbar)[1]
-  return(data.frame(who=rep(paste(a,"minus",b),nrecs),
-                    date=theRows,
-                    xibar=zbar[,1],
-                    lo=zbar[,2],
-                    up=zbar[,3],
-                    prob=zbar[,4]))
+  return(data.frame(
+    date=as.Date(theRows),
+    diff_xibar=zbar[,1],
+    diff_low=zbar[,2],
+    diff_high=zbar[,3],
+    dem_win_prob=zbar[,4]
+  ))
 }
 
 #########################################
@@ -308,7 +311,6 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
   }
 
   dateSeq <- seq.Date(from=min(data$start_date), to=ElectionDay, by="day")
-  NDAYS <- length(dateSeq)
 
   ## missing sample sizes?
   nobs <- data$sample_size
@@ -381,20 +383,22 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
     postprocessed_candidate_data[[who]] <- postProcess(fname, dateSeq)
   }
 
-  ## combine response options
-  tmp <- combine(postprocessed_candidate_data)
-  out <- tmp$xibar
-  tmpArray <- tmp$tmpArray
+  tmpArray <- build_normalized_array(postprocessed_candidate_data)
 
-  ## process contrasts
-  outContrast <- diffSummary(tmpArray, dem_label, gop_label)
-  out <- rbind(out, outContrast)
+  undecided_frame <- build_choice_frame(tmpArray, 'Undecided', list(undecided_xibar='mean'))
+  diff_frame <- diffSummary(tmpArray, dem_label, gop_label)
+  out <- data.frame(date=dateSeq)
+  out <- merge(out, diff_frame, by=c('date'))
+  out <- merge(out, undecided_frame, by=c('date'))
 
   ##########################################
 
-  write.csv(out, file=paste(dataDir,"/out.csv",sep=""))
+  #write.csv(out, file=paste(dataDir,"/out.csv",sep=""))
 
-  unlink(paste(dataDir,"/*.RData",sep=""))
+  return(out)
 }
 
-calculate_diff_curve(chart_slug, cook_rating, dem_label, gop_label)
+frame <- calculate_diff_curve(chart_slug, cook_rating, dem_label, gop_label)
+options(scipen=999)
+options(digits=20)
+write.table(frame, 'out.tsv', na='', quote=FALSE, sep='\t', row.names=FALSE)
