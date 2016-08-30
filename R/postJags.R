@@ -64,41 +64,7 @@ if (FALSE) {
     graphics.off()
 }
 
-    ## delta processing to come here too
-    delta <- out2[,grep("^delta",dimnames(out2)[[2]]),]
-    dimnames(delta) <- list(NULL,thePollsters,NULL)
-
-    deltabar <- apply(delta,2,
-                      function(x){
-                        n <- length(x)
-                        ok <- (1:n)>(n/2)
-                        x <- x[ok]
-                        c(mean(x),
-                          quantile(x,c(.025,.975)),
-                          sd(x),
-                          mean(x>0))
-                      })
-    deltabar <- t(deltabar)
-    colnames(deltabar) <- c("Estimate","2.5%","97.5%","StdDev","Pr[delta>0]")
-    indx <- order(deltabar[,"Estimate"])
-    deltabar <- deltabar[indx,]
-
-    ## dbar processing
-    dbar <- out2[,grep("^dbar",dimnames(out2)[[2]]),]
-    dbarbar <- apply(dbar,2,
-                      function(x){
-                        n <- length(x)
-                        ok <- (1:n)>(n/2)
-                        x <- x[ok]
-                        c(mean(x),
-                          quantile(x,c(.025,.975)),
-                          sd(x),
-                          mean(x>0))
-                      })
-    dbarbar <- t(dbarbar)
-    colnames(deltabar) <- c("Estimate","2.5%","97.5%","StdDev","Pr[dbar>0]")
-
-    return(list(xi=xi,xibar=xibar,delta=deltabar,dbar=dbarbar))
+    return(list(xi=xi,xibar=xibar))
 }
 
 #######################################
@@ -214,24 +180,6 @@ diffSummary <- function(a,b){
                     prob=zbar[,4]*100))
 }
 
-
-combineHouse <- function(tmp){
-    n <- length(tmp)
-    nms <- names(tmp)
-
-    out <- data.frame(who=rep(nms,each=length(thePollsters)),
-                      pollster=rep(thePollsters,n))
-
-    for(i in 1:nrow(out)) {
-      out[i,"est"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "Estimate"], 4)
-      out[i,"lo"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "2.5%"], 4)
-      out[i,"hi"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "97.5%"], 4)
-      out[i,"dev"] <- round(tmp[[out[i,"who"]]][["delta"]][out[i,"pollster"], "StdDev"], 4)
-    }
-
-    return(out)
-}
-
 #########################################
 
 ## process jags output
@@ -268,10 +216,6 @@ if(n.Contrasts>0){
 ##########################################
 
 write.csv(out, file=paste(dataDir,"/out.csv",sep=""))
-
-write.csv(combineHouse(tmp),
-          file=paste(dataDir,"/house.csv",sep=""))
-
 
 unlink(paste(dataDir,"/*.RData",sep=""))
 
