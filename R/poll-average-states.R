@@ -15,16 +15,6 @@ args <- commandArgs(TRUE)
 chart <- args[1]
 #chart <- '2016-arizona-senate-mccain-vs-kirkpatrick'
 
-## url to the pollster csv
-data <- read.csv(
-  file=url(paste0("http://elections.huffingtonpost.com/pollster/api/charts/",chart,".csv")),
-  colClasses=c(
-    "start_date"="Date",
-    "end_date"="Date"
-  ),
-  check.names=FALSE
-)
-
 #############################
 ## data preperation for jags
 #############################
@@ -39,67 +29,6 @@ calculate_contrast <- function(labels) {
 
   return(stable_choices[1:2])
 }
-
-## what we will loop over, below
-theResponses <- calculate_labels(colnames(data))
-
-## dates
-today <- as.Date(Sys.time(),tz="America/New_York")
-dateSeq <- seq.Date(from=min(data$start_date),
-                    to=today,
-                    by="day")
-data$n_days <- as.numeric(data$end_date)-as.numeric(data$start_date) + 1
-if (any(data$n_days < 1)) {
-    stop("found mangled start and end dates")
-}
-NDAYS <- length(dateSeq)
-
-## missing sample sizes?
-nobs <- data$sample_size
-nobs.bad <- is.na(nobs) | nobs <= 0
-if(any(nobs.bad)){
-    cat(paste("mean imputing for", sum(nobs.bad), "bad/missing sample sizes\n"))
-    nobs.bar <- tapply(nobs,data$pollster,mean,na.rm=TRUE)
-    nobs.bar[is.na(nobs.bar)] <- mean(nobs,na.rm=TRUE)
-
-    nobs[nobs.bad] <- nobs.bar[match(data$pollster[nobs.bad],names(nobs.bar))]
-}
-data$nobs <- nobs
-data$nobs_truncated <- ifelse(data$nobs > 3000, 3000, data$nobs)
-
-rm(nobs)
-
-# [adamhooper6] Value 0 makes for "Node inconsistent with parent" error. Use
-# almost-zero.
-for (label in calculate_labels(colnames(data))) {
-  data[[label]] <- ifelse(data[[label]] == 0, 1E-6, data[[label]])
-}
-
-## pollsters and pops
-data$pp <- paste0(data$pollster, ":", data$sample_subpopulation)
-pollsters <- sort(unique(data$pollster)) #list of pollsters
-thePollsters <- sort(unique(data$pp))	#list of pollsters w/populations
-
-dataDir <- paste0("data/",chart)
-dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
-
-if (1 > 0) {							#changed from git code
-  M <- 1E5                              ## number of MCMC iterates, default 100,000
-  keep <- if (NDAYS > 600) 1E3 else 5E3 ## how many to keep
-} else {
-  M <- 1E3
-  keep <- 1E3
-}
-
-thin <- M/keep            ## thinning interval
-
-
-##      FOR FORECAST MODEL, COOK RATINGS PRIORS
-state_name <- gsub('2016-|-senate.*', '', chart)
-all_priors <- read.csv("./priors-sen.csv")
-cookPrior1 <- all_priors[all_priors$state == state_name,'prior1']
-cookPrior2 <- all_priors[all_priors$state == state_name,'prior2']
-
 
 ## object for jags
 makeJagsObject <- function(who, offset=0){
@@ -175,34 +104,6 @@ makeInits <- function(){
     delta <- rnorm(n=forJags$NHOUSES,mean=0,sd=.02)
     out <- list(xi.raw=xi,sigma=sigma,delta.raw=delta)
     return(out)
-}
-
-#######################################
-## loop over the responses to be modelled
-for(who in theResponses){
-    cat(sprintf("Running for outcome %s\n", who))
-
-    tmp <- makeJagsObject(who,offset=0)
-    forJags <- tmp$forJags
-    firstDay <- tmp$firstDay
-
-  initFunc <- makeInits
-    ## call JAGS
-    foo <- jags.model(file="singleTarget.bug",
-                      data=forJags,
-                      n.chains=4,
-                      inits=initFunc,
-                      quiet=TRUE
-                      )
-    update(foo,M/5)
-
-    out <- coda.samples(foo,
-                        variable.names=c("xi","delta","sigma","dbar"),
-                        n.iter=M,thin=thin)
-
-    ## save output
-    fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
-    save("data","dateSeq","firstDay", "forJags","out", file=fname)
 }
 
 postProcess <- function(fname){
@@ -379,6 +280,106 @@ diffSummary <- function(a,b){
 }
 
 #########################################
+
+## url to the pollster csv
+data <- read.csv(
+  file=url(paste0("http://elections.huffingtonpost.com/pollster/api/charts/",chart,".csv")),
+  colClasses=c(
+    "start_date"="Date",
+    "end_date"="Date"
+  ),
+  check.names=FALSE
+)
+
+## what we will loop over, below
+theResponses <- calculate_labels(colnames(data))
+
+## dates
+today <- as.Date(Sys.time(),tz="America/New_York")
+dateSeq <- seq.Date(from=min(data$start_date),
+                    to=today,
+                    by="day")
+data$n_days <- as.numeric(data$end_date)-as.numeric(data$start_date) + 1
+if (any(data$n_days < 1)) {
+    stop("found mangled start and end dates")
+}
+NDAYS <- length(dateSeq)
+
+## missing sample sizes?
+nobs <- data$sample_size
+nobs.bad <- is.na(nobs) | nobs <= 0
+if(any(nobs.bad)){
+    cat(paste("mean imputing for", sum(nobs.bad), "bad/missing sample sizes\n"))
+    nobs.bar <- tapply(nobs,data$pollster,mean,na.rm=TRUE)
+    nobs.bar[is.na(nobs.bar)] <- mean(nobs,na.rm=TRUE)
+
+    nobs[nobs.bad] <- nobs.bar[match(data$pollster[nobs.bad],names(nobs.bar))]
+}
+data$nobs <- nobs
+data$nobs_truncated <- ifelse(data$nobs > 3000, 3000, data$nobs)
+
+rm(nobs)
+
+# [adamhooper6] Value 0 makes for "Node inconsistent with parent" error. Use
+# almost-zero.
+for (label in calculate_labels(colnames(data))) {
+  data[[label]] <- ifelse(data[[label]] == 0, 1E-6, data[[label]])
+}
+
+## pollsters and pops
+data$pp <- paste0(data$pollster, ":", data$sample_subpopulation)
+pollsters <- sort(unique(data$pollster)) #list of pollsters
+thePollsters <- sort(unique(data$pp))	#list of pollsters w/populations
+
+dataDir <- paste0("data/",chart)
+dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
+
+if (1 > 0) {							#changed from git code
+  M <- 1E5                              ## number of MCMC iterates, default 100,000
+  keep <- if (NDAYS > 600) 1E3 else 5E3 ## how many to keep
+} else {
+  M <- 1E3
+  keep <- 1E3
+}
+
+thin <- M/keep            ## thinning interval
+
+
+##      FOR FORECAST MODEL, COOK RATINGS PRIORS
+state_name <- gsub('2016-|-senate.*', '', chart)
+all_priors <- read.csv("./priors-sen.csv")
+cookPrior1 <- all_priors[all_priors$state == state_name,'prior1']
+cookPrior2 <- all_priors[all_priors$state == state_name,'prior2']
+
+
+#######################################
+## loop over the responses to be modelled
+for(who in theResponses){
+    cat(sprintf("Running for outcome %s\n", who))
+
+    tmp <- makeJagsObject(who,offset=0)
+    forJags <- tmp$forJags
+    firstDay <- tmp$firstDay
+
+  initFunc <- makeInits
+    ## call JAGS
+    foo <- jags.model(file="singleTarget.bug",
+                      data=forJags,
+                      n.chains=4,
+                      inits=initFunc,
+                      quiet=TRUE
+                      )
+    update(foo,M/5)
+
+    out <- coda.samples(foo,
+                        variable.names=c("xi","delta","sigma","dbar"),
+                        n.iter=M,thin=thin)
+
+    ## save output
+    fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
+    save("data","dateSeq","firstDay", "forJags","out", file=fname)
+}
+
 
 ## process jags output
 tmp <- list()
