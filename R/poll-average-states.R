@@ -12,8 +12,9 @@ library('coda')
 options(stringsAsFactors=FALSE)
 args <- commandArgs(TRUE)
 chart_slug <- args[1]
+cook_rating <- args[2]
 
-if (args[2] == 'fast') {
+if (args[3] == 'fast') {
   M <- 1E3
   Keep <- 1E3
 } else {
@@ -22,6 +23,13 @@ if (args[2] == 'fast') {
 }
 
 ElectionDay <- as.Date('2016-11-08')
+
+CookPriors <- data.frame(
+  rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
+  prior1=c(0.4823, 0.4881, NA, 0.4792, 0.4746, 0.4879, 0.4783),
+  prior2=c(0.1584, 0.1205, NA, 0.0619, 0.0824, 0.0824, 0.1807),
+  dem_win_prob=c(1.0, 0.90, 0.80, 0.5, 0.20, 0.10, 0.01)
+)
 
 #############################
 ## data preperation for jags
@@ -289,7 +297,7 @@ diffSummary <- function(dataDir, a,b){
 
 #########################################
 
-calculate_diff_curve <- function(chart_slug) {
+calculate_diff_curve <- function(chart_slug, cook_rating) {
   ## url to the pollster csv
   data <- read.csv(
     file=url(paste0("http://elections.huffingtonpost.com/pollster/api/charts/",chart_slug,".csv")),
@@ -338,13 +346,10 @@ calculate_diff_curve <- function(chart_slug) {
   dataDir <- paste0("data/",chart_slug)
   dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
 
-
-  ##      FOR FORECAST MODEL, COOK RATINGS PRIORS
-  state_name <- gsub('2016-|-senate.*', '', chart_slug)
-  all_priors <- read.csv("./priors-sen.csv")
-  cookPrior1 <- all_priors[all_priors$state == state_name,'prior1']
-  cookPrior2 <- all_priors[all_priors$state == state_name,'prior2']
-
+  ## FOR FORECAST MODEL, COOK RATINGS PRIORS
+  cook_index <- match(cook_rating, CookPriors$rating)
+  cookPrior1 <- CookPriors[cook_index,'prior1']
+  cookPrior2 <- CookPriors[cook_index,'prior2']
 
   #######################################
   ## loop over the responses to be modelled
@@ -398,4 +403,4 @@ calculate_diff_curve <- function(chart_slug) {
   unlink(paste(dataDir,"/*.RData",sep=""))
 }
 
-calculate_diff_curve(chart_slug)
+calculate_diff_curve(chart_slug, cook_rating)
