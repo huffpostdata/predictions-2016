@@ -225,8 +225,7 @@ combine <- function(tmp, dataDir){
     }
 
     ## renormalize (and check)
-    tmpArray.renorm <- apply(tmpArray,c(1,2,3),
-                             function(x)x/sum(x,na.rm=TRUE)*100)
+    tmpArray.renorm <- apply(tmpArray,c(1,2,3), function(x)x/sum(x,na.rm=TRUE))
     rm(tmpArray)   ## give back some memory
     tmpArray <- aperm(tmpArray.renorm,perm=c(2,3,4,1))
     save("tmpArray",file=paste(dataDir,"/tmpArray.RData",sep=""))
@@ -292,7 +291,7 @@ diffSummary <- function(dataDir, a,b){
                     xibar=zbar[,1],
                     lo=zbar[,2],
                     up=zbar[,3],
-                    prob=zbar[,4]*100))
+                    prob=zbar[,4]))
 }
 
 #########################################
