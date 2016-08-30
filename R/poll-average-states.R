@@ -34,18 +34,14 @@ calculate_labels <- function(col_names) {
   return(col_names[1:last_choice_index])
 }
 
-calculate_responses <- function(col_names) {
-  all_choices <- calculate_labels(col_names)
+calculate_contrast <- function(labels) {
+  stable_choices <- setdiff(labels, c("Other","Undecided","Not Voting","Refused","Wouldn't Vote","None"))
 
-  stable_choices <- setdiff(all_choices, c("Other","Undecided","Not Voting","Refused","Wouldn't Vote","None"))
-
-  contrast <- list(stable_choices[1:2])
-
-  return(c(all_choices, contrast))
+  return(stable_choices[1:2])
 }
 
 ## what we will loop over, below
-theResponses <- calculate_responses(colnames(data))
+theResponses <- calculate_labels(colnames(data))
 
 ## dates
 today <- as.Date(Sys.time(),tz="America/New_York")
@@ -99,15 +95,14 @@ thin <- M/keep            ## thinning interval
 
 
 ##      FOR FORECAST MODEL, COOK RATINGS PRIORS            
-state_name <- gsub('2016-|-senate.*', '', chart)
+state_name <- gsub('2016-|-senate.*', '', chart)
 all_priors <- read.csv("./priors-sen.csv")
 cookPrior1 <- all_priors[all_priors$state == state_name,'prior1']
 cookPrior2 <- all_priors[all_priors$state == state_name,'prior2']
 
 
 ## object for jags
-makeJagsObject <- function(who,
-                           offset=0){
+makeJagsObject <- function(who, offset=0){
     tmpData <- data
     theColumn <- match(who,names(tmpData))
     y.tmp <- tmpData[,theColumn]                     ## the response
@@ -115,19 +110,8 @@ makeJagsObject <- function(who,
     ok <- apply(y.tmp,1,function(x)!(any(is.na(x)))) ## clobber NA
     tmpData <- tmpData[ok,]                          ## subset to obs with good data
     y <- as.matrix(tmpData[,theColumn])
-    if(dim(y)[2]==2){
-      ## we have a contrast!
-      a <- y[,1]/100
-      b <- y[,2]/100
-      y <- a - b
-      va <- a*(1-a)
-      vb <- b*(1-b)
-      cov <- -a*b
-      v <- (va + vb - 2*cov)/tmpData$nobs_truncated
-    } else {
-      y <- y/100
-      v <- y*(1-y)/tmpData$nobs_truncated          ## variance
-    }
+    y <- y/100
+    v <- y*(1-y)/tmpData$nobs_truncated              ## variance
     prec <- 1/v
     ## pollster/population combinations
 
@@ -193,32 +177,16 @@ makeInits <- function(){
     return(out)
 }
 
-makeInitsContrasts <- function(){
-  sigma <- runif(n=1,0,.003)
-  xi <- rep(0,forJags$NPERIODS)
-  
-
-  ## house effect delta inits
-  delta <- rnorm(n=forJags$NHOUSES,mean=0,sd=.02)
-  out <- list(xi.raw=xi,sigma=sigma,delta.raw=delta)
-  return(out)
-}
-
 #######################################
 ## loop over the responses to be modelled
 for(who in theResponses){
-  who <- unlist(who)
-
-    cat(sprintf("\nRunning for outcome %s\n", paste(who, collapse=" minus ")))
+    cat(sprintf("Running for outcome %s\n", who))
 
     tmp <- makeJagsObject(who,offset=0)
     forJags <- tmp$forJags
     firstDay <- tmp$firstDay
 
   initFunc <- makeInits
-  if(length(who)==2){
-    initFunc <- makeInitsContrasts
-  }
     ## call JAGS
     foo <- jags.model(file="singleTarget.bug",
                       data=forJags,
@@ -233,8 +201,7 @@ for(who in theResponses){
                         n.iter=M,thin=thin)
 
     ## save output
-    fname <- paste0(dataDir,'/',gsub(paste(who,collapse=""),pattern=" ",replacement=""),
-                    ".jags.RData")
+    fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
     save("data","dateSeq","firstDay", "forJags","out", file=fname)
 }
 

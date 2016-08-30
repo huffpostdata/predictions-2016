@@ -32,7 +32,7 @@ postProcess <- function(fname){
                      forJags$y))
 
 if (FALSE) {
-    gname <- paste(paste(who,collapse=""),".pdf",sep="")
+    gname <- paste0(who,".pdf")
     quartz(file=gname,
            type="pdf",
            bg="white")
@@ -43,8 +43,7 @@ if (FALSE) {
          xlab="",ylab="",
          axes=FALSE)
 
-    title(paste(who,collapse=" minus "),
-          adj=0,line=2.67)
+    title(who,adj=0,line=2.67)
     axis.Date(side=1,x=as.Date(theDateSeq),
               lwd=0,lwd.tick=.5,cex.axis=.65)
     axis.Date(side=3,x=as.Date(theDateSeq),
@@ -71,10 +70,6 @@ if (FALSE) {
 ## combine results for response options
 
 combine <- function(tmp){
-    nms <- names(tmp)
-    noInclude <- grep("minus",nms)
-    tmp[noInclude] <- NULL
-
     cat("combining/renormaling output for the following response options\n:")
     print(names(tmp))
 
@@ -185,40 +180,22 @@ diffSummary <- function(a,b){
 ## process jags output
 tmp <- list()
 for(who in theResponses){
- 	who <- unlist(who)
- 		cat(sprintf(
- 			"n\nPost-processing for candidate %s\n",
- 			paste(who, collapse=" minus ")
- 		))
-    fname <- paste(dataDir,'/',paste(who,collapse=""),".jags.RData",sep="")
- 	cat(paste("reading JAGS output and data from file",fname,"\n|"))
- 	tmp[[paste(who,collapse=" minus ")]] <- postProcess(fname)
+ 		cat(sprintf("Post-processing for candidate %s\n", who))
+    fname <- paste(dataDir,'/',who,".jags.RData",sep="")
+ 	cat(paste("reading JAGS output and data from file",fname,"\n"))
+ 	tmp[[who]] <- postProcess(fname)
 }
 
 ## combine response options
 out <- combine(tmp)
 
 ## process contrasts 
-theContrasts <- grep("minus",names(tmp))
-n.Contrasts <- length(theContrasts)
-if(n.Contrasts>0){
-  outContrasts <- list()
-  for(j in 1:n.Contrasts){
-    thisContrast.name <- names(tmp)[theContrasts[j]]
-    nms <- strsplit(thisContrast.name,split=" minus ")[[1]]
-    outContrasts[[j]] <- diffSummary(nms[1],nms[2])
-  }
-  outContrasts <- do.call("rbind",outContrasts)
-  out <- rbind(out,outContrasts)
-}
-
+contrast <- calculate_contrast(theResponses)
+outContrast <- diffSummary(contrast[1], contrast[2])
+out <- rbind(out, outContrast)
 
 ##########################################
 
 write.csv(out, file=paste(dataDir,"/out.csv",sep=""))
 
 unlink(paste(dataDir,"/*.RData",sep=""))
-
-
-
-
