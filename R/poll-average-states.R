@@ -28,8 +28,8 @@ ElectionDay <- as.Date('2016-11-08')
 
 CookPriors <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
-  prior1=c(0.4823, 0.4881, NA, 0.4792, 0.4746, 0.4879, 0.4783),
-  prior2=c(0.1584, 0.1205, NA, 0.0619, 0.0824, 0.0824, 0.1807),
+  prior1=c(0.4823, 0.4881, 0.4865, 0.4792, 0.4746, 0.4879, 0.4783),
+  prior2=c(0.1584, 0.1205, 0.0706, 0.0619, 0.0824, 0.0824, 0.1807),
   dem_win_prob=c(1.0, 0.90, 0.80, 0.5, 0.20, 0.10, 0.01)
 )
 
@@ -132,9 +132,8 @@ postProcess <- function(fname, dateSeq){
     xibar <- t(xibar)
     theDateSeq <- as.character(dateSeq)[seq(from=firstDay,
                                             length=dim(xibar)[1],by=1)]
-    dimnames(xi) <- list(NULL,theDateSeq,1:dim(xi)[3])
-    dimnames(xibar) <- list(theDateSeq,
-                            c("mean","2.5","97.5","sd"))
+    dimnames(xi) <- list(NULL,date=theDateSeq,1:dim(xi)[3])
+    dimnames(xibar) <- list(date=theDateSeq, c("mean","2.5","97.5","sd"))
 
 if (FALSE) {
     ## rough plot
@@ -182,47 +181,51 @@ if (FALSE) {
     return(list(xi=xi,xibar=xibar))
 }
 
-#######################################
-## combine results for response options
-
+# Builds a 3D array of xi results, normalized.
+#
+# Array format:
+#
+#     arr[,,'2016-08-04']: results for Aug. 4
+#     arr['McCain',,]: results for McCain
+#     arr[,1,]: results for one "iteration"
+#
+# "iteration" here is a loose term. Remember that the input is a list of
+# mcmc.list objects, and each is independent. Each mcmc.list has the same number
+# of chains, and each chain has the same number of iterations. One "iteration"
+# i at date d in our return value corresponds to the i-th xi[d] value from each
+# mcmc.list.
+#
+# In other words, arr[,1,'2016-08-04'] pulls one xi value from each entry in
+# candidate_mcmc_lists and normalizes so they all add up to 1.0.
 build_normalized_array <- function(candidate_mcmc_lists) {
     cat('combining/renormaling output for: ')
     print(names(candidate_mcmc_lists))
 
-    n <- length(candidate_mcmc_lists)
-    nms <- names(candidate_mcmc_lists)
-    xi <- lapply(candidate_mcmc_lists,function(x)x$xi)
-    d <- dim(xi[[1]])
+    candidate_xis <- lapply(candidate_mcmc_lists,function(x)x$xi)
+    d <- dim(candidate_xis[[1]])
     niter <- d[1]
     nchains <- d[3]
 
-    dateSpans <- lapply(xi,
-                        function(x){
-                            n <- ncol(x)
-                            return(colnames(x)[c(1,n)])
-                        })
-
+    dateSpans <- lapply(candidate_xis, function(xi) colnames(xi)[c(1,ncol(xi))])
     dateSpans <- do.call("rbind",dateSpans)
     dateRange <- c(as.Date(min(dateSpans[,1])), as.Date(max(dateSpans[,2])))
     dateSeq <- seq.Date(from=dateRange[1], to=dateRange[2], by="day")
 
-    ## create 4-d master array
-    tmpArray <- array(NA,c(niter,length(dateSeq),nchains,n))
-    dimnames(tmpArray) <- list(NULL,as.character(dateSeq),1:nchains,nms)
-    for(j in 1:n){
-        ## populate master array with output for each response option
-        matchingDays <- match(colnames(xi[[j]]),as.character(dateSeq))
-        tmpArray[,matchingDays,,j] <- xi[[j]]
+    # Create 3D master array: date -> chain/iter -> candidate -> fraction
+    #
+    # (We fold iterations from all chains into one big chain+iter vector.)
+    arr <- array(NA, c(length(candidate_mcmc_lists), niter * nchains, length(dateSeq)))
+    dimnames(arr) <- list(who=names(candidate_mcmc_lists), iteration=NULL, date=as.character(dateSeq))
+    for (who in names(candidate_mcmc_lists)) {
+      xi <- candidate_xis[[who]]
+      matching_days <- match(colnames(xi), as.character(dateSeq))
+      arr[who,,matching_days] <- xi
     }
 
-    ## renormalize (and check)
-    tmpArray.renorm <- apply(tmpArray,c(1,2,3), function(x)x/sum(x,na.rm=TRUE))
-    rm(tmpArray)   ## give back some memory
-    tmpArray <- aperm(tmpArray.renorm,perm=c(2,3,4,1))
-    save('tmpArray',file='tmpArray.RData')
-    ##all.sum <- apply(tmpArray,c(1,2,3),sum,na.rm=TRUE)
+    # Normalize. Use same variable name to free up memory.
+    arr <- apply(arr, c(2, 3), function(x) x/sum(x, na.rm=TRUE))
 
-    return(tmpArray)
+    return(arr)
 }
 
 # Builds a data.frame with average results by date for the given choice.
@@ -239,9 +242,9 @@ build_normalized_array <- function(candidate_mcmc_lists) {
 #               column names in the output frame. Values are their meanings.
 #               'mean' is the only valid meaning, for now.
 build_choice_frame <- function(normalized_array, choice, columns_list) {
-  xi <- normalized_array[,,,choice]
+  xi <- normalized_array[choice,,]
 
-  dates <- as.Date(dimnames(xi)[[2]])
+  dates <- as.Date(dimnames(xi)[['date']])
 
   ret <- data.frame(date=dates)
   for (index in names(columns_list)) {
@@ -261,33 +264,23 @@ build_choice_frame <- function(normalized_array, choice, columns_list) {
 
 #################################################
 ## difference function
-diffSummary <- function(tmpArray, a,b){
-  theOnes <- match(c(a,b),dimnames(tmpArray)[[4]])
-  d <- list(tmpArray[,,,theOnes[1]],
-            tmpArray[,,,theOnes[2]])
-  theRows <- sort(unique(unlist(lapply(d,function(x)dimnames(x)[[2]]))))
-  nDays <- length(theRows)
-  nIter <- dim(d[[1]])[1]
-  nChains <- dim(d[[1]])[3]
-  z1 <- array(NA,c(nIter,nDays,nChains))
-  z2 <- array(NA,c(nIter,nDays,nChains))
-  z1[,match(dimnames(d[[1]])[[2]],theRows),] <- d[[1]]
-  z2[,match(dimnames(d[[2]])[[2]],theRows),] <- d[[2]]
-  z <- z1 - z2
-  zbar <- apply(z,2,
-                  function(x){
-                      c(mean(x,na.rm=TRUE),
-                        quantile(x,c(.025,.975),na.rm=TRUE),
-                        mean(x>0,na.rm=TRUE))
-                  })
-  zbar <- t(zbar)
-  nrecs <- dim(zbar)[1]
+diffSummary <- function(normalized_array, dem_who, gop_who) {
+  diff_array <- normalized_array[dem_who,,] - normalized_array[gop_who,,]
+
+  averages <- apply(diff_array, 'date', function(x) c(
+    mean(x, na.rm=TRUE),
+    quantile(x, c(0.025, 0.975), na.rm=TRUE),
+    mean(x > 0, na.rm=TRUE)
+  ))
+
+  dimnames(averages)[[1]] <- c('mean', '0.025', '0.975', 'prob')
+
   return(data.frame(
-    date=as.Date(theRows),
-    diff_xibar=zbar[,1],
-    diff_low=zbar[,2],
-    diff_high=zbar[,3],
-    dem_win_prob=zbar[,4]
+    date=as.Date(dimnames(averages)$date),
+    diff_xibar=averages['mean',],
+    diff_low=averages['0.025',],
+    diff_high=averages['0.975',],
+    dem_win_prob=averages['prob',]
   ))
 }
 
