@@ -14,9 +14,9 @@ args <- commandArgs(TRUE)
 chart <- args[1]
 #chart <- '2016-arizona-senate-mccain-vs-kirkpatrick'
 
-if (1 > 0) {							#changed from git code
-  M <- 1E5                              ## number of MCMC iterates, default 100,000
-  keep <- if (NDAYS > 600) 1E3 else 5E3 ## how many to keep
+if (1 > 0) {     # changed from git code
+  M <- 1E5       ## number of MCMC iterates, default 100,000
+  keep <- 5E3    ## how many to keep
 } else {
   M <- 1E3
   keep <- 1E3
@@ -293,10 +293,7 @@ diffSummary <- function(a,b){
 ## url to the pollster csv
 data <- read.csv(
   file=url(paste0("http://elections.huffingtonpost.com/pollster/api/charts/",chart,".csv")),
-  colClasses=c(
-    "start_date"="Date",
-    "end_date"="Date"
-  ),
+  colClasses=c("start_date"="Date", "end_date"="Date"),
   check.names=FALSE
 )
 
@@ -305,12 +302,10 @@ theResponses <- calculate_labels(colnames(data))
 
 ## dates
 today <- as.Date(Sys.time(),tz="America/New_York")
-dateSeq <- seq.Date(from=min(data$start_date),
-                    to=today,
-                    by="day")
+dateSeq <- seq.Date(from=min(data$start_date), to=today, by="day")
 data$n_days <- as.numeric(data$end_date)-as.numeric(data$start_date) + 1
 if (any(data$n_days < 1)) {
-    stop("found mangled start and end dates")
+  stop("found mangled start and end dates")
 }
 NDAYS <- length(dateSeq)
 
@@ -318,11 +313,11 @@ NDAYS <- length(dateSeq)
 nobs <- data$sample_size
 nobs.bad <- is.na(nobs) | nobs <= 0
 if(any(nobs.bad)){
-    cat(paste("mean imputing for", sum(nobs.bad), "bad/missing sample sizes\n"))
-    nobs.bar <- tapply(nobs,data$pollster,mean,na.rm=TRUE)
-    nobs.bar[is.na(nobs.bar)] <- mean(nobs,na.rm=TRUE)
+  cat(paste("mean imputing for", sum(nobs.bad), "bad/missing sample sizes\n"))
+  nobs.bar <- tapply(nobs,data$pollster,mean,na.rm=TRUE)
+  nobs.bar[is.na(nobs.bar)] <- mean(nobs,na.rm=TRUE)
 
-    nobs[nobs.bad] <- nobs.bar[match(data$pollster[nobs.bad],names(nobs.bar))]
+  nobs[nobs.bad] <- nobs.bar[match(data$pollster[nobs.bad],names(nobs.bar))]
 }
 data$nobs <- nobs
 data$nobs_truncated <- ifelse(data$nobs > 3000, 3000, data$nobs)
@@ -338,7 +333,7 @@ for (label in calculate_labels(colnames(data))) {
 ## pollsters and pops
 data$pp <- paste0(data$pollster, ":", data$sample_subpopulation)
 pollsters <- sort(unique(data$pollster)) #list of pollsters
-thePollsters <- sort(unique(data$pp))	#list of pollsters w/populations
+thePollsters <- sort(unique(data$pp))    #list of pollsters w/populations
 
 dataDir <- paste0("data/",chart)
 dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
@@ -354,39 +349,43 @@ cookPrior2 <- all_priors[all_priors$state == state_name,'prior2']
 #######################################
 ## loop over the responses to be modelled
 for(who in theResponses){
-    cat(sprintf("Running for outcome %s\n", who))
+  cat(sprintf("Running for outcome %s\n", who))
 
-    tmp <- makeJagsObject(who,offset=0)
-    forJags <- tmp$forJags
-    firstDay <- tmp$firstDay
+  tmp <- makeJagsObject(who,offset=0)
+  forJags <- tmp$forJags
+  firstDay <- tmp$firstDay
 
   initFunc <- makeInits
-    ## call JAGS
-    foo <- jags.model(file="singleTarget.bug",
-                      data=forJags,
-                      n.chains=4,
-                      inits=initFunc,
-                      quiet=TRUE
-                      )
-    update(foo,M/5)
+  ## call JAGS
+  foo <- jags.model(
+    file="singleTarget.bug",
+    data=forJags,
+    n.chains=4,
+    inits=initFunc,
+    quiet=TRUE
+  )
+  update(foo,M/5)
 
-    out <- coda.samples(foo,
-                        variable.names=c("xi","delta","sigma","dbar"),
-                        n.iter=M,thin=thin)
+  out <- coda.samples(
+    foo,
+    variable.names=c("xi","delta","sigma","dbar"),
+    n.iter=M,
+    thin=thin
+  )
 
-    ## save output
-    fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
-    save("data","dateSeq","firstDay", "forJags","out", file=fname)
+  ## save output
+  fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
+  save("data","dateSeq","firstDay", "forJags","out", file=fname)
 }
 
 
 ## process jags output
 tmp <- list()
 for(who in theResponses){
-		cat(sprintf("Post-processing for candidate %s\n", who))
-    fname <- paste(dataDir,'/',who,".jags.RData",sep="")
-	cat(paste("reading JAGS output and data from file",fname,"\n"))
-	tmp[[who]] <- postProcess(fname)
+  cat(sprintf("Post-processing for candidate %s\n", who))
+  fname <- paste(dataDir,'/',who,".jags.RData",sep="")
+  cat(paste("reading JAGS output and data from file",fname,"\n"))
+  tmp[[who]] <- postProcess(fname)
 }
 
 ## combine response options
