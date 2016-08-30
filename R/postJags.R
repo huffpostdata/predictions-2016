@@ -223,7 +223,7 @@ diffSummary <- function(tmpArray, a,b){
   zbar <- t(zbar)
   nrecs <- dim(zbar)[1]
   lastrow <- as.numeric(tail(zbar[,4], 1))
-  jitter <- if (lastrow > .5) function(x){x - (rnorm(length(x),2,1.5))} else function(x){x + (rnorm(length(x),4,3))}                  
+  jitter <- if (lastrow > .5) function(x){x - (rnorm(length(x),0.02,0.015))} else function(x){x + (rnorm(length(x),0.02,0.015))}                  
   z <- jitter(z)
   	zbar <- apply(z,2,
                   function(x){
