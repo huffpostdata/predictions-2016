@@ -13,15 +13,13 @@ options(stringsAsFactors=FALSE)
 args <- commandArgs(TRUE)
 chart_slug <- args[1]
 
-if (1 > 0) {     # changed from git code
-  M <- 1E5       ## number of MCMC iterates, default 100,000
-  keep <- 5E3    ## how many to keep
-} else {
+if (args[2] == 'fast') {
   M <- 1E3
-  keep <- 1E3
+  Keep <- 1E3
+} else {
+  M <- 1E5       ## number of MCMC iterates, default 100,000
+  Keep <- 5E3    ## how many to keep
 }
-
-thin <- M/keep            ## thinning interval
 
 ElectionDay <- as.Date('2016-11-08')
 
@@ -368,7 +366,7 @@ calculate_diff_curve <- function(chart_slug) {
     )
     update(jags_model, M/5)
 
-    out <- coda.samples(jags_model, variable.names=c("xi"), n.iter=M, thin=thin)
+    out <- coda.samples(jags_model, variable.names=c("xi"), n.iter=M, thin=M/Keep)
 
     ## save output
     fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
