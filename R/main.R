@@ -101,8 +101,13 @@ dump_senate_data_for_date <- function(data, last_date) {
   curves_path <- sub('DATE', last_date, output_senate_curves_path)
   house_effects_path <- sub('DATE', last_date, output_senate_house_effects_path)
 
-  write.table(format(data$curves, digits=4), file=curves_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
-  write.table(format(data$house_effects, digits=4), file=house_effects_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
+  # Yay, R. format(data$curves) would round digits but show "NA". Plain
+  # write.table() would hide "NA" but not round digits. So let's set some
+  # global options....
+  options(scipen=999)
+  options(digits=6)
+  write.table(data$curves, file=curves_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
+  write.table(format(data$house_effects, digits=6), file=house_effects_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
 }
 
 dump_senate_seat_counts <- function(seat_counts, last_date) {
