@@ -357,21 +357,16 @@ calculate_diff_curve <- function(chart_slug) {
 
     initFunc <- function() { return(makeInits(forJags, cookPrior1, cookPrior2)) }
     ## call JAGS
-    foo <- jags.model(
+    jags_model <- jags.model(
       file="singleTarget.bug",
       data=forJags,
       n.chains=4,
       inits=initFunc,
       quiet=TRUE
     )
-    update(foo,M/5)
+    update(jags_model, M/5)
 
-    out <- coda.samples(
-      foo,
-      variable.names=c("xi","delta","sigma","dbar"),
-      n.iter=M,
-      thin=thin
-    )
+    out <- coda.samples(jags_model, variable.names=c("xi"), n.iter=M, thin=thin)
 
     ## save output
     fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
