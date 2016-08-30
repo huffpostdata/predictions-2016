@@ -20,6 +20,7 @@ postProcess <- function(fname){
     dimnames(xibar) <- list(theDateSeq,
                             c("mean","2.5","97.5","sd"))
 
+if (FALSE) {
     ## rough plot
     plotData <- data.frame(y=forJags$y,
                            date=dateSeq[forJags$date+firstDay])
@@ -31,7 +32,6 @@ postProcess <- function(fname){
     ylims <- range(c(as.vector(xi[s,,]),
                      forJags$y))
 
-if (FALSE) {
     gname <- paste0(who,".pdf")
     quartz(file=gname,
            type="pdf",
