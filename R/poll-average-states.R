@@ -5,7 +5,6 @@
 ## July 2016
 
 #####################################
-#some of top part is changed from git code to be customized for NJ local runs
 
 suppressPackageStartupMessages(library('rjags'))
 library('coda')
@@ -14,6 +13,16 @@ options(stringsAsFactors=FALSE)
 args <- commandArgs(TRUE)
 chart <- args[1]
 #chart <- '2016-arizona-senate-mccain-vs-kirkpatrick'
+
+if (1 > 0) {							#changed from git code
+  M <- 1E5                              ## number of MCMC iterates, default 100,000
+  keep <- if (NDAYS > 600) 1E3 else 5E3 ## how many to keep
+} else {
+  M <- 1E3
+  keep <- 1E3
+}
+
+thin <- M/keep            ## thinning interval
 
 #############################
 ## data preperation for jags
@@ -333,16 +342,6 @@ thePollsters <- sort(unique(data$pp))	#list of pollsters w/populations
 
 dataDir <- paste0("data/",chart)
 dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
-
-if (1 > 0) {							#changed from git code
-  M <- 1E5                              ## number of MCMC iterates, default 100,000
-  keep <- if (NDAYS > 600) 1E3 else 5E3 ## how many to keep
-} else {
-  M <- 1E3
-  keep <- 1E3
-}
-
-thin <- M/keep            ## thinning interval
 
 
 ##      FOR FORECAST MODEL, COOK RATINGS PRIORS
