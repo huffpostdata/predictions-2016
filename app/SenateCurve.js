@@ -13,8 +13,6 @@ function values_to_path_d(raw_values, options) {
 
   const values = raw_values.map(v => Math.round(ChartHeight / 2 - convert_y * v))
 
-  console.log(values)
-
   if (reverse) values.reverse()
 
   let last_y = values[0]
@@ -48,8 +46,8 @@ module.exports = class SenateCurve {
     this.is_plottable = this.points[0].dem_xibar !== null
 
     if (this.is_plottable) {
-      const max_diff = points.reduce(((a, p) => Math.max(a, Math.abs(p.diff_low), Math.abs(p.diff_high))), 1)
-      this.y_max = [ 3, 5, 10, 15, 20, 30, 40, 50 ].find(i => i > max_diff)
+      const max_diff = points.reduce(((a, p) => Math.max(a, Math.abs(p.diff_low), Math.abs(p.diff_high))), 0.01)
+      this.y_max = [ 0.03, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50 ].find(i => i > max_diff)
       this.x_min = this.points.findIndex(p => p.date_s >= '2016-07-01')
       this.x_max = this.points.length // 1 past end of chart
     }

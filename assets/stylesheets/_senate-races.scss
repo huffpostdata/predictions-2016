@@ -80,23 +80,10 @@
     }
   }
 
-  .balance-of-power {
-    position: absolute;
-    z-index: -1;
-    // XXX hard-coded: 36 Dem+Ind seats in class 1 and 2; 30 GOP seats in class 1 and 2
-    // ... and both Ind senators caucus with Dem
-    top: 14 * $line-height;
-    margin-top: -1px;
-    height: 2px;
-    left: $state-width;
-    right: 0;
-    background: $alt-background;
-  }
-
   svg {
     path.spread {
       stroke: none;
-      fill: #eee;
+      opacity: .4;
     }
 
     path.diff {
@@ -109,6 +96,36 @@
       stroke: gray;
       stroke-width: 3px;
       fill: none;
+    }
+  }
+
+  .chart-container {
+    background: $background;
+    border: 1px solid black;
+    line-height: 1;
+
+    .grid {
+      position: relative;
+      padding-left: 2rem; // for y-axis
+    }
+
+    .y-axis {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2rem;
+      bottom: 0;
+
+      .min, .max, .zero {
+        position: absolute;
+        left: 0;
+        width: 2rem;
+        text-align: right;
+      }
+
+      .max { top: 0; }
+      .zero { top: 50%; height: 1rem; margin-top: -.5rem; }
+      .min { bottom: 0; }
     }
   }
 }

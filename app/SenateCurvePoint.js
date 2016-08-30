@@ -25,6 +25,6 @@ module.exports = class SenateCurvePoint {
     this.diff_low = n(hash.diff_low)
     this.diff_high = n(hash.diff_high)
     this.undecided_xibar = n(hash.undecided_xibar)
-    this.dem_win_prob = n(hash.dem_win_prob)
+    this.dem_win_prob = n(hash.dem_win_prob_with_undecided)
   }
 }
