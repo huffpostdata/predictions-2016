@@ -185,7 +185,7 @@ if (FALSE) {
 #######################################
 ## combine results for response options
 
-combine <- function(tmp, dataDir){
+combine <- function(tmp){
     cat("combining/renormaling output for the following response options\n:")
     print(names(tmp))
 
@@ -224,7 +224,7 @@ combine <- function(tmp, dataDir){
     tmpArray.renorm <- apply(tmpArray,c(1,2,3), function(x)x/sum(x,na.rm=TRUE))
     rm(tmpArray)   ## give back some memory
     tmpArray <- aperm(tmpArray.renorm,perm=c(2,3,4,1))
-    save("tmpArray",file=paste(dataDir,"/tmpArray.RData",sep=""))
+    #save("tmpArray",file=paste(dataDir,"/tmpArray.RData",sep=""))
     ##all.sum <- apply(tmpArray,c(1,2,3),sum,na.rm=TRUE)
 
     ## average over iterations and chains
@@ -252,16 +252,14 @@ combine <- function(tmp, dataDir){
                             up=xiq.out[,2],
                             prob=rep(NA,nrecs))
 
-    return(xibar.out)
+    return(list(xibar=xibar.out, tmpArray=tmpArray))
 
 }
 
 
 #################################################
 ## difference function
-diffSummary <- function(dataDir, a,b){
-  load(file=paste(dataDir,"/tmpArray.RData",sep=""))
-
+diffSummary <- function(tmpArray, a,b){
   theOnes <- match(c(a,b),dimnames(tmpArray)[[4]])
   d <- list(tmpArray[,,,theOnes[1]],
             tmpArray[,,,theOnes[2]])
@@ -375,19 +373,21 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
 
 
   ## process jags output
-  tmp <- list()
+  postprocessed_candidate_data <- list()
   for(who in theResponses){
     cat(sprintf("Post-processing for candidate %s\n", who))
     fname <- paste(dataDir,'/',who,".jags.RData",sep="")
     cat(paste("reading JAGS output and data from file",fname,"\n"))
-    tmp[[who]] <- postProcess(fname, dateSeq)
+    postprocessed_candidate_data[[who]] <- postProcess(fname, dateSeq)
   }
 
   ## combine response options
-  out <- combine(tmp, dataDir)
+  tmp <- combine(postprocessed_candidate_data)
+  out <- tmp$xibar
+  tmpArray <- tmp$tmpArray
 
   ## process contrasts
-  outContrast <- diffSummary(dataDir, dem_label, gop_label)
+  outContrast <- diffSummary(tmpArray, dem_label, gop_label)
   out <- rbind(out, outContrast)
 
   ##########################################
