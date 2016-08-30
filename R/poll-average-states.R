@@ -23,6 +23,8 @@ if (1 > 0) {     # changed from git code
 
 thin <- M/keep            ## thinning interval
 
+ElectionDay <- as.Date('2016-11-08')
+
 #############################
 ## data preperation for jags
 #############################
@@ -301,12 +303,12 @@ calculate_diff_curve <- function(chart_slug) {
   theResponses <- calculate_labels(colnames(data))
 
   ## dates
-  today <- as.Date(Sys.time(),tz="America/New_York")
-  dateSeq <- seq.Date(from=min(data$start_date), to=today, by="day")
   data$n_days <- as.numeric(data$end_date)-as.numeric(data$start_date) + 1
   if (any(data$n_days < 1)) {
     stop("found mangled start and end dates")
   }
+
+  dateSeq <- seq.Date(from=min(data$start_date), to=ElectionDay, by="day")
   NDAYS <- length(dateSeq)
 
   ## missing sample sizes?
