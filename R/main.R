@@ -90,7 +90,8 @@ predict_n_dem_senate_seats <- function(dem_win_probs) {
   for (n in 1:NMonteCarloSimulations) {
     random_numbers <- runif(n=n_seats)
     n_won <- sum(dem_win_probs > random_numbers)
-    n_seat_event_counts[n_won] <- n_seat_event_counts[n_won] + 1
+    index = n_won + 1
+    n_seat_event_counts[index] <- n_seat_event_counts[index] + 1
   }
 
   return(n_seat_event_counts)
