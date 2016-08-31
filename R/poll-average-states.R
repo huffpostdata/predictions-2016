@@ -118,9 +118,7 @@ makeInits <- function(forJags, cookPrior1, cookPrior2) {
     return(out)
 }
 
-postProcess <- function(fname, dateSeq){
-    load(file=fname)
-
+postProcess <- function(out, firstDay, dateSeq){
     out2 <- as.array(out)
     xi <- out2[,grep("^xi",dimnames(out2)[[2]]),]
     xibar <- apply(xi,2,
@@ -339,9 +337,11 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
   cookPrior1 <- CookPriors[cook_index,'prior1']
   cookPrior2 <- CookPriors[cook_index,'prior2']
 
+  candidate_model_outputs <- list()
+
   #######################################
   ## loop over the responses to be modelled
-  for(who in theResponses){
+  for (who in calculate_labels(colnames(data))) {
     cat(sprintf("Running for outcome %s\n", who))
 
     tmp <- makeJagsObject(data, thePollsters, dateSeq, who, offset=0)
@@ -360,23 +360,14 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
     update(jags_model, M/5)
 
     out <- coda.samples(jags_model, variable.names=c("xi"), n.iter=M, thin=M/Keep)
+    postprocessed <- postProcess(out, firstDay, dateSeq)
 
-    ## save output
-    fname <- paste0(dataDir,'/',gsub(who,pattern=" ",replacement=""), ".jags.RData")
-    save("data","dateSeq","firstDay", "forJags","out", file=fname)
+    candidate_model_outputs[[who]] <- postprocessed
+
+    #save("data","dateSeq","firstDay", "forJags","out","postprocessed" file='out.RData')
   }
 
-
-  ## process jags output
-  postprocessed_candidate_data <- list()
-  for(who in theResponses){
-    cat(sprintf("Post-processing for candidate %s\n", who))
-    fname <- paste(dataDir,'/',who,".jags.RData",sep="")
-    cat(paste("reading JAGS output and data from file",fname,"\n"))
-    postprocessed_candidate_data[[who]] <- postProcess(fname, dateSeq)
-  }
-
-  tmpArray <- build_normalized_array(postprocessed_candidate_data)
+  tmpArray <- build_normalized_array(candidate_model_outputs)
 
   undecided_frame <- build_choice_frame(tmpArray, 'Undecided', list(undecided_xibar='mean'))
   diff_frame <- diffSummary(tmpArray, dem_label, gop_label)
