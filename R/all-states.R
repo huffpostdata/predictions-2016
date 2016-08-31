@@ -3,6 +3,7 @@ source('poll-average-states.R')
 input_senate_races_path <- '../data/sheets/input/senate-races.tsv'
 output_senate_curves_path <- '../data/sheets/output/senate-curves.tsv'
 output_senate_seat_counts_path <- '../data/sheets/output/senate-seat-counts.tsv'
+output_senate_samples_path <- '../data/sheets/output/senate-samples-STATE'
 
 NMonteCarloSimulations <- 1e8
 ElectionDay <- as.Date('2016-11-08')
@@ -10,7 +11,9 @@ ElectionDay <- as.Date('2016-11-08')
 args <- commandArgs(TRUE)
 fast <- !is.na(args[1]) && args[1] == 'fast'
 
-load_or_calculate_senate_curve_for_race <- function(race) {
+if (fast) NMonteCarloSimulations <- 1e6
+
+load_or_calculate_senate_data_for_race <- function(race) {
   if (!dir.exists('interim-results')) {
     dir.create('interim-results', recursive=TRUE)
   }
@@ -22,7 +25,7 @@ load_or_calculate_senate_curve_for_race <- function(race) {
   tryCatch({
     load(file_path)
   }, error = function(e) {
-    data <<- calculate_diff_curve(
+    data <<- calculate_diff_data(
       race$state,
       race$pollster_slug,
       race$cook_rating,
@@ -57,11 +60,18 @@ calculate_dem_win_prob_with_undecided <- function(curves) {
   return(new_prob)
 }
 
-load_or_calculate_senate_curves_for_races <- function(races) {
+load_or_calculate_senate_data_for_races <- function(races) {
   races_lists <- apply(races, 1, as.list)
-  curves_list <- lapply(races_lists, load_or_calculate_senate_curve_for_race)
+  names(races_lists) <- races$state
+
+  data_list <- lapply(races_lists, load_or_calculate_senate_data_for_race)
+
+  curves_list <- lapply(data_list, function(x) x$curve)
   curves <- do.call(rbind, curves_list)
-  return(curves)
+
+  state_samples_strings <- lapply(data_list, function(x) x$samples_string)
+
+  return(list(curves=curves,state_samples_strings=state_samples_strings))
 }
 
 # Monte-Carlo simulation: run lots of election nights for the senate and return
@@ -95,6 +105,14 @@ dump_senate_curves <- function(curves) {
   write.table(curves, file=output_senate_curves_path, quote=FALSE, sep='\t', row.names=FALSE, na='')
 }
 
+dump_senate_samples <- function(state_samples_strings) {
+  for (state_code in names(state_samples_strings)) {
+    samples_string <- state_samples_strings[[state_code]]
+    filename <- sub('STATE', state_code, output_senate_samples_path)
+    write(samples_string, file=filename)
+  }
+}
+
 dump_senate_seat_counts <- function(seat_counts) {
   frame <- data.frame(
     date=rep(ElectionDay, length(seat_counts)),
@@ -108,8 +126,13 @@ dump_senate_seat_counts <- function(seat_counts) {
 
 run_all_senate <- function() {
   races <- read.table(input_senate_races_path, header=TRUE, sep='\t')
-  senate_curves <- load_or_calculate_senate_curves_for_races(races)
+
+  senate_data <- load_or_calculate_senate_data_for_races(races)
+  senate_curves <- senate_data$curves
+
   dump_senate_curves(senate_curves)
+
+  dump_senate_samples(senate_data$state_samples_strings)
 
   election_day_seat_probabilities = c(senate_curves[senate_curves$date==ElectionDay,'dem_win_prob_with_undecided'])
   n_dem_seats <- predict_n_dem_senate_seats(election_day_seat_probabilities)

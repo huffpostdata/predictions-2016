@@ -25,6 +25,8 @@ McmcParams <- list(
 
 ElectionDay <- as.Date('2016-11-08')
 MinNPollsForModel <- 5
+NOutputSamples <- 1000
+Uint16Factor <- 2**16 - 1 # to convert [0.0,1.0] fractions to [0, 65536) 16-bit integers
 
 CookPriors <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
@@ -260,19 +262,45 @@ stub_diff_curve <- function(state_code, cook_rating) {
   cook_index <- match(cook_rating, CookPriors$rating)
   dem_win_prob <- CookPriors[cook_index,'dem_win_prob']
 
-  return(data.frame(
-    state=c(state_code),
-    date=c(ElectionDay),
-    diff_xibar=NA,
-    diff_low=NA,
-    diff_high=NA,
-    undecided_xibar=NA,
-    dem_win_prob=c(dem_win_prob),
-    dem_win_prob_with_undecided=c(dem_win_prob)
+  return(list(
+    curve=data.frame(
+      state=c(state_code),
+      date=c(ElectionDay),
+      diff_xibar=NA,
+      diff_low=NA,
+      diff_high=NA,
+      undecided_xibar=NA,
+      dem_win_prob=c(dem_win_prob),
+      dem_win_prob_with_undecided=c(dem_win_prob)
+    ),
+    samples_string=''
   ))
 }
 
-calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label, gop_label, fast) {
+# Outputs a string of the format we'll read in JavaScript.
+#
+# The output has NOutputSamples lines. Each line is a hex string of length
+# 4*ndays. Each 4-byte set of hexadecimal digits represents a 2-byte uint16 of
+# the fraction democrats are beating republicans: the floats [-1.0,1.0]
+# normalized to the range [0,0xffff].
+#
+# The last uint16 is for ElectionDay; JavaScript can determine the other dates
+# by working backwards.
+calculate_diff_curve_samples_string <- function(normalized_array, dem_label, gop_label) {
+  diff_array <- normalized_array[dem_label,,] - normalized_array[gop_label,,]
+  n_input_samples <- dim(diff_array)[1]
+  thin_factor <- floor(n_input_samples / NOutputSamples)
+  thin_indexes <- seq_len(NOutputSamples) * thin_factor
+
+  thinned_array <- diff_array[thin_indexes,]
+
+  int_array <- round((thinned_array * 0.5 + 0.5) * Uint16Factor)
+  strings <- apply(int_array, 'iteration', function(x) paste(sprintf('%04x', x), collapse=''))
+
+  return(paste(strings, collapse='\n'))
+}
+
+calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, gop_label, fast) {
   if (chart_slug == '') {
     return(stub_diff_curve(state_code, cook_rating))
   }
@@ -377,16 +405,21 @@ calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label,
 
   out$dem_win_prob_with_undecided <- center_probability_with_undecided(out$dem_win_prob, out$diff_xibar, out$undecided_xibar)
 
+  samples_string <- calculate_diff_curve_samples_string(normalized_array, dem_label, gop_label)
+
   #write.csv(out, file='out.csv')
 
-  return(out[c(
-    'state',
-    'date',
-    'diff_xibar',
-    'diff_low',
-    'diff_high',
-    'undecided_xibar',
-    'dem_win_prob',
-    'dem_win_prob_with_undecided'
-  )])
+  return(list(
+    curve=out[c(
+      'state',
+      'date',
+      'diff_xibar',
+      'diff_low',
+      'diff_high',
+      'undecided_xibar',
+      'dem_win_prob',
+      'dem_win_prob_with_undecided'
+    )],
+    samples_string=samples_string
+  ))
 }
