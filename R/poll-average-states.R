@@ -9,12 +9,13 @@
 suppressPackageStartupMessages(library('rjags'))
 
 args <- commandArgs(TRUE)
-chart_slug <- args[1]
-cook_rating <- args[2]
-dem_label <- args[3]
-gop_label <- args[4]
+state_code <- args[1]
+chart_slug <- args[2]
+cook_rating <- args[3]
+dem_label <- args[4]
+gop_label <- args[5]
 
-if (args[5] == 'fast') {
+if (args[6] == 'fast') {
   M <- 1E3
   Keep <- 1E3
 } else {
@@ -255,11 +256,12 @@ center_probability_with_undecided <- function(dem_win_prob, diff_xibar, undecide
 
 #########################################
 
-stub_diff_curve <- function(cook_rating) {
+stub_diff_curve <- function(state_code, cook_rating) {
   cook_index <- match(cook_rating, CookPriors$rating)
   dem_win_prob <- CookPriors[cook_index,'dem_win_prob']
 
   return(data.frame(
+    state=c(state_code),
     date=c(ElectionDay),
     diff_xibar=NA,
     diff_low=NA,
@@ -269,9 +271,9 @@ stub_diff_curve <- function(cook_rating) {
   ))
 }
 
-calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) {
+calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label, gop_label) {
   if (chart_slug == '') {
-    return(stub_diff_curve(cook_rating))
+    return(stub_diff_curve(state_code, cook_rating))
   }
 
   ## url to the pollster csv
@@ -282,7 +284,7 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
   )
 
   if (length(data) < MinNPollsForModel) {
-    return(stub_diff_curve(cook_rating))
+    return(stub_diff_curve(state_code, cook_rating))
   }
 
   ## what we will loop over, below
@@ -361,7 +363,7 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
 
   undecided_frame <- build_choice_frame(tmpArray, 'Undecided', list(undecided_xibar='mean'))
   diff_frame <- diffSummary(tmpArray, dem_label, gop_label)
-  out <- data.frame(date=dateSeq)
+  out <- data.frame(state=rep(state_code, times=length(dateSeq)), date=dateSeq)
   out <- merge(out, diff_frame, by=c('date'))
   out <- merge(out, undecided_frame, by=c('date'))
 
@@ -369,10 +371,19 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
 
   #write.csv(out, file='out.csv')
 
-  return(out)
+  return(out[c(
+    'state',
+    'date',
+    'diff_xibar',
+    'diff_low',
+    'diff_high',
+    'undecided_xibar',
+    'dem_win_prob',
+    'dem_win_prob_with_undecided'
+  )])
 }
 
-frame <- calculate_diff_curve(chart_slug, cook_rating, dem_label, gop_label)
+frame <- calculate_diff_curve(state_code, chart_slug, cook_rating, dem_label, gop_label)
 options(scipen=999)
 options(digits=20)
 write.table(frame, 'out.tsv', na='', quote=FALSE, sep='\t', row.names=FALSE)
