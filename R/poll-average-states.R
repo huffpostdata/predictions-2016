@@ -239,6 +239,22 @@ diffSummary <- function(normalized_array, dem_who, gop_who) {
   ))
 }
 
+# Given vectors of win probabilities, spreads and undecided counts, return
+# probabilities shifted towards 0.5, with higher undecideds leading to larger
+# shifts.
+center_probability_with_undecided <- function(dem_win_prob, diff_xibar, undecided_xibar) {
+  shift_proportion <- undecided_xibar / pmax(0.0001, abs(diff_xibar)) # avoid div by 0
+
+  # if undecided == 5x diff, move probability by 5%.
+  unbounded_shift <- 0.01 * shift_proportion
+
+  # raw_shift can reach near-infinity. Cap to 10%
+  shift <- pmin(0.1, unbounded_shift)
+
+  # shift, while guaranteeing never to flip the probability
+  return(ifelse(dem_win_prob > 0.5, pmax(0.5, dem_win_prob - shift), pmin(0.5, dem_win_prob + shift)))
+}
+
 #########################################
 
 stub_diff_curve <- function(cook_rating) {
@@ -351,7 +367,7 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
   out <- merge(out, diff_frame, by=c('date'))
   out <- merge(out, undecided_frame, by=c('date'))
 
-  ##########################################
+  out$dem_win_prob_with_undecided <- center_probability_with_undecided(out$dem_win_prob, out$diff_xibar, out$undecided_xibar)
 
   #write.csv(out, file='out.csv')
 
