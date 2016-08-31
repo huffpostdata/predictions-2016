@@ -23,10 +23,8 @@ var races=data.model.races
                   .zero - 0
                   .min - R+${race.curve.y_max * 100}
                 svg viewBox="0 0 1000 600" width="20rem" height="12rem"
-                  defs
-                    linearGradient id="${race.state_code}-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="0%" y2="100%"
-                      stop offset="49.999999%" stop-color="#5c6b95"
-                      stop offset="50.000000%" stop-color="#bc5c5c"
-                  path.spread d="${race.curve.svg_polygon('diff_high', 'diff_low')}" fill="url(#${race.state_code}-gradient)"
+                  rect.dem x="0" y="0" width="1000" height="300"
+                  rect.gop x="0" y="300" width="1000" height="300"
                   path.axis d="M0,300H1000"
                   path.diff d="${race.curve.svg_path('diff_xibar')}"
+                  path.sample d="${d}" for(d in race.curve.calculate_sample_svg_paths())

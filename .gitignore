@@ -1,5 +1,7 @@
 /node_modules/
 *.marko.js
 __MACOSX
-R/tmp/
+R/interim-results/
 data/sheets/output/*.tsv
+data/sheets/output/senate-samples-??
+*.swp
