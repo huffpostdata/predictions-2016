@@ -266,8 +266,9 @@ stub_diff_curve <- function(state_code, cook_rating) {
     diff_xibar=NA,
     diff_low=NA,
     diff_high=NA,
+    undecided_xibar=NA,
     dem_win_prob=c(dem_win_prob),
-    undecided_xibar=NA
+    dem_win_prob_with_undecided=c(dem_win_prob)
   ))
 }
 
