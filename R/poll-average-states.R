@@ -308,9 +308,6 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
   pollsters <- sort(unique(data$pollster)) #list of pollsters
   thePollsters <- sort(unique(data$pp))    #list of pollsters w/populations
 
-  dataDir <- paste0("data/",chart_slug)
-  dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
-
   ## FOR FORECAST MODEL, COOK RATINGS PRIORS
   cook_index <- match(cook_rating, CookPriors$rating)
   cookPrior1 <- CookPriors[cook_index,'prior1']
@@ -356,7 +353,7 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
 
   ##########################################
 
-  #write.csv(out, file=paste(dataDir,"/out.csv",sep=""))
+  #write.csv(out, file='out.csv')
 
   return(out)
 }
