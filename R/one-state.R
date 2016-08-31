@@ -11,7 +11,7 @@ chart_slug <- args[2]
 cook_rating <- args[3]
 dem_label <- args[4]
 gop_label <- args[5]
-fast <- args[6] == 'fast'
+fast <- !is.na(args[6]) && args[6] == 'fast'
 
 frame <- calculate_diff_curve(state_code, chart_slug, cook_rating, dem_label, gop_label, fast)
 options(scipen=999)

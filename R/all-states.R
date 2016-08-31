@@ -8,7 +8,7 @@ NMonteCarloSimulations <- 1e8
 ElectionDay <- as.Date('2016-11-08')
 
 args <- commandArgs(TRUE)
-fast <- args[1] == 'fast'
+fast <- !is.na(args[1]) && args[1] == 'fast'
 
 load_or_calculate_senate_curve_for_race <- function(race) {
   if (!dir.exists('interim-results')) {
