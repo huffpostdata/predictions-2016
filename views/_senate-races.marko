@@ -12,7 +12,7 @@ var races=data.model.races
         .state-code - ${race.state_code}
         .probability
           .box
-            .marker.${race.dem_win_probability > 0.5 ? 'lean-dem' : (race.dem_win_probability == 0.5 ? 'toss-up' : 'lean-gop')} style="left: ${100 * (1 - race.dem_win_probability)}%"
+            .marker.${race.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : (race.dem_win_prob_with_undecided == 0.5 ? 'toss-up' : 'lean-gop')} style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
           if(race.curve.is_plottable)
             .chart-container
               h3 - ${race.state_code}
@@ -28,3 +28,12 @@ var races=data.model.races
                   path.axis d="M0,300H1000"
                   path.diff d="${race.curve.svg_path('diff_xibar')}"
                   path.sample d="${d}" for(d in race.curve.calculate_sample_svg_paths())
+
+            ol.calculations
+              var o=race.calculations
+              if(o.tie === 0.5)
+                li - Our simulations ended in a <span class="undecided">tie</span> between <span class="dem">${race.dem_name} (D)</span> and <span class="gop">${race.gop_name} (R)</span>.
+              else
+                li - In our simulations, <span class="${o.winner_party}">${o.winner_name} (${o.winner_party_letter})</span> won against <span class="${o.loser_party}">${o.loser_name} (${o.loser_party_letter})</span> <strong>${o.raw_prob}%</strong> of the time.
+                li - Our simulations also show that the polled population is <span class="undecided">${o.undecided}% undecided</span>. We penalized the winner by <strong>${o.undecided_penalty}</strong> ${o.undecided_penalty == 1 ? 'percentage point' : 'percentage points'}.
+                li - Our adjusted probability is <span class="${o.winner_party}">${o.prob_with_undecided}% ${o.winner_party_full}</span>

@@ -13,11 +13,11 @@
     padding: 0;
     list-style: none;
     line-height: $line-height;
-  }
 
-  li {
-    display: -webkit-flex;
-    display: flex;
+    &>li {
+      display: -webkit-flex;
+      display: flex;
+    }
   }
 
   .state-code {
@@ -141,5 +141,24 @@
       .zero { top: 50%; height: 1rem; margin-top: -.5rem; }
       .min { bottom: 0; }
     }
+  }
+
+  ol.calculations {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    span.dem, span.gop, span.undecided {
+      font-weight: bold;
+    }
+
+    li {
+      line-height: 1.5;
+      margin: .5rem 0;
+    }
+
+    span.dem { color: $strong-dem; }
+    span.gop { color: $strong-gop; }
+    span.undecided { color: $toss-up; }
   }
 }
