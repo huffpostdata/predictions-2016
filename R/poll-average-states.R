@@ -25,7 +25,7 @@ McmcParams <- list(
 
 ElectionDay <- as.Date('2016-11-08')
 MinNPollsForModel <- 5
-NOutputSamples <- 1000
+NOutputSamples <- 200 # 1,000 looks cluttered
 Uint16Factor <- 2**16 - 1 # to convert [0.0,1.0] fractions to [0, 65536) 16-bit integers
 
 CookPriors <- data.frame(
