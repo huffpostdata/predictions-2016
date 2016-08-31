@@ -240,7 +240,25 @@ diffSummary <- function(normalized_array, dem_who, gop_who) {
 
 #########################################
 
+stub_diff_curve <- function(cook_rating) {
+  cook_index <- match(cook_rating, CookPriors$rating)
+  dem_win_prob <- CookPriors[cook_index,'dem_win_prob']
+
+  return(data.frame(
+    date=c(ElectionDay),
+    diff_xibar=NA,
+    diff_low=NA,
+    diff_high=NA,
+    dem_win_prob=c(dem_win_prob),
+    undecided_xibar=NA
+  ))
+}
+
 calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) {
+  if (chart_slug == '') {
+    return(stub_diff_curve(cook_rating))
+  }
+
   ## url to the pollster csv
   data <- read.csv(
     file=url(paste0("http://elections.huffingtonpost.com/pollster/api/charts/",chart_slug,".csv")),
