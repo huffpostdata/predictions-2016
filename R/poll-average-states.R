@@ -205,7 +205,7 @@ build_choice_frame <- function(normalized_array, choice, columns_list) {
     name = columns_list[[index]]
 
     if (name == 'mean') {
-      values <- apply(xi, 2, mean)
+      values <- apply(xi, 'date', mean)
     } else {
       stop('name must be "mean"')
     }
