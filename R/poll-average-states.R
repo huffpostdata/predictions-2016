@@ -283,7 +283,7 @@ calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label,
     check.names=FALSE
   )
 
-  if (length(data) < MinNPollsForModel) {
+  if (nrow(data) < MinNPollsForModel) {
     return(stub_diff_curve(state_code, cook_rating))
   }
 
