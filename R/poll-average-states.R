@@ -366,10 +366,10 @@ calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label,
     #save("data","dateSeq","firstDay", "forJags","out","xi_array" file='out.RData')
   }
 
-  tmpArray <- build_normalized_array(candidate_xis)
+  normalized_array <- build_normalized_array(candidate_xis)
 
-  undecided_frame <- build_choice_frame(tmpArray, 'Undecided', list(undecided_xibar='mean'))
-  diff_frame <- diffSummary(tmpArray, dem_label, gop_label)
+  undecided_frame <- build_choice_frame(normalized_array, 'Undecided', list(undecided_xibar='mean'))
+  diff_frame <- diffSummary(normalized_array, dem_label, gop_label)
   out <- data.frame(state=rep(state_code, times=length(dateSeq)), date=dateSeq)
   out <- merge(out, diff_frame, by=c('date'))
   out <- merge(out, undecided_frame, by=c('date'))
