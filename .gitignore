@@ -1,5 +1,6 @@
 /node_modules/
 *.marko.js
 __MACOSX
-R/tmp/
+R/interim-results/
 data/sheets/output/*.tsv
+*.swp
