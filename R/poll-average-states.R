@@ -8,7 +8,6 @@
 
 suppressPackageStartupMessages(library('rjags'))
 
-options(stringsAsFactors=FALSE)
 args <- commandArgs(TRUE)
 chart_slug <- args[1]
 cook_rating <- args[2]
