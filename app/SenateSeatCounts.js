@@ -3,7 +3,6 @@
 const fs = require('fs')
 const csv_parse = require('csv-parse/lib/sync')
 
-const TodayS = new Date().toISOString().slice(0, 10) // FIXME pass as parameter
 const ThisYearSeatClass = 3
 
 function is_seat_existing_dem(seat) {
@@ -30,13 +29,6 @@ class SenateSeatCounts {
 
     this.n = this.dem_counts.reduce(((a, s) => a + s), 0)
 
-    // Assume max_n will be lower than ~5e7 and higher than ~1e7.
-    const max_tick = Math.ceil(this.max_n / 1e7) * 1e7
-    this.y_ticks = []
-    for (let tick = 0; tick <= max_tick; tick += 1e7) {
-      this.y_ticks.push(tick)
-    }
-
     let x_min = null
     let x_max = null
     for (let e = 0; e < dem_counts.length; e++) {
@@ -51,7 +43,7 @@ class SenateSeatCounts {
         n: dem_counts[e],
         n_million: dem_counts[e] / 1e6,
         p: dem_count_probs[e],
-        fraction: dem_counts[e] / max_tick
+        fraction: dem_counts[e] / this.max_n
       })
     }
 
@@ -66,7 +58,7 @@ class SenateSeatCounts {
 }
 
 SenateSeatCounts.load = function(senate_seats) {
-  const input_path = `${__dirname}/../data/sheets/output/senate-seat-counts-${TodayS}.tsv`
+  const input_path = `${__dirname}/../data/sheets/output/senate-seat-counts.tsv`
   const tsv = fs.readFileSync(input_path)
   const array = csv_parse(tsv, { delimiter: '\t', columns: true })
   const dem_counts = array.map(h => +h.n) // 0 => 0, 1 => ....

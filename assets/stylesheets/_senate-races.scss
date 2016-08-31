@@ -81,14 +81,28 @@
   }
 
   svg {
-    path.spread {
+    rect.dem {
       stroke: none;
-      opacity: .4;
+      fill: $strong-dem;
+      opacity: .2;
+    }
+
+    rect.gop {
+      stroke: none;
+      fill: $strong-gop;
+      opacity: .2;
     }
 
     path.diff {
       stroke: black;
-      stroke-width: 5px;
+      stroke-width: 6px;
+      fill: none;
+    }
+
+    path.sample {
+      stroke: #333;
+      stroke-width: 3px;
+      opacity: .04;
       fill: none;
     }
 
