@@ -25,6 +25,7 @@ if (args[5] == 'fast') {
 }
 
 ElectionDay <- as.Date('2016-11-08')
+MinNPollsForModel <- 5
 
 CookPriors <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
@@ -265,6 +266,10 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
     colClasses=c("start_date"="Date", "end_date"="Date"),
     check.names=FALSE
   )
+
+  if (length(data) < MinNPollsForModel) {
+    return(stub_diff_curve(cook_rating))
+  }
 
   ## what we will loop over, below
   theResponses <- calculate_labels(colnames(data))
