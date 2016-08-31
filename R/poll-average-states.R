@@ -118,22 +118,31 @@ makeInits <- function(forJags, cookPrior1, cookPrior2) {
     return(out)
 }
 
-postProcess <- function(out, firstDay, dateSeq){
-    out2 <- as.array(out)
-    xi <- out2[,grep("^xi",dimnames(out2)[[2]]),]
-    xibar <- apply(xi,2,
-                   function(x){
-                     c(mean(x),
-                       quantile(x,c(.025,.975)),
-                       sd(x))
-                   })
-    xibar <- t(xibar)
-    theDateSeq <- as.character(dateSeq)[seq(from=firstDay,
-                                            length=dim(xibar)[1],by=1)]
-    dimnames(xi) <- list(NULL,date=theDateSeq,1:dim(xi)[3])
-    dimnames(xibar) <- list(date=theDateSeq, c("mean","2.5","97.5","sd"))
+# Turns the mcmc.list from a JAGS model into a proper Array of xi values.
+#
+# The first dimension is the "iteration" number. The second is the date, as a
+# character.
+#
+# "iteration" here is a loose term. Remember that the input is a mcmc.list
+# object: it has C chains, and each chain has I iterations. An output
+# "iteration" i means "chain floor(i/C), iteration i%%C". (We don't care which
+# chain a given value comes from.
+mcmc_list_to_xi_array <- function(mcmc_list, firstDay, dateSeq){
+    iter_i_chain <- as.array(mcmc_list)
 
-    return(list(xi=xi,xibar=xibar))
+    # Transpose so chain and iter are together
+    ret <- aperm(iter_i_chain, c(1, 3, 2))
+
+    # Cast as a 2D array instead of a 3D array
+    dim(ret) <- c(dim(ret)[1] * dim(ret)[2], dim(ret)[3])
+
+    # Set the dims: we're going by date
+    theDateSeq <- as.character(dateSeq)[seq(from=firstDay, length=dim(ret)[2], by=1)]
+    dimnames(ret) <- list(iteration=NULL, date=theDateSeq)
+
+    #save('ret', file='debug.RData')
+
+    return(ret)
 }
 
 # Builds a 3D array of xi results, normalized.
@@ -144,22 +153,13 @@ postProcess <- function(out, firstDay, dateSeq){
 #     arr['McCain',,]: results for McCain
 #     arr[,1,]: results for one "iteration"
 #
-# "iteration" here is a loose term. Remember that the input is a list of
-# mcmc.list objects, and each is independent. Each mcmc.list has the same number
-# of chains, and each chain has the same number of iterations. One "iteration"
-# i at date d in our return value corresponds to the i-th xi[d] value from each
-# mcmc.list.
-#
 # In other words, arr[,1,'2016-08-04'] pulls one xi value from each entry in
-# candidate_mcmc_lists and normalizes so they all add up to 1.0.
-build_normalized_array <- function(candidate_mcmc_lists) {
+# candidate_xis and normalizes so they all add up to 1.0.
+build_normalized_array <- function(candidate_xis) {
     cat('combining/renormaling output for: ')
-    print(names(candidate_mcmc_lists))
+    print(names(candidate_xis))
 
-    candidate_xis <- lapply(candidate_mcmc_lists,function(x)x$xi)
-    d <- dim(candidate_xis[[1]])
-    niter <- d[1]
-    nchains <- d[3]
+    n_iterations <- dim(candidate_xis[[1]])[1]
 
     dateSpans <- lapply(candidate_xis, function(xi) colnames(xi)[c(1,ncol(xi))])
     dateSpans <- do.call("rbind",dateSpans)
@@ -169,18 +169,17 @@ build_normalized_array <- function(candidate_mcmc_lists) {
     # Create 3D master array: date -> chain/iter -> candidate -> fraction
     #
     # (We fold iterations from all chains into one big chain+iter vector.)
-    arr <- array(NA, c(length(candidate_mcmc_lists), niter * nchains, length(dateSeq)))
-    dimnames(arr) <- list(who=names(candidate_mcmc_lists), iteration=NULL, date=as.character(dateSeq))
-    for (who in names(candidate_mcmc_lists)) {
+    arr <- array(NA, c(length(candidate_xis), n_iterations, length(dateSeq)))
+    dimnames(arr) <- list(who=names(candidate_xis), iteration=NULL, date=as.character(dateSeq))
+    for (who in names(candidate_xis)) {
       xi <- candidate_xis[[who]]
       matching_days <- match(colnames(xi), as.character(dateSeq))
       arr[who,,matching_days] <- xi
     }
 
-    # Normalize. Use same variable name to free up memory.
-    arr <- apply(arr, c(2, 3), function(x) x/sum(x, na.rm=TRUE))
+    normalized <- apply(arr, c('iteration', 'date'), function(x) x/sum(x, na.rm=TRUE))
 
-    return(arr)
+    return(normalized)
 }
 
 # Builds a data.frame with average results by date for the given choice.
@@ -294,7 +293,7 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
   cookPrior1 <- CookPriors[cook_index,'prior1']
   cookPrior2 <- CookPriors[cook_index,'prior2']
 
-  candidate_model_outputs <- list()
+  candidate_xis <- list()
 
   #######################################
   ## loop over the responses to be modelled
@@ -317,14 +316,14 @@ calculate_diff_curve <- function(chart_slug, cook_rating, dem_label, gop_label) 
     update(jags_model, M/5)
 
     out <- coda.samples(jags_model, variable.names=c("xi"), n.iter=M, thin=M/Keep)
-    postprocessed <- postProcess(out, firstDay, dateSeq)
+    xi_array <- mcmc_list_to_xi_array(out, firstDay, dateSeq)
 
-    candidate_model_outputs[[who]] <- postprocessed
+    candidate_xis[[who]] <- xi_array
 
-    #save("data","dateSeq","firstDay", "forJags","out","postprocessed" file='out.RData')
+    #save("data","dateSeq","firstDay", "forJags","out","xi_array" file='out.RData')
   }
 
-  tmpArray <- build_normalized_array(candidate_model_outputs)
+  tmpArray <- build_normalized_array(candidate_xis)
 
   undecided_frame <- build_choice_frame(tmpArray, 'Undecided', list(undecided_xibar='mean'))
   diff_frame <- diffSummary(tmpArray, dem_label, gop_label)
