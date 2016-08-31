@@ -13,7 +13,7 @@ McmcParams <- list(
     n_iterations=1000,
     n_samples=1000,
     n_chains=4,
-    n_pre_monitor_iterations=200
+    n_pre_monitor_iterations=1000
   ),
   slow=list(
     n_iterations=100000,
