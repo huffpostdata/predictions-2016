@@ -39,27 +39,6 @@ load_or_calculate_senate_data_for_race <- function(race) {
   return(data)
 }
 
-calculate_dem_win_prob_with_undecided <- function(curves) {
-  undecided <- ifelse(is.na(curves$undecided_xibar), 0.0, curves$undecided_xibar)
-  spread <- ifelse(is.na(curves$diff_xibar), 0.0, curves$diff_xibar)
-  original_prob <- curves$dem_win_prob
-
-  # if Dem winning, then adjustment is -; if GOP winning, +
-  raw_adjustment <- ifelse(spread == 0.0, 0.0, -undecided / spread)
-
-  # never adjust probability by more than 10%
-  clamped_adjustment <- pmax(-0.1, pmin(0.1, raw_adjustment))
-
-  # never flip probability
-  new_prob <- ifelse(
-    original_prob >= .5,
-    pmax(.5, original_prob + clamped_adjustment),
-    pmin(.5, original_prob + clamped_adjustment)
-  )
-
-  return(new_prob)
-}
-
 load_or_calculate_senate_data_for_races <- function(races) {
   races_lists <- apply(races, 1, as.list)
   names(races_lists) <- races$state
