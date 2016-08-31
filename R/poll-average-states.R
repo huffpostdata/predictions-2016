@@ -8,20 +8,20 @@
 
 suppressPackageStartupMessages(library('rjags'))
 
-args <- commandArgs(TRUE)
-state_code <- args[1]
-chart_slug <- args[2]
-cook_rating <- args[3]
-dem_label <- args[4]
-gop_label <- args[5]
-
-if (args[6] == 'fast') {
-  M <- 1E3
-  Keep <- 1E3
-} else {
-  M <- 1E5       ## number of MCMC iterates, default 100,000
-  Keep <- 5E3    ## how many to keep
-}
+McmcParams <- list(
+  fast=list(
+    n_iterations=1000,
+    n_samples=1000,
+    n_chains=4,
+    n_pre_monitor_iterations=200
+  ),
+  slow=list(
+    n_iterations=100000,
+    n_samples=5000,
+    n_chains=4,
+    n_pre_monitor_iterations=20000
+  )
+)
 
 ElectionDay <- as.Date('2016-11-08')
 MinNPollsForModel <- 5
@@ -271,7 +271,7 @@ stub_diff_curve <- function(state_code, cook_rating) {
   ))
 }
 
-calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label, gop_label) {
+calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label, gop_label, fast) {
   if (chart_slug == '') {
     return(stub_diff_curve(state_code, cook_rating))
   }
@@ -330,6 +330,7 @@ calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label,
   cookPrior2 <- CookPriors[cook_index,'prior2']
 
   candidate_xis <- list()
+  mcmc_params <- McmcParams[[ifelse(fast, 'fast', 'slow')]]
 
   #######################################
   ## loop over the responses to be modelled
@@ -345,13 +346,19 @@ calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label,
     jags_model <- jags.model(
       file="singleTarget.bug",
       data=forJags,
-      n.chains=4,
+      n.chains=mcmc_params$n_chains,
       inits=initFunc,
       quiet=TRUE
     )
-    update(jags_model, M/5)
+    update(jags_model, mcmc_params$n_pre_monitor_iterations)
 
-    out <- coda.samples(jags_model, variable.names=c("xi"), n.iter=M, thin=M/Keep)
+    out <- coda.samples(
+      jags_model,
+      variable.names=c("xi"),
+      n.iter=mcmc_params$n_iterations,
+      thin=mcmc_params$n_iterations/mcmc_params$n_samples
+    )
+
     xi_array <- mcmc_list_to_xi_array(out, firstDay, dateSeq)
 
     candidate_xis[[who]] <- xi_array
@@ -382,8 +389,3 @@ calculate_diff_curve <- function(state_code, chart_slug, cook_rating, dem_label,
     'dem_win_prob_with_undecided'
   )])
 }
-
-frame <- calculate_diff_curve(state_code, chart_slug, cook_rating, dem_label, gop_label)
-options(scipen=999)
-options(digits=20)
-write.table(frame, 'out.tsv', na='', quote=FALSE, sep='\t', row.names=FALSE)
