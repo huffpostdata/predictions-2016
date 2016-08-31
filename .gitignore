@@ -3,4 +3,5 @@
 __MACOSX
 R/interim-results/
 data/sheets/output/*.tsv
+data/sheets/output/senate-samples-??
 *.swp
