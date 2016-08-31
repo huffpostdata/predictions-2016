@@ -133,49 +133,6 @@ postProcess <- function(out, firstDay, dateSeq){
     dimnames(xi) <- list(NULL,date=theDateSeq,1:dim(xi)[3])
     dimnames(xibar) <- list(date=theDateSeq, c("mean","2.5","97.5","sd"))
 
-if (FALSE) {
-    ## rough plot
-    plotData <- data.frame(y=forJags$y,
-                           date=dateSeq[forJags$date+firstDay])
-    par(lend=2)
-
-    M <- 250
-    s <- sample(size=M,x=1:nrow(xi))
-    chain <- sample(size=M,x=1:dim(xi)[3],replace=TRUE)
-    ylims <- range(c(as.vector(xi[s,,]),
-                     forJags$y))
-
-    gname <- paste0(who,".pdf")
-    quartz(file=gname,
-           type="pdf",
-           bg="white")
-    plot(y ~ date,
-         data=plotData,
-         type="n",
-         ylim=ylims,
-         xlab="",ylab="",
-         axes=FALSE)
-
-    title(who,adj=0,line=2.67)
-    axis.Date(side=1,x=as.Date(theDateSeq),
-              lwd=0,lwd.tick=.5,cex.axis=.65)
-    axis.Date(side=3,x=as.Date(theDateSeq),
-              lwd=0,lwd.tick=.5,cex.axis=.65)
-    axis(2,lwd=0,lwd.tick=.5,
-         las=1,cex.axis=.65)
-
-    for(j in 1:M){
-        lines(as.Date(theDateSeq),xi[s[j],,chain[j]],
-              lwd=.25,
-              col=rgb(0,0,0,.10))
-    }
-    lines(as.Date(theDateSeq),xibar[,"mean"],
-          lwd=4,col=gray(.25))
-
-    points(plotData$date,plotData$y)
-    graphics.off()
-}
-
     return(list(xi=xi,xibar=xibar))
 }
 
