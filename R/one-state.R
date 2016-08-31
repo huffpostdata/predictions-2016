@@ -16,4 +16,4 @@ fast <- args[6] == 'fast'
 frame <- calculate_diff_curve(state_code, chart_slug, cook_rating, dem_label, gop_label, fast)
 options(scipen=999)
 options(digits=20)
-write.table(frame, 'out.tsv', na='', quote=FALSE, sep='\t', row.names=FALSE)
+write.table(frame, '', na='', quote=FALSE, sep='\t', row.names=FALSE)
