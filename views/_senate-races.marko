@@ -25,7 +25,11 @@ var races=data.model.races
                 svg viewBox="0 0 1000 600" width="20rem" height="12rem"
                   rect.dem x="0" y="0" width="1000" height="300"
                   rect.gop x="0" y="300" width="1000" height="300"
-                  path.axis d="M0,300H1000"
+                  path.x-axis d="M0,300H1000"
+                  path.x-start-day d="M0,0V600"
+                  if(race.curve.updated_at_x != race.curve.x_max)
+                    path.x-updated-at d="M${Math.round(race.curve.date_width * race.curve.updated_at_x)},0V600"
+                  path.x-election-day d="M1000,0V600"
                   path.diff d="${race.curve.svg_path('diff_xibar')}"
                   path.sample d="${d}" for(d in race.curve.calculate_sample_svg_paths())
 

@@ -106,9 +106,16 @@
       fill: none;
     }
 
-    path.axis {
-      stroke: gray;
-      stroke-width: 3px;
+    path.x-axis {
+      stroke: black;
+      stroke-width: 1px;
+      fill: none;
+    }
+
+    path.x-updated-at, path.x-start-day, path.x-election-day {
+      stroke: black;
+      stroke-width: 1px;
+      stroke-dasharray: 10, 10;
       fill: none;
     }
   }

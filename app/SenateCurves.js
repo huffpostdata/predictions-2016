@@ -43,6 +43,7 @@ SenateCurves.load = function() {
   const input_path = `${__dirname}/../data/sheets/output/senate-curves.tsv`
   const tsv = fs.readFileSync(input_path)
   const array = csv_parse(tsv, { delimiter: '\t', columns: true })
+  const updated_at = fs.statSync(input_path).mtime
 
   const curve_points = array.map(hash => new SenateCurvePoint(hash))
 
@@ -57,7 +58,7 @@ SenateCurves.load = function() {
   const state_code_to_curve = new Map()
   state_code_to_points.forEach((points, state_code) => {
     const samples = load_state_samples(state_code)
-    state_code_to_curve.set(state_code, new SenateCurve(points, samples))
+    state_code_to_curve.set(state_code, new SenateCurve(updated_at, points, samples))
   })
 
   return new SenateCurves(state_code_to_curve)
