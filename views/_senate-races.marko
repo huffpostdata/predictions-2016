@@ -32,6 +32,7 @@ var races=data.model.races
                   path.x-election-day d="M1000,0V600"
                   path.diff d="${race.curve.svg_path('diff_xibar')}"
                   path.sample d="${d}" for(d in race.curve.calculate_sample_svg_paths())
+                  circle.poll.${pt.html_class} cx="${pt.x}" cy="${pt.y}" r="8" for(pt in race.curve.calculate_poll_coordinates())
 
             ol.calculations
               var o=race.calculations

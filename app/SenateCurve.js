@@ -82,14 +82,15 @@ function calculate_sample_path_d(uint16s, y_max) {
 }
 
 function values_to_path_d(raw_values, y_max) {
-  const convert_y = ChartHeight / 2 / y_max;
+  const convert_y = ChartHeight / 2 / y_max
   const values = raw_values.map(v => v === null ? null : Math.round(ChartHeight / 2 - convert_y * v))
   return render_path_d_for_ys(values, y_max)
 }
 
 module.exports = class SenateCurve {
-  constructor(updated_at, points, uint16_samples) {
+  constructor(updated_at, points, polls, uint16_samples) {
     this.election_day_point = points[points.length - 1]
+    this.polls = polls
 
     this.is_plottable = uint16_samples.length > 0
 
@@ -98,7 +99,7 @@ module.exports = class SenateCurve {
       const min_y_uint16 = simple_reduce_samples(uint16_samples, Math.min)
       const max_diff = Math.max(Math.abs(uint16_to_fraction(max_y_uint16)), Math.abs(uint16_to_fraction(min_y_uint16)))
 
-      this.y_max = [ 0.03, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50 ].find(y => y > max_diff)
+      this.y_max = [ 0.03, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80 ].find(y => y > max_diff)
       this.date_width = DateWidth
 
       // Today is `updated_at_x` days from the start of this chart
@@ -111,6 +112,22 @@ module.exports = class SenateCurve {
 
   calculate_sample_svg_paths() {
     return this.uint16_samples.map(uint16s => calculate_sample_path_d(uint16s, this.y_max))
+  }
+
+  /**
+   * Returns an Array of { x, y, html_class } Objects: one per poll
+   */
+  calculate_poll_coordinates() {
+    const convert_y = ChartHeight / 2 / this.y_max
+
+    function poll_to_coordinates(poll) {
+      const x = Math.round((new Date(poll.end_date) - new Date(StartDayS)) / 86400000 * DateWidth)
+      const y = Math.round(ChartHeight / 2 - convert_y * poll.diff / 100)
+      const html_class = poll.diff > 0 ? 'poll-dem' : (poll.diff < 0 ? 'poll-gop' : 'poll-toss-up')
+      return { x: x, y: y, html_class: html_class }
+    }
+
+    return this.polls.map(poll_to_coordinates)
   }
 
   /**

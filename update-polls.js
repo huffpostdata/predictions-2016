@@ -30,7 +30,7 @@ function refresh_polls_tsv() {
   const lines = get_all_race_tsv_lines(races)
   const text = `state\tend_date\tdem_lead\n${lines.join('\n')}`
 
-  const filename = `${__dirname}/data/sheets/output/polls.tsv`
+  const filename = `${__dirname}/data/sheets/output/senate-polls.tsv`
   console.log(`WRITE ${filename}`)
   fs.writeFileSync(filename, text)
 }

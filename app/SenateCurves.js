@@ -39,6 +39,25 @@ function load_state_samples(state_code) {
     .map(string_to_sample)
 }
 
+/**
+ * Returns a Map from state_code to [ { end_date_s: '2016-XX-XX', diff: -3 }, ... ]
+ */
+function load_all_state_polls() {
+  const input_path = `${__dirname}/../data/sheets/output/senate-polls.tsv`
+  const tsv = fs.readFileSync(input_path)
+  const array = csv_parse(tsv, { delimiter: '\t', columns: true })
+
+  const ret = new Map()
+  array.forEach(o => {
+    if (!ret.has(o.state)) {
+      ret.set(o.state, [])
+    }
+    ret.get(o.state).push({ end_date: o.end_date, diff: parseFloat(o.dem_lead) })
+  })
+
+  return ret
+}
+
 SenateCurves.load = function() {
   const input_path = `${__dirname}/../data/sheets/output/senate-curves.tsv`
   const tsv = fs.readFileSync(input_path)
@@ -55,10 +74,13 @@ SenateCurves.load = function() {
     state_code_to_points.get(p.state_code).push(p)
   })
 
+  const state_code_to_polls = load_all_state_polls()
+
   const state_code_to_curve = new Map()
   state_code_to_points.forEach((points, state_code) => {
     const samples = load_state_samples(state_code)
-    state_code_to_curve.set(state_code, new SenateCurve(updated_at, points, samples))
+    const polls = state_code_to_polls.get(state_code) || []
+    state_code_to_curve.set(state_code, new SenateCurve(updated_at, points, polls, samples))
   })
 
   return new SenateCurves(state_code_to_curve)

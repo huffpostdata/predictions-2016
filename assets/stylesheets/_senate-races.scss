@@ -118,6 +118,11 @@
       stroke-dasharray: 10, 10;
       fill: none;
     }
+
+    circle.poll {
+      stroke: none;
+      fill: $toss-up;
+    }
   }
 
   .chart-container {
