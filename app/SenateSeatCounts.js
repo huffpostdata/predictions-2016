@@ -54,6 +54,36 @@ class SenateSeatCounts {
     this.prob_tie = dem_count_probs[50 - this.n_existing_dem]
 
     this.prob_gop = 1.0 - this.prob_dem - this.prob_tie
+
+    this.summary_chart_data = [
+      {
+        result: 'dem',
+        party_name: 'Democrats',
+        percent: 100 * this.prob_dem,
+        is_most_probable: this.prob_dem > Math.max(this.prob_tie, this.prob_gop),
+        sentence_html: `Democrats gain control of the Senate in <strong>${Math.round(100 * this.prob_dem)}%</strong> of our simulations.`,
+        sentence_left: '0',
+        sentence_width: `${100 / this.prob_dem}%`
+      },
+      {
+        result: 'tie',
+        party_name: 'Tie',
+        percent: 100 * this.prob_tie,
+        is_most_probable: this.prob_tie > Math.max(this.prob_dem, this.prob_gop),
+        sentence_html: `The Senate splits 50-50 in <strong>${Math.round(100 * this.prob_tie)}%</strong> of our simulations. <small>The vice-president decides the balance of power in that case.</small>`,
+        sentence_left: `-${100 * this.prob_dem / this.prob_tie}%`,
+        sentence_width: `${100 / this.prob_tie}%`
+      },
+      {
+        result: 'gop',
+        party_name: 'Republicans',
+        percent: 100 * this.prob_gop,
+        is_most_probable: this.prob_gop > Math.max(this.prob_tie, this.prob_dem),
+        sentence_html: `Republicans keep control of the Senate in <strong>${Math.round(100 * this.prob_gop)}%</strong> of our simulations.`,
+        sentence_left: `-${100 * (this.prob_dem + this.prob_tie) / this.prob_gop}%`,
+        sentence_width: `${100 / this.prob_gop}%`
+      }
+    ]
   }
 }
 

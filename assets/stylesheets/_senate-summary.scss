@@ -1,0 +1,98 @@
+#senate-summary {
+  h1 {
+    font-family: $header-font-family;
+    font-size: 3rem;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  ol.chart {
+    list-style: none;
+    padding: 0;
+    display: -webkit-flex;
+    display: flex;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 7rem;
+
+    li {
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      position: relative;
+
+      box-sizing: border-box;
+      padding: .5rem;
+      margin-top: 3rem;
+      line-height: 1;
+      color: $background;
+      outline: 2px solid $background;
+
+      &>strong {
+        font-size: 2rem;
+        span.unit {
+          font-size: 1.5rem;
+        }
+      }
+
+      &.prob-dem { background: $strong-dem; .sentence strong { color: $strong-dem; } }
+      &.prob-gop { background: $strong-gop; .sentence strong { color: $strong-gop; } }
+      &.prob-tie { background: $toss-up;    .sentence strong { color: $toss-up; } }
+
+      .party-icon {
+        position: absolute;
+        top: -2.5rem;
+        height: 2.25rem;
+        left: 0;
+        width: 100%;
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+      }
+
+      &.prob-gop .party-icon { background-position: right; }
+      &.prob-tie .party-icon { background-position: center; }
+
+      .sentence {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        box-sizing: border-box;
+        bottom: 7rem;
+        padding: 1.5rem;
+        background: $background;
+        border: 1px solid black;
+        font-size: 1.2rem;
+        color: $color;
+
+        small {
+          display: block;
+          margin-top: .5rem;
+          font-size: .85rem;
+          color: $muted-color;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          bottom: -0.5rem;
+          width: 1rem;
+          height: 1rem;
+          box-sizing: border-box;
+          background: $background;
+          transform: rotate(45deg);
+          border-bottom: 1px solid black;
+          border-right: 1px solid black;
+          border-top: 1px solid $background;
+          border-left: 1px solid $background;
+        }
+      }
+
+      &.prob-dem .sentence::before { left: 1rem; }
+      &.prob-tie .sentence::before { display: none; } // TODO figure out math for this one
+      &.prob-gop .sentence::before { right: 1rem; }
+    }
+  }
+
+  ol.chart li:hover .sentence { display: block; }
+  &:not(:hover) ol.chart li.most-probable .sentence { display: block; }
+}
