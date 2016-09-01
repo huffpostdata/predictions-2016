@@ -1,0 +1,9 @@
+input/ is generated from `npm run update-google-sheets`.
+
+output/ is generated from our scripts, and is _not in this repository_:
+
+* `../../update-polls.js` downloads poll data from Pollster
+* `../../R/main.R` runs Senate models
+
+The R script takes a long time to run. If you want sample data,
+`cp -a sample-output output`
