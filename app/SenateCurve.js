@@ -20,10 +20,10 @@ const UInt16Max = 0xffff
  * If `array` is too long, we return only the last values.
  */
 function make_array_fill_our_date_range(array) {
-
   if (array.length < NDays) {
-    const nulls = new Array()
-    nulls.fill(null, 0, NDays - array.length)
+    const nulls = new Array(NDays - array.length)
+    nulls.fill(null)
+    console.log(nulls)
     return nulls.concat(array)
   } else if (array.length > NDays) {
     return array.slice(array.length - NDays)
@@ -44,61 +44,48 @@ function uint16_to_fraction(uint16) {
  * of uint16 values.
  */
 function simple_reduce_samples(uint16_samples, f) {
-  const one_per_sample = uint16_samples.map(u16s => f.apply(null, u16s))
+  const plotted_u16s = uint16_samples.map(u16s => u16s.slice(Math.max(0, u16s.length - NDays)))
+  const one_per_sample = plotted_u16s.map(u16s => f.apply(null, u16s))
   return f.apply(null, one_per_sample)
 }
 
-function calculate_sample_path_d(y_max, uint16s) {
+function render_path_d_for_ys(ys_and_nulls, y_max) {
   let last_y = 0
   let last_x = 0
+  let first = true
 
-  const step = function(y_uint16, i) {
+  function step(y, i) {
+    if (y === null) return null
+
     const x = Math.round(DateWidth * i)
-    const y = Math.round(ChartHeight / 2 - ChartHeight / 2 * uint16_to_fraction(y_uint16) / y_max)
+
     const dx = x - last_x
     const dy = y - last_y
-    last_x = x
-    last_y = y
 
-    if (i === 0) {
+    last_y = y
+    last_x = x
+
+    if (first) {
+      first = false
       return `M${dx},${dy} l`
     } else {
       return ` ${dx},${dy}`
     }
   }
 
-  return uint16s.map(step).join('')
+  return ys_and_nulls.map(step).filter(s => s !== null).join('')
 }
 
-function values_to_path_d(raw_values, options) {
-  const convert_y = ChartHeight / 2 / options.y_max;
-  const convert_x = ChartWidth / (raw_values.length - 1);
-  const reverse = options.reverse === true
+function calculate_sample_path_d(uint16s, y_max) {
+  const convert_y = ChartHeight / 2 / y_max
+  const values = uint16s.map(v => v === null ? null : Math.round(ChartHeight / 2 - convert_y * uint16_to_fraction(v)))
+  return render_path_d_for_ys(values, y_max)
+}
 
-  const values = raw_values.map(v => Math.round(ChartHeight / 2 - convert_y * v))
-
-  if (reverse) values.reverse()
-
-  let last_y = values[0]
-  let last_x = reverse ? ChartWidth : 0
-
-  const v = function(dy) { return dy === 0 ? '' : `v${dy}` }
-
-  const step = function(y, i) {
-    const raw_x = Math.round(convert_x * (i + 1))
-    const x = reverse ? ChartWidth - raw_x : raw_x
-    const dx = x - last_x
-    const dy = y - last_y
-    last_y = y
-    last_x = x
-    if (reverse) {
-      return `${v(dy)}h${dx}`
-    } else {
-      return `h${dx}${v(dy)}`
-    }
-  }
-
-  return `M${last_x},${last_y}` + values.slice(1).map(step).join('')
+function values_to_path_d(raw_values, y_max) {
+  const convert_y = ChartHeight / 2 / y_max;
+  const values = raw_values.map(v => v === null ? null : Math.round(ChartHeight / 2 - convert_y * v))
+  return render_path_d_for_ys(values, y_max)
 }
 
 module.exports = class SenateCurve {
@@ -120,15 +107,12 @@ module.exports = class SenateCurve {
       this.updated_at_x = Math.round((new Date(updated_at.toISOString().slice(0, 10)) - new Date(StartDayS)) / 86400000)
 
       this.points = make_array_fill_our_date_range(points)
-      this.uint16_samples = make_array_fill_our_date_range(uint16_samples)
+      this.uint16_samples = uint16_samples.map(make_array_fill_our_date_range)
     }
   }
 
   calculate_sample_svg_paths() {
-    //const y_max_scaled_to_uint16 = (0.5 + this.y_max) * 0.5 * UInt16Max
-    const y_height = (ChartHeight * 2 * this.y_max) / UInt16Max // height of any "1" of a uint16 (65535)
-
-    return this.uint16_samples.map(uint16s => calculate_sample_path_d(this.y_max, uint16s))
+    return this.uint16_samples.map(uint16s => calculate_sample_path_d(uint16s, this.y_max))
   }
 
   /**
@@ -138,6 +122,6 @@ module.exports = class SenateCurve {
    * 300 are negative spread. All values are integers (to save space).
    */
   svg_path(key) {
-    return values_to_path_d(this.points, { y_max: this.y_max })
+    return values_to_path_d(this.points.map(p => p === null ? null : p[key]), this.y_max)
   }
 }
