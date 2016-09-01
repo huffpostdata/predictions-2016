@@ -23,7 +23,6 @@ function make_array_fill_our_date_range(array) {
   if (array.length < NDays) {
     const nulls = new Array(NDays - array.length)
     nulls.fill(null)
-    console.log(nulls)
     return nulls.concat(array)
   } else if (array.length > NDays) {
     return array.slice(array.length - NDays)
@@ -98,7 +97,6 @@ module.exports = class SenateCurve {
       const max_y_uint16 = simple_reduce_samples(uint16_samples, Math.max)
       const min_y_uint16 = simple_reduce_samples(uint16_samples, Math.min)
       const max_diff = Math.max(Math.abs(uint16_to_fraction(max_y_uint16)), Math.abs(uint16_to_fraction(min_y_uint16)))
-      console.log(max_y_uint16, min_y_uint16, max_diff)
 
       this.y_max = [ 0.03, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50 ].find(y => y > max_diff)
       this.date_width = DateWidth
