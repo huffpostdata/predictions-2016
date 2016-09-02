@@ -38,9 +38,13 @@ CookPriors <- data.frame(
   dem_win_prob=c(1.0, 0.90, 0.80, 0.5, 0.20, 0.10, 0.01)
 )
 
-#############################
-## data preperation for jags
-#############################
+date_to_date_int <- function(date) {
+  return(as.integer(date - StartDate) + 1)
+}
+
+date_int_to_date <- function(date_int) {
+  return(date_int + StartDate)
+}
 
 calculate_labels <- function(col_names) {
   last_choice_index <- match('poll_id', col_names) - 1
@@ -49,48 +53,26 @@ calculate_labels <- function(col_names) {
 
 ## object for jags
 makeJagsObject <- function(data, thePollsters, dateSeq, who, offset=0){
-    tmpData <- data
-    theColumn <- match(who,names(tmpData))
-    y.tmp <- tmpData[,theColumn]                     ## the response
-    y.tmp <- matrix(y.tmp,ncol=length(theColumn))    ## be a matrix
-    ok <- apply(y.tmp,1,function(x)!(any(is.na(x)))) ## clobber NA
-    tmpData <- tmpData[ok,]                          ## subset to obs with good data
-    y <- as.matrix(tmpData[,theColumn])
-    y <- y/100
-    v <- y*(1-y)/tmpData$nobs_truncated              ## variance
-    prec <- 1/v
-    ## pollster/population combinations
+  responses <- data[!is.na(data[[who]]),c('start_date', 'end_date', 'nobs_truncated', 'pp', who)]
+  responses$n_days <- as.integer(responses$end_date - responses$start_date + 1)
 
+  responses$y <- responses[[who]] / 100
+  responses$prec <- responses$nobs_truncated / (responses$y * (1 - responses$y))
+  responses$j <- match(responses$pp, thePollsters)
 
-    j <- match(tmpData$pp,thePollsters)
+  firstDay <- dateSeq[1]
 
-    ## loop over polls
-    NPOLLS <- dim(tmpData)[1]
-    counter <- 1
-    pollList <- list()
-    for(i in 1:NPOLLS){
-        pollLength <- tmpData$n_days[i]
-        ##cat(paste("pollLength:",pollLength,"\n"))
-        dateSeq.limits <- match(c(tmpData$start_date[i],tmpData$end_date[i]),dateSeq)
-        dateSeq.local <- dateSeq.limits[1]:dateSeq.limits[2]
-        ##cat("dateSeq.local:\n")
-        ##print(dateSeq.local)
-        pollList[[i]] <- data.frame(y=rep(y[i],pollLength),
-                                    j=rep(j[i],pollLength),
-                                    prec=rep(prec[i]/pollLength,pollLength),
-                                    date=dateSeq.local)
-    }
-    pollList <- do.call("rbind",pollList)
+  pollList <- data.frame(
+    y=rep(responses$y, responses$n_days),
+    j=rep(responses$j, responses$n_days),
+    prec=rep(responses$prec / responses$n_days, responses$n_days),
+    date=rep(responses$start_date - firstDay, responses$n_days) + sequence(responses$n_days)
+  )
 
     forJags <- as.list(pollList)
-    forJags$NOBS <- dim(pollList)[1]
+    forJags$NOBS <- nrow(pollList)
     forJags$NHOUSES <- length(thePollsters)
     forJags$NPERIODS <- length(dateSeq)
-
-    ## renormalize dates relative to what we have for this candidate
-    firstDay <- match(min(tmpData$start_date),dateSeq)
-    forJags$date <- forJags$date - firstDay + 1
-    forJags$NPERIODS <- forJags$NPERIODS - firstDay + 1
 
     ## prior for house effects
     forJags$d0 <- rep(0,forJags$NHOUSES)
@@ -142,7 +124,7 @@ mcmc_list_to_xi_array <- function(mcmc_list, firstDay, dateSeq){
     dim(ret) <- c(dim(ret)[1] * dim(ret)[2], dim(ret)[3])
 
     # Set the dims: we're going by date
-    theDateSeq <- as.character(dateSeq)[seq(from=firstDay, length=dim(ret)[2], by=1)]
+    theDateSeq <- as.character(dateSeq)[seq(from=firstDay - min(dateSeq) + 1, length=dim(ret)[2], by=1)]
     dimnames(ret) <- list(iteration=NULL, date=theDateSeq)
 
     #save('ret', file='debug.RData')
@@ -168,12 +150,8 @@ build_normalized_array <- function(candidate_xis) {
 
     dateSpans <- lapply(candidate_xis, function(xi) colnames(xi)[c(1,ncol(xi))])
     dateSpans <- do.call("rbind",dateSpans)
-    dateRange <- c(as.Date(min(dateSpans[,1])), as.Date(max(dateSpans[,2])))
-    dateSeq <- seq.Date(from=dateRange[1], to=dateRange[2], by="day")
+    dateSeq <- seq.Date(from=as.Date(min(dateSpans[,1])), to=as.Date(max(dateSpans[,2])), by='day')
 
-    # Create 3D master array: date -> chain/iter -> candidate -> fraction
-    #
-    # (We fold iterations from all chains into one big chain+iter vector.)
     arr <- array(NA, c(length(candidate_xis), n_iterations, length(dateSeq)))
     dimnames(arr) <- list(who=names(candidate_xis), iteration=NULL, date=as.character(dateSeq))
     for (who in names(candidate_xis)) {
@@ -321,12 +299,7 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
     return(stub_diff_curve(state_code, cook_rating))
   }
 
-  ## what we will loop over, below
-  theResponses <- calculate_labels(colnames(data))
-
-  ## dates
-  data$n_days <- as.numeric(data$end_date)-as.numeric(data$start_date) + 1
-  if (any(data$n_days < 1)) {
+  if (any(data$end_date < data$start_date)) {
     stop("found mangled start and end dates")
   }
 
