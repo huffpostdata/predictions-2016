@@ -29,6 +29,7 @@ NDates <- as.integer(EndDate - StartDate + 1)
 OutputStartDate <- as.Date('2016-07-01') # don't return data before this day
 
 MinNPollsForModel <- 5
+MinNPollsForOutput <- 2
 NOutputSamples <- 200 # 1,000 looks cluttered
 Uint16Factor <- 2**16 - 1 # to convert [0.0,1.0] fractions to [0, 65536) 16-bit integers
 
@@ -289,6 +290,13 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
   data <- data[data$start_date >= StartDate & data$end_date <= EndDate,]
 
   if (nrow(data) < MinNPollsForModel) {
+    # Not enough polls: the model will be garbage
+    return(stub_diff_curve(state_code, cook_rating))
+  }
+
+  if (sum(data$end_date >= OutputStartDate) < MinNPollsForOutput) {
+    # Not enough polls on the chart: the chart will be garbage (the model
+    # will be imprecise, too)
     return(stub_diff_curve(state_code, cook_rating))
   }
 
