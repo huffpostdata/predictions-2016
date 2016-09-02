@@ -52,7 +52,7 @@ calculate_labels <- function(col_names) {
 }
 
 ## object for jags
-makeJagsObject <- function(data, thePollsters, dateSeq, who, offset=0){
+makeJagsObject <- function(data, thePollsters, dateSeq, who) {
   responses <- data[!is.na(data[[who]]),c('start_date', 'end_date', 'nobs_truncated', 'pp', who)]
   responses$n_days <- as.integer(responses$end_date - responses$start_date + 1)
 
@@ -79,9 +79,6 @@ makeJagsObject <- function(data, thePollsters, dateSeq, who, offset=0){
     delta.prior.sd <- .025
     delta.prior.prec <- (1/delta.prior.sd)^2
     forJags$D0 <- diag(rep(delta.prior.prec,forJags$NHOUSES))
-
-    ## offset, user-defined?
-    forJags$offset <- offset
 
     return(list(forJags=forJags,firstDay=firstDay))
 }
@@ -344,7 +341,7 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
   for (who in calculate_labels(colnames(data))) {
     cat(sprintf("Running for outcome %s\n", who))
 
-    tmp <- makeJagsObject(data, thePollsters, dateSeq, who, offset=0)
+    tmp <- makeJagsObject(data, thePollsters, dateSeq, who)
     forJags <- tmp$forJags
     firstDay <- tmp$firstDay
 

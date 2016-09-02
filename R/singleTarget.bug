@@ -20,7 +20,7 @@ model{
   ## remap to identified parameters
   dbar <- mean(delta.raw) 
   for(p in 1:NPERIODS){
-    xi[p] <- xi.raw[p] + dbar - offset
+    xi[p] <- xi.raw[p] + dbar
   }
 
   ## impose sum to zero restriction on houses
