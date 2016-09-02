@@ -26,6 +26,7 @@ McmcParams <- list(
 StartDate <- as.Date('2016-01-01')       # ignore polls before this day
 EndDate <- as.Date('2016-11-08')         # run the model until this day -- election day!
 NDates <- as.integer(EndDate - StartDate + 1)
+Today <- Sys.Date()
 OutputStartDate <- as.Date('2016-07-01') # don't return data before this day
 
 MinNPollsForModel <- 5
@@ -136,7 +137,7 @@ mcmc_list_to_xi_array <- function(mcmc_list) {
 # In other words, arr[,1,'2016-08-04'] pulls one xi value from each entry in
 # candidate_xis and normalizes so they all add up to 1.0.
 build_normalized_array <- function(candidate_xis) {
-    cat('combining/renormaling output for: ', names(candidate_xis))
+    cat('combining/renormaling output for: ', names(candidate_xis), '\n')
 
     # All candidate_xi arrays have the same dims; make a big, 3D array
     arr <- array(
@@ -218,6 +219,10 @@ diffSummary <- function(normalized_array, dem_who, gop_who) {
 # probabilities shifted towards 0.5, with higher undecideds leading to larger
 # shifts.
 center_probability_with_undecided <- function(dem_win_prob, diff_xibar, undecided_xibar) {
+  # for days after today, undecided_xibar should use today's value
+  today <- as.integer(Today - OutputStartDate + 1)
+  undecided_xibar[today:length(undecided_xibar)] <- undecided_xibar[today]
+
   shift_proportion <- undecided_xibar / pmax(0.0001, abs(diff_xibar)) # avoid div by 0
 
   # if undecided == 5x diff, move probability by 5%.
