@@ -25,6 +25,7 @@ McmcParams <- list(
 
 StartDate <- as.Date('2016-01-01')       # ignore polls before this day
 EndDate <- as.Date('2016-11-08')         # run the model until this day -- election day!
+NDates <- as.integer(EndDate - StartDate + 1)
 OutputStartDate <- as.Date('2016-07-01') # don't return data before this day
 
 MinNPollsForModel <- 5
@@ -38,21 +39,13 @@ CookPriors <- data.frame(
   dem_win_prob=c(1.0, 0.90, 0.80, 0.5, 0.20, 0.10, 0.01)
 )
 
-date_to_date_int <- function(date) {
-  return(as.integer(date - StartDate) + 1)
-}
-
-date_int_to_date <- function(date_int) {
-  return(date_int + StartDate)
-}
-
 calculate_labels <- function(col_names) {
   last_choice_index <- match('poll_id', col_names) - 1
   return(col_names[1:last_choice_index])
 }
 
 ## object for jags
-makeJagsObject <- function(data, thePollsters, dateSeq, who) {
+makeJagsObject <- function(data, thePollsters, who) {
   responses <- data[!is.na(data[[who]]),c('start_date', 'end_date', 'nobs_truncated', 'pp', who)]
   responses$n_days <- as.integer(responses$end_date - responses$start_date + 1)
 
@@ -60,19 +53,17 @@ makeJagsObject <- function(data, thePollsters, dateSeq, who) {
   responses$prec <- responses$nobs_truncated / (responses$y * (1 - responses$y))
   responses$j <- match(responses$pp, thePollsters)
 
-  firstDay <- dateSeq[1]
-
   pollList <- data.frame(
     y=rep(responses$y, responses$n_days),
     j=rep(responses$j, responses$n_days),
     prec=rep(responses$prec / responses$n_days, responses$n_days),
-    date=rep(responses$start_date - firstDay, responses$n_days) + sequence(responses$n_days)
+    date=rep(responses$start_date - StartDate, responses$n_days) + sequence(responses$n_days)
   )
 
     forJags <- as.list(pollList)
     forJags$NOBS <- nrow(pollList)
     forJags$NHOUSES <- length(thePollsters)
-    forJags$NPERIODS <- length(dateSeq)
+    forJags$NPERIODS <- NDates
 
     ## prior for house effects
     forJags$d0 <- rep(0,forJags$NHOUSES)
@@ -80,14 +71,14 @@ makeJagsObject <- function(data, thePollsters, dateSeq, who) {
     delta.prior.prec <- (1/delta.prior.sd)^2
     forJags$D0 <- diag(rep(delta.prior.prec,forJags$NHOUSES))
 
-    return(list(forJags=forJags,firstDay=firstDay))
+    return(forJags)
 }
 
 makeInits <- function(forJags, cookPrior1, cookPrior2) {
     sigma <- runif(n=1,0,.003)
-    xi <- rep(NA,forJags$NPERIODS)
+    xi <- rep(NA,NDates)
     xi[1] <- rnorm(n=1, cookPrior1,cookPrior2)
-    for(i in 2:forJags$NPERIODS){
+    for (i in 2:NDates) {
         xi[i] <- rnorm(n=1,xi[i-1],sd=sigma)
     }
     xi.bad <- xi < .01
@@ -111,7 +102,7 @@ makeInits <- function(forJags, cookPrior1, cookPrior2) {
 # object: it has C chains, and each chain has I iterations. An output
 # "iteration" i means "chain floor(i/C), iteration i%%C". (We don't care which
 # chain a given value comes from.
-mcmc_list_to_xi_array <- function(mcmc_list, firstDay, dateSeq){
+mcmc_list_to_xi_array <- function(mcmc_list) {
     iter_i_chain <- as.array(mcmc_list)
 
     # Transpose so chain and iter are together
@@ -120,9 +111,13 @@ mcmc_list_to_xi_array <- function(mcmc_list, firstDay, dateSeq){
     # Cast as a 2D array instead of a 3D array
     dim(ret) <- c(dim(ret)[1] * dim(ret)[2], dim(ret)[3])
 
+    # Filter out the dates we don't care about
+    ret <- ret[,(OutputStartDate - StartDate + 1):NDates]
+
     # Set the dims: we're going by date
-    theDateSeq <- as.character(dateSeq)[seq(from=firstDay - min(dateSeq) + 1, length=dim(ret)[2], by=1)]
-    dimnames(ret) <- list(iteration=NULL, date=theDateSeq)
+    dateSeq <- as.character(seq.Date(from=OutputStartDate, to=EndDate, by='day'))
+
+    dimnames(ret) <- list(iteration=NULL, date=dateSeq)
 
     #save('ret', file='debug.RData')
 
@@ -140,22 +135,22 @@ mcmc_list_to_xi_array <- function(mcmc_list, firstDay, dateSeq){
 # In other words, arr[,1,'2016-08-04'] pulls one xi value from each entry in
 # candidate_xis and normalizes so they all add up to 1.0.
 build_normalized_array <- function(candidate_xis) {
-    cat('combining/renormaling output for: ')
-    print(names(candidate_xis))
+    cat('combining/renormaling output for: ', names(candidate_xis))
 
-    n_iterations <- dim(candidate_xis[[1]])[1]
+    # All candidate_xi arrays have the same dims; make a big, 3D array
+    arr <- array(
+      unlist(candidate_xis),
+      dim=c(dim(candidate_xis[[1]]), length(candidate_xis))
+    )
+    dimnames(arr) <- list(
+      iteration=NULL,
+      date=dimnames(candidate_xis[[1]])[[2]],
+      who=names(candidate_xis)
+    )
 
-    dateSpans <- lapply(candidate_xis, function(xi) colnames(xi)[c(1,ncol(xi))])
-    dateSpans <- do.call("rbind",dateSpans)
-    dateSeq <- seq.Date(from=as.Date(min(dateSpans[,1])), to=as.Date(max(dateSpans[,2])), by='day')
-
-    arr <- array(NA, c(length(candidate_xis), n_iterations, length(dateSeq)))
-    dimnames(arr) <- list(who=names(candidate_xis), iteration=NULL, date=as.character(dateSeq))
-    for (who in names(candidate_xis)) {
-      xi <- candidate_xis[[who]]
-      matching_days <- match(colnames(xi), as.character(dateSeq))
-      arr[who,,matching_days] <- xi
-    }
+    # move candidate values next to each other in each date+iter
+    # reuse variable name to save memory
+    arr <- aperm(arr, c(3, 1, 2))
 
     normalized <- apply(arr, c('iteration', 'date'), function(x) x/sum(x, na.rm=TRUE))
 
@@ -290,7 +285,8 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
     check.names=FALSE
   )
 
-  data <- data[data$start_date >= StartDate,]
+  # Nix out-of-range polls
+  data <- data[data$start_date >= StartDate & data$end_date <= EndDate,]
 
   if (nrow(data) < MinNPollsForModel) {
     return(stub_diff_curve(state_code, cook_rating))
@@ -299,8 +295,6 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
   if (any(data$end_date < data$start_date)) {
     stop("found mangled start and end dates")
   }
-
-  dateSeq <- seq.Date(from=min(data$start_date), to=EndDate, by="day")
 
   ## missing sample sizes?
   nobs <- data$sample_size
@@ -341,15 +335,13 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
   for (who in calculate_labels(colnames(data))) {
     cat(sprintf("Running for outcome %s\n", who))
 
-    tmp <- makeJagsObject(data, thePollsters, dateSeq, who)
-    forJags <- tmp$forJags
-    firstDay <- tmp$firstDay
+    jags_data <- makeJagsObject(data, thePollsters, who)
 
-    initFunc <- function() { return(makeInits(forJags, cookPrior1, cookPrior2)) }
+    initFunc <- function() { return(makeInits(jags_data, cookPrior1, cookPrior2)) }
     ## call JAGS
     jags_model <- jags.model(
       file="singleTarget.bug",
-      data=forJags,
+      data=jags_data,
       n.chains=mcmc_params$n_chains,
       inits=initFunc,
       quiet=TRUE
@@ -363,21 +355,21 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
       thin=mcmc_params$n_iterations/mcmc_params$n_samples
     )
 
-    xi_array <- mcmc_list_to_xi_array(out, firstDay, dateSeq)
+    xi_array <- mcmc_list_to_xi_array(out)
 
     candidate_xis[[who]] <- xi_array
-
-    #save("data","dateSeq","firstDay", "forJags","out","xi_array" file='out.RData')
   }
 
   normalized_array <- build_normalized_array(candidate_xis)
 
+  frame <- data.frame(
+    state=rep(state_code, times=EndDate - OutputStartDate + 1),
+    date=seq.Date(from=OutputStartDate, to=EndDate, by='day')
+  )
   undecided_frame <- build_choice_frame(normalized_array, 'Undecided', list(undecided_xibar='mean'))
   diff_frame <- diffSummary(normalized_array, dem_label, gop_label)
-  out <- data.frame(state=rep(state_code, times=length(dateSeq)), date=dateSeq)
-  out <- merge(out, diff_frame, by=c('date'))
-  out <- merge(out, undecided_frame, by=c('date'))
 
+  out <- data.frame(frame, undecided_frame, diff_frame)
   out$dem_win_prob_with_undecided <- center_probability_with_undecided(out$dem_win_prob, out$diff_xibar, out$undecided_xibar)
 
   samples_string <- calculate_diff_curve_samples_string(normalized_array, dem_label, gop_label)
