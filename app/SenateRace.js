@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = class SenateRace {
-  constructor(hash, curve) {
+  constructor(hash, seat, curve) {
     this.state_code = hash.state
     this.pollster_slug = hash.pollster_slug
     this.cook_rating = hash.cook_rating
@@ -9,10 +9,16 @@ module.exports = class SenateRace {
     this.dem_label = hash.dem_label
     this.gop_name = hash.gop_name
     this.gop_label = hash.gop_label
+
+    this.seat = seat
     this.curve = curve
 
     this.dem_win_prob = curve.election_day_point.dem_win_prob
     this.dem_win_prob_with_undecided = curve.election_day_point.dem_win_prob_with_undecided
+
+    this.flip_prob = this.seat.party_code === 'dem' ? (1 - this.dem_win_prob_with_undecided) : this.dem_win_prob_with_undecided
+    this.seat_party_code = this.seat.party_code
+    this.flip_party_code = this.seat_party_code === 'dem' ? 'gop' : 'dem'
 
     const winner = this.dem_win_prob > 0.5 ? 'dem' : 'gop'
     const loser = this.dem_win_prob > 0.5 ? 'gop' : 'dem'

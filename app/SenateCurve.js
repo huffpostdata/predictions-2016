@@ -99,7 +99,8 @@ module.exports = class SenateCurve {
       const min_y_uint16 = simple_reduce_samples(uint16_samples, Math.min)
       const max_diff = Math.max(Math.abs(uint16_to_fraction(max_y_uint16)), Math.abs(uint16_to_fraction(min_y_uint16)))
 
-      this.y_max = [ 0.03, 0.05, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80 ].find(y => y > max_diff)
+      // y_max: make sure it's divisible by two
+      this.y_max = [ 0.04, 0.08, 0.10, 0.16, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80 ].find(y => y > max_diff)
       this.date_width = DateWidth
 
       // Today is `updated_at_x` days from the start of this chart

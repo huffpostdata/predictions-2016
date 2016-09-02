@@ -80,7 +80,21 @@
     }
   }
 
-  svg {
+  svg.arrow {
+    path {
+      stroke: none;
+      fill: $very-muted-color;
+    }
+  }
+
+  svg.plot {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
     rect.dem {
       stroke: none;
       fill: $strong-dem;
@@ -126,32 +140,123 @@
   }
 
   .chart-container {
+    $x-axis-height: 2rem;
+    $today-height: 2rem;
+
     background: $background;
-    border: 1px solid black;
     line-height: 1;
 
-    .grid {
-      position: relative;
-      padding-left: 2rem; // for y-axis
+    .y-axis-and-rest {
+      display: -webkit-flex;
+      display: flex;
+    }
+
+    .rest {
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+
+    .x-axis {
+      display: -webkit-flex;
+      display: flex;
+      height: $x-axis-height;
+      white-space: nowrap;
+
+      div.arrow {
+        -webkit-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: .3rem;
+        height: .4rem;
+        position: relative;
+      }
+
+      svg.arrow {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    .today {
+      height: $today-height;
     }
 
     .y-axis {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2rem;
-      bottom: 0;
+      display: -webkit-flex;
+      display: flex; // to vertically center .label
+      -webkit-align-items: center;
+      align-items: center;
+      position: relative;
+      top: -.125rem; // tweak baseline of Source Sans Pro
 
-      .min, .max, .zero {
-        position: absolute;
-        left: 0;
-        width: 2rem;
-        text-align: right;
+      .label {
+        white-space: nowrap;
+        text-transform: uppercase;
+        color: $muted-color;
+        font-style: italic;
+        padding-right: 1.5rem;
       }
 
-      .max { top: 0; }
-      .zero { top: 50%; height: 1rem; margin-top: -.5rem; }
-      .min { bottom: 0; }
+      .values {
+        // Put the axis where it belongs
+        position: absolute;
+        box-sizing: border-box;
+        right: .25rem;
+        top: $x-axis-height - .5rem;
+        bottom: $today-height - .5rem;
+        width: 100%;
+
+        // Align the labels
+        // line-height is 1rem and we added an extra .5rem at the top and bottom;
+        // that's so the labels all center at their values.
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+
+        line-height: 1rem;
+        text-align: right;
+        font-weight: bold;
+      }
+
+      .max-dem { position: relative; top: .5rem; }
+      .max-gop { position: relative; bottom: .5rem; }
+
+      .max-dem, .mid-dem { color: $strong-dem; }
+      .max-gop, .mid-gop { color: $strong-gop; }
+    }
+
+    div.plot {
+      position: relative;
+      width: 100%;
+
+      &::before {
+        content: '';
+        display: block;
+        height: 0;
+        padding-bottom: 60%;
+      }
+    }
+  }
+
+  .legend {
+    color: $muted-color;
+    font-style: italic;
+
+    .legend-def {
+      display: inline-block;
+
+      svg {
+        display: inline-block;
+        height: 1rem;
+        width: auto;
+      }
+
+      svg.legend-thread path { fill: none; stroke: $toss-up; stroke-width: 1px; }
+      svg.legend-average path { fill: none; stroke: $color; stroke-width: 5px; }
+      svg.legend-poll circle { fill: $toss-up; stroke: none; }
     }
   }
 

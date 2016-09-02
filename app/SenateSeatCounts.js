@@ -7,25 +7,24 @@ const ThisYearSeatClass = 3
 
 function is_seat_existing_dem(seat) {
   if (seat.seat_class == ThisYearSeatClass) return false
-  return seat.party_code != 'GOP'
+  return seat.party_code != 'gop'
 }
 
 function is_seat_existing_gop(seat) {
   if (seat.seat_class == ThisYearSeatClass) return false
-  return seat.party_code == 'GOP'
+  return seat.party_code == 'gop'
 }
 
 class SenateSeatCounts {
   constructor(seats, dem_count_probs, dem_counts) {
-    this.seats = seats
+    this.n_existing_dem = seats.all.filter(is_seat_existing_dem).length
+    this.n_existing_gop = seats.all.filter(is_seat_existing_gop).length
+
     this.dem_count_probs = dem_count_probs
     this.dem_counts = dem_counts
 
     this.max_n = Math.max.apply(null, dem_counts)
     this.max_p = Math.max.apply(null, dem_count_probs)
-
-    this.n_existing_dem = seats.all.filter(is_seat_existing_dem).length
-    this.n_existing_gop = seats.all.filter(is_seat_existing_gop).length
 
     this.n = this.dem_counts.reduce(((a, s) => a + s), 0)
 
