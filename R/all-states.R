@@ -6,7 +6,7 @@ output_senate_seat_counts_path <- '../data/sheets/output/senate-seat-counts.tsv'
 output_senate_samples_path <- '../data/sheets/output/senate-samples-STATE'
 
 NMonteCarloSimulations <- 1e8
-ElectionDay <- as.Date('2016-11-08')
+EndDate <- as.Date('2016-11-08')
 
 args <- commandArgs(TRUE)
 fast <- !is.na(args[1]) && args[1] == 'fast'
@@ -94,7 +94,7 @@ dump_senate_samples <- function(state_samples_strings) {
 
 dump_senate_seat_counts <- function(seat_counts) {
   frame <- data.frame(
-    date=rep(ElectionDay, length(seat_counts)),
+    date=rep(EndDate, length(seat_counts)),
     n_dem=0:(length(seat_counts) - 1),
     n=seat_counts,
     p=(seat_counts / sum(seat_counts))
@@ -113,7 +113,7 @@ run_all_senate <- function() {
 
   dump_senate_samples(senate_data$state_samples_strings)
 
-  election_day_seat_probabilities = c(senate_curves[senate_curves$date==ElectionDay,'dem_win_prob_with_undecided'])
+  election_day_seat_probabilities = c(senate_curves[senate_curves$date==EndDate,'dem_win_prob_with_undecided'])
   n_dem_seats <- predict_n_dem_senate_seats(election_day_seat_probabilities)
   dump_senate_seat_counts(n_dem_seats)
 }

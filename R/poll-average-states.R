@@ -23,7 +23,10 @@ McmcParams <- list(
   )
 )
 
-ElectionDay <- as.Date('2016-11-08')
+StartDate <- as.Date('2016-01-01')       # ignore polls before this day
+EndDate <- as.Date('2016-11-08')         # run the model until this day -- election day!
+OutputStartDate <- as.Date('2016-07-01') # don't return data before this day
+
 MinNPollsForModel <- 5
 NOutputSamples <- 200 # 1,000 looks cluttered
 Uint16Factor <- 2**16 - 1 # to convert [0.0,1.0] fractions to [0, 65536) 16-bit integers
@@ -265,7 +268,7 @@ stub_diff_curve <- function(state_code, cook_rating) {
   return(list(
     curve=data.frame(
       state=c(state_code),
-      date=c(ElectionDay),
+      date=c(EndDate),
       diff_xibar=NA,
       diff_low=NA,
       diff_high=NA,
@@ -284,7 +287,7 @@ stub_diff_curve <- function(state_code, cook_rating) {
 # the fraction democrats are beating republicans: the floats [-1.0,1.0]
 # normalized to the range [0,0xffff].
 #
-# The last uint16 is for ElectionDay; JavaScript can determine the other dates
+# The last uint16 is for EndDate; JavaScript can determine the other dates
 # by working backwards.
 calculate_diff_curve_samples_string <- function(normalized_array, dem_label, gop_label) {
   diff_array <- normalized_array[dem_label,,] - normalized_array[gop_label,,]
@@ -312,6 +315,8 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
     check.names=FALSE
   )
 
+  data <- data[data$start_date >= StartDate,]
+
   if (nrow(data) < MinNPollsForModel) {
     return(stub_diff_curve(state_code, cook_rating))
   }
@@ -325,7 +330,7 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
     stop("found mangled start and end dates")
   }
 
-  dateSeq <- seq.Date(from=min(data$start_date), to=ElectionDay, by="day")
+  dateSeq <- seq.Date(from=min(data$start_date), to=EndDate, by="day")
 
   ## missing sample sizes?
   nobs <- data$sample_size
