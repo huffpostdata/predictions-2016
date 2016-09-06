@@ -1,9 +1,10 @@
 nav {
   background: $nav-background;
+  border-bottom: 1px solid #ccc;
   color: $nav-color;
   font-family: $nav-font-family;
   padding: .5rem;
-  height: 2rem;
+  height: 4rem;
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-between;
@@ -16,8 +17,8 @@ nav {
   }
 
   .nav-logo {
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
+    -webkit-flex: 2 2 auto;
+    flex: 2 2 auto;
     display: -webkit-flex;
     display: flex;
 
@@ -43,20 +44,50 @@ nav {
 
     img {
       display: block;
-      max-height: 2rem;
+      min-height: 4rem;
       max-width: 100%;
       width: auto;
+      padding-top: 1.7rem;
     }
   }
 
   .share-buttons {
-    padding-top: .1rem;
+    padding-top: 1.1rem;
     line-height: 1.7rem;
     white-space: nowrap;
 
     button {
-      background: #181818;
+      background: $nav-background;
       margin-right: .5rem;
+      color: black;
     }
   }
+}
+
+
+    .election-header {
+      margin: .7rem auto;
+      text-align: center;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      -webkit-justify-content: center;
+      justify-content: center;
+      width: 100%;
+
+
+      .election-header-text {
+        font-family: $header-font-family;
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      margin: auto;
+      .election-header-blue {
+        color: $muted-dem;
+
+      }
+      .election-header-red {
+        color: $strong-gop;
+      }
+    }
 }
