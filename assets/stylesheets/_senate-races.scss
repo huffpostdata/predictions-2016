@@ -157,7 +157,8 @@
     }
 
     circle.poll {
-      stroke: none;
+      stroke: $color;
+      stroke-width: 2px;
       fill: $toss-up;
     }
   }
@@ -352,7 +353,8 @@
 
       svg.legend-thread path { fill: none; stroke: $toss-up; stroke-width: 1px; }
       svg.legend-average path { fill: none; stroke: $color; stroke-width: 5px; }
-      svg.legend-poll circle { fill: $toss-up; stroke: none; }
+      svg.legend-poll circle { fill: $toss-up; stroke: $color; stroke-width: 2px; }
+      svg.legend-poll { vertical-align: -2px; }
     }
   }
 

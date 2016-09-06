@@ -105,16 +105,17 @@ makeInits <- function(forJags, cookPrior1, cookPrior2) {
 # "iteration" i means "chain floor(i/C), iteration i%%C". (We don't care which
 # chain a given value comes from.
 mcmc_list_to_xi_array <- function(mcmc_list) {
-    iter_i_chain <- as.array(mcmc_list)
+    # 3D array: [iteration,date (as integer),chain number]
+    iter_date_chain <- as.array(mcmc_list)
+
+    # Filter out the dates we don't care about
+    iter_date_chain <- iter_date_chain[,(OutputStartDate - StartDate + 1):NDates,]
 
     # Transpose so chain and iter are together
-    ret <- aperm(iter_i_chain, c(1, 3, 2))
+    ret <- aperm(iter_date_chain, c(1, 3, 2))
 
     # Cast as a 2D array instead of a 3D array
     dim(ret) <- c(dim(ret)[1] * dim(ret)[2], dim(ret)[3])
-
-    # Filter out the dates we don't care about
-    ret <- ret[,(OutputStartDate - StartDate + 1):NDates]
 
     # Set the dims: we're going by date
     dateSeq <- as.character(seq.Date(from=OutputStartDate, to=EndDate, by='day'))
