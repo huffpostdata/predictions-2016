@@ -29,8 +29,8 @@
   .probability {
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
-    padding-left: $half-marker-width + .5rem;
-    padding-right: $half-marker-width + .5rem;
+    margin-left: $half-marker-width + .5rem;
+    margin-right: $half-marker-width;
     position: relative;
 
     .box {
@@ -146,8 +146,7 @@
     border: 1px solid black;
     background: $background;
     box-sizing: border-box;
-    min-width: 90%;
-    max-width: 100%;
+    width: 100%;
     padding: 1.5rem;
     position: absolute;
     top: 2.5rem;
