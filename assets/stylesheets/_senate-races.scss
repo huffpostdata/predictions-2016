@@ -1,9 +1,16 @@
 #senate-races {
-  $line-height: 2rem;
   $marker-width: 1rem;
   $half-marker-width: $marker-width / 2;
   $state-width: 2rem;
   $collapsed-height: 2rem;
+
+  @mixin chart-label() {
+    font-size: .85rem;
+    line-height: 1rem;
+    color: $muted-color;
+    text-transform: uppercase;
+    font-style: italic;
+  }
 
   .container {
     position: relative;
@@ -17,7 +24,6 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    line-height: $line-height;
 
     &>li {
       position: relative;
@@ -33,6 +39,7 @@
     box-sizing: border-box;
     padding-left: .25rem;
     width: $state-width;
+    line-height: $collapsed-height;
     height: $collapsed-height;
     font-family: $header-font-family;
     font-size: 1.2rem;
@@ -213,10 +220,11 @@
 
   .chart-container {
     $x-axis-height: 2.25rem;
-    $today-height: 2rem;
+    $today-height: 2.25rem;
 
     background: $background;
     line-height: 1;
+    margin: .75rem;
 
     .y-axis-and-rest {
       display: -webkit-flex;
@@ -260,9 +268,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        color: $muted-color;
-        text-transform: uppercase;
-        font-style: italic;
+        @include chart-label();
       }
     }
 
@@ -273,7 +279,7 @@
 
       .today-inner {
         position: absolute;
-        top: 0;
+        bottom: 0;
         padding-right: .75rem;
         left: -7rem; // don't wrap on mobile
 
@@ -291,9 +297,7 @@
       }
 
       .label {
-        color: $muted-color;
-        text-transform: uppercase;
-        font-style: italic;
+        @include chart-label();
       }
 
       .spread {
@@ -315,9 +319,7 @@
 
       .label {
         white-space: nowrap;
-        text-transform: uppercase;
-        color: $muted-color;
-        font-style: italic;
+        @include chart-label();
         padding-right: 1.5rem;
       }
 

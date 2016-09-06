@@ -8,7 +8,6 @@ var races=data.model.races
   p - The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50.
 
   .container
-    .axis-50
     ul
       li.${race.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : (race.dem_win_prob_with_undecided == 0.5 ? 'toss-up' : 'lean-gop')} data-state-code="${race.state_code}" for(race in races.sorted_by('flip-probability'))
         input.expand#state-race-expand-${race.state_code} data-state-code="${race.state_code}" type="checkbox" value="${race.state_code}"
@@ -56,7 +55,7 @@ var races=data.model.races
                       .zero - 0
                       .mid-gop - R+${race.curve.y_max * 50}
                       .max-gop - R+${race.curve.y_max * 100}
-                  .x-axis-and-plot-and-today
+                  .rest
                     .x-axis
                       .start-date - July 1
                       .arrow
