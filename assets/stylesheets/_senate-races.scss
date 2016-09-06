@@ -176,7 +176,7 @@
 
   .content-to-expand {
     max-height: $collapsed-height;
-    transition: max-height 200ms ease-in-out, background-color 200ms ease-in-out;
+    transition: max-height 150ms ease-in-out, background-color 150ms ease-in-out, margin-bottom 150ms ease-in-out;
     background-color: $background;
     overflow: hidden;
   }
@@ -184,6 +184,7 @@
   input.expand:checked + .content-to-expand {
     max-height: 50rem;
     background-color: $alt-background;
+    margin-bottom: .5rem;
   }
 
   .details {
