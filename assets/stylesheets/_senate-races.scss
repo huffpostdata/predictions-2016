@@ -1,8 +1,19 @@
 #senate-races {
   $marker-width: 1rem;
   $half-marker-width: $marker-width / 2;
-  $state-width: 2rem;
+  $state-width: 3rem;
   $collapsed-height: 2rem;
+
+  @include full-width();
+
+  &>* {
+    @include page_width();
+  }
+
+  .container {
+    margin: 0 auto; // nix margins on mobile
+    position: relative;
+  }
 
   @mixin chart-label() {
     font-size: .85rem;
@@ -10,10 +21,6 @@
     color: $muted-color;
     text-transform: uppercase;
     font-style: italic;
-  }
-
-  .container {
-    position: relative;
   }
 
   label, input {
@@ -37,7 +44,7 @@
   .state-code {
     display: inline-block;
     box-sizing: border-box;
-    padding-left: .25rem;
+    padding-left: 1rem;
     width: $state-width;
     line-height: $collapsed-height;
     height: $collapsed-height;
@@ -62,22 +69,17 @@
     display: inline-block;
     box-sizing: border-box;
     position: absolute;
-    width: $collapsed-height / 3;
-    height: $collapsed-height / 3;
-    right: $collapsed-height / 3;
-    top: $collapsed-height / 3;
-    border: 2px solid $muted-color;
-    border-top: 0;
-    border-right: 0;
-    transform: rotate(-45deg);
-    transition: transform 100ms ease-in-out;
+    right: 1rem;
+    top: $collapsed-height / 4;
+    width: $collapsed-height / 2;
+    height: $collapsed-height / 2;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><path d="M1,2L4,5L7,2" stroke="%23ccc" stroke-width="1.5" fill="none"/></svg>');
+    background-size: 100%;
+    transition: transform 150ms ease-in-out;
   }
 
   input.expand:checked + .content-to-expand::before {
-    // Just flipping the rotation causes off-by-one px on Chrome 52 on Linux.
-    // But we can hack the effect.
-    //transform: rotate(135deg);
-    transform: rotate(-45deg) rotateY(180deg) rotateX(180deg);
+    transform: scaleY(-1);
   }
 
   label.probability {
