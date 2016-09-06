@@ -1,8 +1,9 @@
 #senate-races {
   $line-height: 2rem;
-  $marker-width: .5rem;
+  $marker-width: 1rem;
   $half-marker-width: $marker-width / 2;
   $state-width: 2rem;
+  $collapsed-height: 2rem;
 
   .container {
     position: relative;
@@ -15,63 +16,94 @@
     line-height: $line-height;
 
     &>li {
-      display: -webkit-flex;
-      display: flex;
+      position: relative;
+      border-top: 1px solid $border-color;
+      &:last-child {
+        border-bottom: 1px solid $border-color;
+      }
     }
   }
 
   .state-code {
+    display: inline-block;
     width: $state-width;
-    -webkit-flex: 0 0 auto;
-    flex: 0 0 auto;
+    height: $collapsed-height;
+    font-family: $header-font-family;
+    font-size: 1.2rem;
+  }
+
+  input.expand {
+    position: absolute;
+    box-sizing: border-box;
+    right: 0;
+    width: $state-width;
+    top: 0;
+    height: $collapsed-height;
+    opacity: 0;
+  }
+
+  // "expand/collapse" down-arrow, over the input.expand
+  .content-to-expand::before {
+    pointer-events: none; // make clicks happen on the input.expand
+    content: '';
+    display: inline-block;
+    box-sizing: border-box;
+    position: absolute;
+    width: $collapsed-height / 2;
+    height: $collapsed-height / 2;
+    right: $collapsed-height / 4;
+    top: $collapsed-height / 4;
+    border: 2px solid $muted-color;
+    border-top: 0;
+    border-right: 0;
+    transform: translateY(-$collapsed-height / 8) rotate(-45deg);
+    transition: transform 100ms ease-in-out;
+  }
+
+  input.expand:checked + .content-to-expand::before {
+    transform: translateY($collapsed-height / 8) rotate(135deg);
   }
 
   .probability {
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-    margin-left: $half-marker-width;
-    margin-right: $half-marker-width;
-    position: relative;
+    position: absolute;
+    left: $state-width + $half-marker-width;
+    right: $state-width + $half-marker-width;
+    top: 0;
+    height: $collapsed-height;
 
     .box {
-      height: 2 * $marker-width;
+      height: $collapsed-height;
       position: relative;
+
+      // 50% mark
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        margin-left: -.5px;
+        width: 1px;
+        background: $border-color;
+      }
     }
 
     .marker {
       position: absolute;
       display: inline-block;
-      top: ($line-height / 2) - $half-marker-width - .1rem;
+      box-sizing: border-box;
+      top: $collapsed-height / 2 - $half-marker-width;
       height: $marker-width;
       width: $marker-width;
       margin-left: -$half-marker-width;
       border-radius: $half-marker-width;
+      border: 1px solid black;
     }
   }
 
   .lean-dem .marker { background: $strong-dem; }
   .lean-gop .marker { background: $strong-gop; }
   .toss-up .marker { background: $toss-up; }
-
-  .axis-50 {
-    position: absolute;
-    z-index: -1;
-    left: $state-width;
-    top: 0;
-    right: 0;
-    bottom: 0;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      margin-left: -1px;
-      width: 2px;
-      background: $alt-background;
-    }
-  }
 
   svg.arrow {
     path {
@@ -130,48 +162,23 @@
     }
   }
 
-  li[data-state-code]:hover .details {
-    display: block;
+  .content-to-expand {
+    max-height: $collapsed-height;
+    transition: max-height 200ms ease-in-out, background-color 200ms ease-in-out;
+    background-color: $background;
+    overflow: hidden;
+  }
+
+  input.expand:checked + .content-to-expand {
+    max-height: 50rem;
+    background-color: $alt-background;
   }
 
   .details {
-    display: none;
-    z-index: 1;
-    border: 1px solid black;
-    background: $background;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 1.5rem;
-    position: absolute;
-    top: 2.5rem;
-
-    &>.arrow {
-      position: absolute;
-      display: inline-block;
-      background: $background;
-      top: 0;
-      box-sizing: border-box;
-      height: 1.5rem;
-      width: 1.5rem;
-      margin-top: -.75rem;
-      border: 1px solid $background;
-      border-top-color: black;
-      border-right-color: black;
-    }
-  }
-
-  .lean-dem .details>.arrow {
-    transform: scaleX(-1) skewY(-45deg);
-  }
-
-  .lean-gop .details>.arrow {
-    transform: skewY(-45deg);
-    margin-left: -1.5rem; // center where we're pointing
-  }
-
-  .toss-up .details .arrow {
-    transform: rotate(-45deg);
-    margin-left: -.75rem; // center where we're pointing
+    padding-left: $state-width;
+    padding-right: $state-width;
+    background: $alt-background; // cover the vertical line running down the page
+    border-top: 1px dotted $border-color;
   }
 
   .chart-container {
@@ -184,6 +191,9 @@
     .y-axis-and-rest {
       display: -webkit-flex;
       display: flex;
+      -webkit-justify-content: center;
+      justify-content: center;
+      padding: .5rem 0;
     }
 
     .rest {
