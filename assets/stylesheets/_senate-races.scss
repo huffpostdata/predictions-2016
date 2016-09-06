@@ -73,7 +73,7 @@
     transform: rotate(-45deg) rotateY(180deg) rotateX(180deg);
   }
 
-  .probability {
+  label.probability {
     display: block;
     position: absolute;
     left: $state-width + $half-marker-width;
@@ -187,9 +187,28 @@
   }
 
   .details {
-    background: $alt-background; // cover the vertical line running down the page
+    background: $background; // cover the vertical line running down the page
     border-top: 1px dotted $border-color;
+    border: .25rem solid $alt-background;
   }
+
+	h4 {
+    margin-top: .75rem;
+    padding: 0 .75rem;
+    line-height: 1.5;
+
+    strong.probability {
+      display: inline-block;
+      margin-left: -.25rem;
+      font-weight: bold;
+      padding: 0 .25rem;
+      color: white;
+    }
+	}
+
+  .lean-dem strong.probability { background: $strong-dem; }
+  .lean-gop strong.probability { background: $strong-gop; }
+  .toss-up strong.probability { background: $toss-up; }
 
   .chart-container {
     $x-axis-height: 2.25rem;
@@ -346,7 +365,7 @@
   }
 
   .legend {
-    padding-top: .5rem;
+    margin: .75rem;
     font-size: .9rem;
     line-height: 1.5;
     color: $muted-color;
@@ -379,7 +398,7 @@
 
     li {
       line-height: 1.5;
-      margin: .5rem 0;
+      margin: .75rem;
     }
 
     span.dem { color: $strong-dem; }

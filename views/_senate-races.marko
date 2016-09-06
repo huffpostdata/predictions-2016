@@ -21,20 +21,30 @@ var races=data.model.races
               span.marker style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
 
           .details
+            var o=race.calculations
             h4
-              span.incumbent-party.${race.seat_party_code}
-              span.state - ${race.state_code}
-              - : 
-              span.prob - ${Math.round(100 * race.flip_prob)}%
-              -  chance to flip to ${race.flip_party_code}
-            if(race.curve.is_plottable)
+              if(o.tie)
+                strong.probability - Toss-up
+                -  in ${race.state_name}
+              else
+                strong.probability - ${o.prob_with_undecided}%
+                -  chance ${race.state_name} will 
+                span.flip-or-stay - ${race.flip_prob > .5 ? 'flip to' : 'remain with'}
+                -  a 
+                span.party - ${o.winner_party_full}
+            if(!race.curve.is_plottable)
               ol.calculations
-                var o=race.calculations
-                if(o.tie === 0.5)
+                li - Since we haven't collected enough polls, we rely on Cook Political Report's <a href="http://cookpolitical.com/senate/charts/race-ratings">Senate Ratings</a>.
+                li - <em>Cook</em> suggests ${race.state_name}'s senate race is <strong class="cook-rating">${race.cook_rating_name}</strong>.
+                if(!o.tie)
+                  li - Historically, Cook has been right about this call in ${o.raw_prob}% of Senate races.
+            else
+              ol.calculations
+                if(o.tie)
                   li - Our simulations ended in a <span class="undecided">tie</span> between <span class="dem">${race.dem_name} (D)</span> and <span class="gop">${race.gop_name} (R)</span>.
                 else
-                  li - In our simulations, <span class="${o.winner_party}">${o.winner_name} (${o.winner_party_letter})</span> won against <span class="${o.loser_party}">${o.loser_name} (${o.loser_party_letter})</span> <strong>${o.raw_prob}%</strong> of the time.
-                  li - Our simulations also show that the polled population is <span class="undecided">${o.undecided}% undecided</span>. We penalized the winner by <strong>${o.undecided_penalty}</strong> ${o.undecided_penalty == 1 ? 'percentage point' : 'percentage points'}. Our adjusted probability is <span class="${o.winner_party}">${o.prob_with_undecided}% ${o.winner_party_full}</span>.
+                  li - <span class="${o.winner_party}">${o.winner_name} (${o.winner_party_letter})</span> won against <span class="${o.loser_party}">${o.loser_name} (${o.loser_party_letter})</span> in <strong>${o.raw_prob}%</strong> of our simulations.
+                  li - Our simulated populations were <span class="undecided">${o.undecided}% undecided</span> on average. We penalized the winner's chances by <strong>${o.undecided_penalty}</strong> ${o.undecided_penalty == 1 ? 'percentage point' : 'percentage points'}. Our adjusted probability is <span class="${o.winner_party}">${o.prob_with_undecided}% ${o.winner_party_full}</span>.
 
               .chart-container
                 .y-axis-and-rest

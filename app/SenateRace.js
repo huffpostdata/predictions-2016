@@ -1,10 +1,76 @@
 'use strict'
 
+const StateCodeToStateName = {
+	AL: 'Alabama',
+	AK: 'Alaska',
+	AZ: 'Arizona',
+	AR: 'Arkansas',
+	CA: 'California',
+	CO: 'Colorado',
+	CT: 'Connecticut',
+	DE: 'Delaware',
+	DC: 'District of Columbia',
+	FL: 'Florida',
+	GA: 'Georgia',
+	HI: 'Hawaii',
+	ID: 'Idaho',
+	IL: 'Illinois',
+	IN: 'Indiana',
+	IA: 'Iowa',
+	KS: 'Kansas',
+	KY: 'Kentucky',
+	LA: 'Louisiana',
+	ME: 'Maine',
+	MD: 'Maryland',
+	MA: 'Massachusetts',
+	MI: 'Michigan',
+	MN: 'Minnesota',
+	MS: 'Mississippi',
+	MO: 'Missouri',
+	MT: 'Montana',
+	NE: 'Nebraska',
+	NV: 'Nevada',
+	NH: 'New Hampshire',
+	NJ: 'New Jersey',
+	NM: 'New Mexico',
+	NY: 'New York',
+	NC: 'North Carolina',
+	ND: 'North Dakota',
+	OH: 'Ohio',
+	OK: 'Oklahoma',
+	OR: 'Oregon',
+	PA: 'Pennsylvania',
+	RI: 'Rhode Island',
+	SC: 'South Carolina',
+	SD: 'South Dakota',
+	TN: 'Tennessee',
+	TX: 'Texas',
+	UT: 'Utah',
+	VT: 'Vermont',
+	VA: 'Virginia',
+	WA: 'Washington',
+	WV: 'West Virginia',
+	WI: 'Wisconsin',
+	WY: 'Wyoming'
+}
+
+const CookRatingToCookName = {
+  'R-Solid': 'solidly Republican',
+  'R-Likely': 'likely Republican',
+  'R-Lean': 'leaning Republican',
+  'Toss Up': 'a toss-up',
+  'D-Lean': 'leaning Democrat',
+  'D-Likely': 'likely Democrat',
+  'D-Solid': 'solidly Democrat'
+}
+
 module.exports = class SenateRace {
   constructor(hash, seat, curve) {
     this.state_code = hash.state
+    this.state_name = StateCodeToStateName[hash.state]
     this.pollster_slug = hash.pollster_slug
     this.cook_rating = hash.cook_rating
+    this.cook_rating_name = CookRatingToCookName[hash.cook_rating]
     this.dem_name = hash.dem_name
     this.dem_label = hash.dem_label
     this.gop_name = hash.gop_name
@@ -24,7 +90,7 @@ module.exports = class SenateRace {
     const loser = this.dem_win_prob > 0.5 ? 'gop' : 'dem'
 
     this.calculations = {
-      tie: this.dem_win_prob === 0.5,
+      tie: Math.round(this.dem_win_prob_with_undecided * 1000) === 500,
       winner_name: this[winner + '_name'],
       loser_name: this[loser + '_name'],
       winner_party: winner,
