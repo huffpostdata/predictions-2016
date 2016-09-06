@@ -3,6 +3,8 @@
 const PageContext = require('../generator/PageContext')
 const escape_html = require('../generator/escape_html')
 
+const Months = [ 'Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.' ];
+
 function extend_context(context, locals) {
   const new_locals = Object.assign({ model: context.model }, context.locals, locals)
   return new PageContext(context.compiler, new_locals)
@@ -33,6 +35,10 @@ class Helpers {
     // Not HTML-safe. That should be fine.
     return author
       .replace(/\[([^\]]+)\]/g, (_, name) => `<a rel="author" href="${name_to_href(name)}">${name}</a>`)
+  }
+
+  format_date(date) {
+    return `${Months[date.getMonth()]} ${date.getDate()}`
   }
 }
 

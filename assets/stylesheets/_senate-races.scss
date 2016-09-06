@@ -31,11 +31,16 @@
     flex: 1 1 auto;
     padding-left: $half-marker-width + .5rem;
     padding-right: $half-marker-width + .5rem;
+    position: relative;
 
     .box {
       height: 2 * $marker-width;
       position: relative;
     }
+
+    &.lean-dem .marker { background: $strong-dem; }
+    &.lean-gop .marker { background: $strong-gop; }
+    &.toss-up .marker { background: $toss-up; }
 
     .marker {
       position: absolute;
@@ -45,18 +50,6 @@
       width: $marker-width;
       margin-left: -$half-marker-width;
       border-radius: $half-marker-width;
-
-      &.lean-dem {
-        background: $strong-dem;
-      }
-
-      &.lean-gop {
-        background: $strong-gop;
-      }
-
-      &.toss-up {
-        background: $toss-up;
-      }
     }
   }
 
@@ -139,8 +132,57 @@
     }
   }
 
+  li[data-state-code]:hover .details {
+    display: block;
+  }
+
+  li[data-state-code=NC] .details {
+    display: block;
+  }
+
+  .details {
+    display: none;
+    z-index: 1;
+    border: 1px solid black;
+    background: $background;
+    box-sizing: border-box;
+    min-width: 90%;
+    max-width: 100%;
+    padding: 1.5rem;
+    position: absolute;
+    top: 2.5rem;
+
+    &>.arrow {
+      position: absolute;
+      display: inline-block;
+      background: $background;
+      top: 0;
+      box-sizing: border-box;
+      height: 1.5rem;
+      width: 1.5rem;
+      margin-top: -.75rem;
+      border: 1px solid $background;
+      border-top-color: black;
+      border-right-color: black;
+    }
+  }
+
+  .lean-dem .details>.arrow {
+    transform: scaleX(-1) skewY(-45deg);
+  }
+
+  .lean-gop .details>.arrow {
+    transform: skewY(-45deg);
+    margin-left: -1.5rem; // center where we're pointing
+  }
+
+  .toss-up .details .arrow {
+    transform: rotate(-45deg);
+    margin-left: -.75rem; // center where we're pointing
+  }
+
   .chart-container {
-    $x-axis-height: 2rem;
+    $x-axis-height: 2.25rem;
     $today-height: 2rem;
 
     background: $background;
@@ -159,13 +201,18 @@
     .x-axis {
       display: -webkit-flex;
       display: flex;
+      -webkit-align-items: flex-end;
+      align-items: flex-end;
       height: $x-axis-height;
+      padding-bottom: .25rem;
       white-space: nowrap;
+      position: relative;
+      line-height: 1rem;
 
       div.arrow {
         -webkit-flex: 1 1 auto;
         flex: 1 1 auto;
-        padding: .3rem;
+        padding: .2rem;
         height: .4rem;
         position: relative;
       }
@@ -175,10 +222,53 @@
         height: 100%;
         width: 100%;
       }
+
+      .label-election-day {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: $muted-color;
+        text-transform: uppercase;
+        font-style: italic;
+      }
     }
 
     .today {
       height: $today-height;
+      position: relative;
+      text-align: right;
+
+      .today-inner {
+        position: absolute;
+        top: 0;
+        padding-right: .75rem;
+
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          right: -.5px;
+          height: .5rem;
+          width: .5rem;
+          border-right: 1px dashed $muted-color;
+          border-bottom: 1px dashed $muted-color;
+        }
+      }
+
+      .label {
+        color: $muted-color;
+        text-transform: uppercase;
+        font-style: italic;
+      }
+
+      .spread {
+        padding-left: .25rem;
+      }
+
+      .dem-lead { color: $strong-dem; }
+      .gop-lead { color: $strong-gop; }
+      .toss-up { color: $toss-up; }
     }
 
     .y-axis {
@@ -242,6 +332,9 @@
   }
 
   .legend {
+    padding-top: .5rem;
+    font-size: .9rem;
+    line-height: 1.5;
     color: $muted-color;
     font-style: italic;
 

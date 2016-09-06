@@ -89,10 +89,12 @@ function values_to_path_d(raw_values, y_max) {
 
 module.exports = class SenateCurve {
   constructor(updated_at, points, polls, uint16_samples) {
+    this.updated_at = updated_at
     this.election_day_point = points[points.length - 1]
     this.polls = polls
 
     this.is_plottable = uint16_samples.length > 0
+    this.NDays = NDays
 
     if (this.is_plottable) {
       const max_y_uint16 = simple_reduce_samples(uint16_samples, Math.max)
@@ -113,6 +115,18 @@ module.exports = class SenateCurve {
 
   calculate_sample_svg_paths() {
     return this.uint16_samples.map(uint16s => calculate_sample_path_d(uint16s, this.y_max))
+  }
+
+  today_spread_html() {
+    const point = this.points[this.updated_at_x]
+    const leader = point.diff_xibar > 0 ? 'D' : 'R'
+    const xibar_s = Math.abs(point.diff_xibar * 100).toFixed(1)
+
+    if (xibar_s == '0.0') {
+      return '<span class="toss-up">Tied</span>'
+    } else {
+      return `<span class="${leader == 'D' ? 'dem' : 'gop'}-lead">${leader}+${xibar_s}</span>`
+    }
   }
 
   /**

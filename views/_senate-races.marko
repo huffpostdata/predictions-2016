@@ -12,11 +12,12 @@ var races=data.model.races
     ul
       li data-state-code="${race.state_code}" for(race in races.sorted_by('flip-probability'))
         .state-code - ${race.state_code}
-        .probability
+        .probability.${race.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : (race.dem_win_prob_with_undecided == 0.5 ? 'toss-up' : 'lean-gop')}
           .box
-            .marker.${race.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : (race.dem_win_prob_with_undecided == 0.5 ? 'toss-up' : 'lean-gop')} style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
+            .marker style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
 
           .details
+            .arrow style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
             h4
               span.incumbent-party.${race.seat_party_code}
               span.state - ${race.state_code}
@@ -49,6 +50,7 @@ var races=data.model.races
                         svg.arrow viewBox="0 0 99 7" preserveAspectRatio="none"
                           path d="M0,3h96L95.5,0L99,3.5L95.5,7L96,4h-96z"
                       .end-date - Nov. 8
+                      .label-election-day - Election Day
                     .plot
                       svg.plot viewBox="0 0 1000 600"
                         rect.dem x="0" y="0" width="1000" height="300"
@@ -59,6 +61,13 @@ var races=data.model.races
                         path.diff d="${race.curve.svg_path('diff_xibar')}"
                         path.sample d="${d}" for(d in race.curve.calculate_sample_svg_paths())
                         circle.poll.${pt.html_class} cx="${pt.x}" cy="${pt.y}" r="8" for(pt in race.curve.calculate_poll_coordinates())
-                    .today - Hello
+                    <!-- always show ".today", for sizing; but leave it empty after election day. -->
+                    .today
+                      if(race.curve.updated_at_x != race.curve.x_max)
+                        .today-inner style="right: ${100 * (1 - race.curve.updated_at_x / (race.curve.NDays - 1))}%"
+                          .label - Latest Average
+                          .date-and-spread
+                            time datetime="${race.curve.updated_at.toISOString()}" - ${data.helpers.format_date(race.curve.updated_at)}
+                            strong.spread - $!{race.curve.today_spread_html()}
 
               .legend - We simulated 5,000TK <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> random populations</span> that conform to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> polls</span>. (We only plot 200TK.) For illustration, we show their <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
