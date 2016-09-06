@@ -38,10 +38,6 @@
       position: relative;
     }
 
-    &.lean-dem .marker { background: $strong-dem; }
-    &.lean-gop .marker { background: $strong-gop; }
-    &.toss-up .marker { background: $toss-up; }
-
     .marker {
       position: absolute;
       display: inline-block;
@@ -52,6 +48,10 @@
       border-radius: $half-marker-width;
     }
   }
+
+  .lean-dem .marker { background: $strong-dem; }
+  .lean-gop .marker { background: $strong-gop; }
+  .toss-up .marker { background: $toss-up; }
 
   .axis-50 {
     position: absolute;
@@ -90,14 +90,12 @@
 
     rect.dem {
       stroke: none;
-      fill: $strong-dem;
-      opacity: .2;
+      fill: $background-dem;
     }
 
     rect.gop {
       stroke: none;
-      fill: $strong-gop;
-      opacity: .2;
+      fill: $background-gop;
     }
 
     path.diff {
@@ -108,8 +106,8 @@
 
     path.sample {
       stroke: #333;
-      stroke-width: 3px;
-      opacity: .04;
+      stroke-width: 1.2px;
+      opacity: .1;
       fill: none;
     }
 
@@ -133,10 +131,6 @@
   }
 
   li[data-state-code]:hover .details {
-    display: block;
-  }
-
-  li[data-state-code=NC] .details {
     display: block;
   }
 
