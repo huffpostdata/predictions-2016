@@ -9,6 +9,10 @@
     position: relative;
   }
 
+  label, input {
+    cursor: pointer;
+  }
+
   ul {
     margin: 0;
     padding: 0;
@@ -26,6 +30,8 @@
 
   .state-code {
     display: inline-block;
+    box-sizing: border-box;
+    padding-left: .25rem;
     width: $state-width;
     height: $collapsed-height;
     font-family: $header-font-family;
@@ -49,22 +55,26 @@
     display: inline-block;
     box-sizing: border-box;
     position: absolute;
-    width: $collapsed-height / 2;
-    height: $collapsed-height / 2;
-    right: $collapsed-height / 4;
-    top: $collapsed-height / 4;
+    width: $collapsed-height / 3;
+    height: $collapsed-height / 3;
+    right: $collapsed-height / 3;
+    top: $collapsed-height / 3;
     border: 2px solid $muted-color;
     border-top: 0;
     border-right: 0;
-    transform: translateY(-$collapsed-height / 8) rotate(-45deg);
+    transform: rotate(-45deg);
     transition: transform 100ms ease-in-out;
   }
 
   input.expand:checked + .content-to-expand::before {
-    transform: translateY($collapsed-height / 8) rotate(135deg);
+    // Just flipping the rotation causes off-by-one px on Chrome 52 on Linux.
+    // But we can hack the effect.
+    //transform: rotate(135deg);
+    transform: rotate(-45deg) rotateY(180deg) rotateX(180deg);
   }
 
   .probability {
+    display: block;
     position: absolute;
     left: $state-width + $half-marker-width;
     right: $state-width + $half-marker-width;
@@ -72,6 +82,7 @@
     height: $collapsed-height;
 
     .box {
+      display: block;
       height: $collapsed-height;
       position: relative;
 
@@ -176,8 +187,6 @@
   }
 
   .details {
-    padding-left: $state-width;
-    padding-right: $state-width;
     background: $alt-background; // cover the vertical line running down the page
     border-top: 1px dotted $border-color;
   }
@@ -246,6 +255,7 @@
         position: absolute;
         top: 0;
         padding-right: .75rem;
+        left: -7rem; // don't wrap on mobile
 
         &::before {
           content: '';
