@@ -1,0 +1,55 @@
+header.senate {
+  @include page-width();
+
+  h1 {
+    font-family: $header-font-family;
+    font-size: 3.5rem;
+    line-height: 4.5rem;
+    text-transform: uppercase;
+    text-align: left;
+    margin-top: 0;
+    color: black;
+    text-decoration: underline;
+  }
+
+  h2.forecast-label {
+    font-family: $header-font-family;
+    text-transform: uppercase;
+    color: $muted-dem;
+    font-size: 1.2rem;
+    line-height: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 0px;
+
+  }
+
+  h2.president-header {
+    color: $very-muted-color;
+    text-decoration: none;
+    margin: 0;
+    font-family:$nav-font-family;
+    font-size: 1.2rem;
+    height: 3rem;
+    font-weight: bold;
+    font-style: italic;
+    text-transform: uppercase;
+  }
+
+  .byline {
+    color: $muted-color;
+    font-style: italic;
+    font-family: $nav-font-family;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: .5rem 0;
+  }
+
+  .date {
+    color: $muted-color;
+    text-transform: uppercase;
+    font-family: $nav-font-family;
+    font-size: .8rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+}

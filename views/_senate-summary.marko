@@ -1,12 +1,6 @@
 var seat_counts=data.model.seat_counts
 
 #senate-summary
-  p.forecast-label - Forecast
-  h1 - <span class='senate-header'><a href='/2016/forecast/senate#-'>Senate</a></span> 
-  p.prez-header - Presidential forecast coming soon
-  p.bylines - By Natalie Jackson and Adam Hooper
-  p.date-updated - Updated: TKTKTK date 00:00 AM
-
   ol.chart
     li.prob-${o.result} class="${o.is_most_probable ? 'most-probable' : ''}" style="width: ${o.percent}%" for(o in seat_counts.summary_chart_data)
       .party-icon style="background-image: url(${data.path_to_asset('digest', 'images/' + o.result + '.svg')})"

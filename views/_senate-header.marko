@@ -1,0 +1,12 @@
+var meta=data.model.metadata
+
+header.senate
+  h2.forecast-label - Forecast
+  h1 - Senate
+  h2.president-header - Presidential forecast coming soon
+
+  p.byline - $!{meta.author_html}
+  <p class="date date-published">Published <time>${meta.date_published}</time></p>
+  if(meta.date_updated)
+    <p class="date date-updated">Updated <time>${meta.date_updated}</time></p>
+

@@ -78,6 +78,7 @@ module.exports = class SenateRace {
 
     this.seat = seat
     this.curve = curve
+    this.updated_at = curve.updated_at
 
     this.dem_win_prob = curve.election_day_point.dem_win_prob
     this.dem_win_prob_with_undecided = curve.election_day_point.dem_win_prob_with_undecided
