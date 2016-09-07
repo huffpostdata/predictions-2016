@@ -1,15 +1,17 @@
 source('poll-average-states.R')
 
+args <- commandArgs(TRUE)
+fast <- !is.na(args[1]) && args[1] == 'fast'
+
 input_senate_races_path <- '../data/sheets/input/senate-races.tsv'
-output_senate_curves_path <- '../data/sheets/output/senate-curves.tsv'
-output_senate_seat_counts_path <- '../data/sheets/output/senate-seat-counts.tsv'
-output_senate_samples_path <- '../data/sheets/output/senate-samples-STATE'
+output_dir <- Sys.getenv('OUTPUT_DIR')
+output_dir <- ifelse(output_dir != '', output_dir, '../data/sheets/output')
+output_senate_curves_path <- paste0(output_dir, '/senate-curves.tsv')
+output_senate_seat_counts_path <- paste0(output_dir, '/senate-seat-counts.tsv')
+output_senate_samples_path <- paste0(output_dir, '/senate-samples-STATE')
 
 NMonteCarloSimulations <- 1e8
 EndDate <- as.Date('2016-11-08')
-
-args <- commandArgs(TRUE)
-fast <- !is.na(args[1]) && args[1] == 'fast'
 
 if (fast) NMonteCarloSimulations <- 1e6
 

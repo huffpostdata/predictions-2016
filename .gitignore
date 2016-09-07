@@ -3,5 +3,8 @@
 __MACOSX
 R/interim-results/
 data/sheets/output/*.tsv
+data/sheets/output-archives/
+data/sheets/output-backup/
+data/sheets/output-spool/
 data/sheets/output/senate-samples-??
 *.swp
