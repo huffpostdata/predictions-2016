@@ -113,6 +113,7 @@
         background: $background;
         border: 1px solid black;
         font-size: 1.2rem;
+        line-height: 1.5rem;
         color: $color;
 
         small {
@@ -120,6 +121,7 @@
           font-style: italic;
           margin-top: .5rem;
           font-size: .85rem;
+          line-height: 1rem;
           color: $muted-color;
         }
 
