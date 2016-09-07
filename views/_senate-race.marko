@@ -30,6 +30,8 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
           li - <em>Cook</em> suggests ${race.state_name}'s senate race is <strong class="cook-rating">${race.cook_rating_name}</strong>.
           if(!o.tie)
             li - Historically, Cook has been right about this call in ${o.raw_prob}% of Senate races.
+          else
+            li - We consider this a 50 percent chance the seat will flip.
       else
         ol.calculations
           if(o.tie)
@@ -74,3 +76,5 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
                       strong.spread - $!{race.curve.today_spread_html()}
 
         .legend - Our algorithm simulates 5,000TK <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> random populations</span> that vote similarly to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> poll results</span>. For illustration, we plot 200TK populations and show the <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
+
+        .source - Poll data from <a href="//elections.huffingtonpost.com/pollster/${race.pollster_slug}">HuffPost Pollster</a>

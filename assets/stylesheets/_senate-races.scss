@@ -413,12 +413,15 @@
     }
   }
 
-  .legend {
+  .legend, .source {
     margin: .75rem;
     font-size: .9rem;
     line-height: 1.5;
     color: $muted-color;
     font-style: italic;
+  }
+
+  .legend {
 
     .legend-def {
       display: inline-block;
