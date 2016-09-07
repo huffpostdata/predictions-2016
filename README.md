@@ -126,12 +126,11 @@ Here's how we set up our "staging" server:
 5. On the server, start up `rebuild-continually.js`:
 
 ```sh
-screen -L -D -m \
-AIRBRAKE_PROJECT_ID=101010 \
-AIRBRAKE_PROJECT_KEY=1f1f1ff... \
-BASE_URL=http://example.org \
-S3_BUCKET=example.org \
-./rebuild-continually.js`
+export AIRBRAKE_PROJECT_ID=101010
+export AIRBRAKE_PROJECT_KEY=1f1f1ff...
+export BASE_URL=http://example.org
+export S3_BUCKET=example.org
+screen -L -d -m ./rebuild-continually.js`
 ```
 
 The output will be logged to `screenlog.0`, and it will run forever. On dev
