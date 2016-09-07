@@ -42,7 +42,29 @@
     "type": "p",
     "texts": [
       {
+        "text": "Author: Additional design by ",
+        "underline": true
+      },
+      {
+        "text": "Alissa Scheller",
+        "href": "http://www.huffingtonpost.com/author/alissa-scheller"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
         "text": "Twitter-author: @HuffPostData",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Suggested-Tweet: TK senate predictions tweet",
         "underline": true
       }
     ]
@@ -53,6 +75,86 @@
       {
         "text": "Date-published: TKweekday, August TKday, 2016 9:01 AM EDT",
         "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
       }
     ]
   }
