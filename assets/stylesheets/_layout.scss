@@ -47,6 +47,14 @@ body {
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
+
+    .bylines {
+    color: $muted-color;
+    font-style: italic;
+    font-family: $nav-font-family;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
 }
 
 nav, footer {

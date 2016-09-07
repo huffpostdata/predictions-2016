@@ -1,7 +1,10 @@
 var seat_counts=data.model.seat_counts
 
 #senate-summary
-  h1 - Senate Forecast 2016
+  p.forecast-label - Forecast
+  h1 - Senate
+  p.bylines - By Natalie Jackson and Adam Hooper
+  p.date-updated - Updated: TKTKTK date 00:00 AM
 
   ol.chart
     li.prob-${o.result} class="${o.is_most_probable ? 'most-probable' : ''}" style="width: ${o.percent}%" for(o in seat_counts.summary_chart_data)

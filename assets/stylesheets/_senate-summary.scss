@@ -1,10 +1,41 @@
 #senate-summary {
+  .forecast-label {
+    font-family: $header-font-family;
+    text-transform: uppercase;
+    color: $muted-dem;
+    font-size: 1.2rem;
+    line-height: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 0px;
+
+  }
   h1 {
     font-family: $header-font-family;
-    font-size: 3rem;
+    font-size: 3.5rem;
+    line-height: 4.5rem;
     text-transform: uppercase;
-    text-align: center;
-    margin-top: 2rem;
+    text-align: left;
+    margin-top: 0px;
+    text-decoration: underline;
+    
+  }
+
+  .bylines {
+    color: $muted-color;
+    font-style: italic;
+    font-family: $nav-font-family;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin: .5rem 0px;
+  }
+
+   .date-updated {
+    color: $muted-color;
+    text-transform: uppercase;
+    font-family: $nav-font-family;
+    font-size: .8rem;
+    line-height: 1rem;
+    margin: 0px 0px 2rem 0px;
   }
 
   ol.chart {
@@ -14,7 +45,7 @@
     display: flex;
     text-align: center;
     cursor: pointer;
-    margin-top: 7rem;
+    margin-top: 9rem;
 
     li {
       -webkit-flex: 0 0 auto;
@@ -31,7 +62,7 @@
       &>strong {
         font-size: 2rem;
         span.unit {
-          font-size: 1.5rem;
+          font-size: 1.8rem;
         }
       }
 
@@ -66,6 +97,7 @@
 
         small {
           display: block;
+          font-style: italic;
           margin-top: .5rem;
           font-size: .85rem;
           color: $muted-color;
