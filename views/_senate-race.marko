@@ -1,6 +1,6 @@
 var race=data.model.race
 
-li.${race.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : (race.dem_win_prob_with_undecided == 0.5 ? 'toss-up' : 'lean-gop')} data-state-code="${race.state_code}"
+li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${race.state_code}"
   input.expand#state-race-expand-${race.state_code} data-state-code="${race.state_code}" type="checkbox" value="${race.state_code}"
 
   .content-to-expand
@@ -9,6 +9,8 @@ li.${race.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : (race.dem_win_prob_wi
     label.probability for="state-race-expand-${race.state_code}"
       span.box
         span.marker style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
+          if(data.model.show_help_label)
+            span.help-label - ${race.seat_party_name} incumbent
 
     .details
       var o=race.calculations

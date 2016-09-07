@@ -84,7 +84,11 @@ module.exports = class SenateRace {
     this.dem_win_prob_with_undecided = curve.election_day_point.dem_win_prob_with_undecided
 
     this.flip_prob = this.seat.party_code === 'dem' ? (1 - this.dem_win_prob_with_undecided) : this.dem_win_prob_with_undecided
+
+    this.lean_html_class = (this.dem_win_prob_with_undecided === 0.5) ? 'toss-up' : (this.dem_win_prob_with_undecided > 0.5 ? 'lean-dem' : 'lean-gop')
+
     this.seat_party_code = this.seat.party_code
+    this.seat_party_name = this.seat_party_code === 'dem' ? 'Democratic' : 'Republican'
     this.flip_party_code = this.seat_party_code === 'dem' ? 'gop' : 'dem'
 
     const winner = this.dem_win_prob > 0.5 ? 'dem' : 'gop'

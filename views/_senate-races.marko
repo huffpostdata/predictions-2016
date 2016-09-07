@@ -3,7 +3,7 @@ var races=data.model.races
 #senate-races
   h2 - By-State Probabilities
 
-  p - The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) Most states will re-elect their incumbent senators, but some will flip to the other party.
+  p - The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) Voters usually re-elect their incumbent senators, but some seats will flip to the other party.
 
   p - If four Republican Senate seats flip to Democrats and there are no other flips, the 2017 Senate will be split 50-50.
 
@@ -11,22 +11,22 @@ var races=data.model.races
   var likely_flips=all_races.filter(function(race) { return race.flip_prob >= 0.5 })
   var unlikely_flips=all_races.filter(function(race) { return race.flip_prob < 0.5 })
 
-  h3 - Likely to flip
+  h3 - States Likely To Flip
 
-  p.flip-subhed - Our algorithm suggests these states have at least a 50 percent chance of flipping.
+  p.flip-subhed - Our algorithm suggests these states have at least a 50 percent chance of flipping. Click or tap a race to see our calculations.
 
   $!{data.helpers.partial('_senate-races-legend')}
   ul
-    for(race in likely_flips)
-      $!{data.helpers.partial('_senate-race', { model: { race: race } })}
+    for(race in likely_flips | status-var=loop)
+      $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}
 
   p.instruction - Click or tap a race to see our calculations
 
-  h3 - Less likely to flip
+  h3 - States Less Likely To Flip
 
   p.flip-subhed - Our algorithm suggests these states have less than a 50 percent chance of flipping.
 
   $!{data.helpers.partial('_senate-races-legend')}
   ul
-    for(race in unlikely_flips)
-      $!{data.helpers.partial('_senate-race', { model: { race: race } })}
+    for(race in unlikely_flips | status-var=loop)
+      $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}

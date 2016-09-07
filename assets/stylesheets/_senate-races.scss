@@ -32,6 +32,13 @@
     background-position: left center;
   }
 
+  h3 {
+    font-size: 1.2rem;
+    margin-top: 3rem;
+    margin-bottom: 0;
+    font-weight: bold;
+  }
+
   &>ul, &>.races-legend {
     margin: 0 auto; // nix margins on mobile
   }
@@ -124,8 +131,21 @@
         bottom: 0;
         margin-left: -.5px;
         width: 1px;
-        background: $border-color;
+        background: $very-very-muted-color;
       }
+    }
+
+    .help-label {
+      position: absolute;
+      white-space: nowrap;
+      top: -$collapsed-height / 2 + $half-marker-width;
+      background: $background;
+      font-size: .85rem;
+      height: .85rem;
+      margin-top: $collapsed-height / 2 - .85rem / 2 - .25rem;
+      padding: .25rem;
+      line-height: 1;
+      color: $muted-color;
     }
 
     .marker {
@@ -141,9 +161,18 @@
     }
   }
 
-  .lean-dem .marker { background: $strong-dem; }
-  .lean-gop .marker { background: $strong-gop; }
-  .toss-up .marker { background: $toss-up; }
+  .lean-dem .help-label, .toss-up .help-label {
+    &::before { content: '← '; }
+    left: $marker-width;
+  }
+
+  .lean-gop .help-label {
+    &::after { content: ' →'; }
+    right: $marker-width;
+  }
+
+  .incumbent-dem .marker { background: $strong-dem; }
+  .incumbent-gop .marker { background: $strong-gop; }
 
   svg.plot {
     display: block;
