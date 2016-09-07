@@ -27,7 +27,7 @@ echo >&2 'Running ./update-polls.js...'
 # Run model
 echo >&2 "Running Rscript --vanilla ./all-states.R \"$1\"..."
 rm -rf R/interim-results
-(cd R && OUTPUT_DIR=../$TEMP_OUTDIR Rscript --vanilla ./all-states.R "$1") 1>&2
+(cd R && OUTPUT_DIR=../$TEMP_OUTDIR Rscript --vanilla ./all-states.R "$1")
 
 # Move files around
 echo >&2 'Archiving and placing new results in data/sheets/output...'
@@ -42,6 +42,7 @@ cp -a $TIMESTAMPED_OUTDIR $OUTDIR
 
 # Build the website
 echo >&2 'Building and uploading the website...'
-./generator/upload.js 1>&2
+npm install
+./generator/upload.js
 
 popd >/dev/null
