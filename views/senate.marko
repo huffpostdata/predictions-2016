@@ -9,7 +9,7 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1"
     link rel="stylesheet" href="${data.path_to_asset('scss', 'stylesheets/index.css')}"
     $!{data.render_template('_social-meta', data)}
-  body
+  body.senate
     $!{data.render_template('_nav', data)}
 
     $!{data.render_template('_senate-header', data)}
@@ -20,6 +20,9 @@ html lang="en"
       $!{data.render_template('_senate-seat-counts', data)}
 
       $!{data.render_template('_senate-races', data)}
+
+      h2#methodology - Methodology
+      $!{data.model.render(data)}
 
       <!--
       .comments

@@ -493,6 +493,7 @@
     .axis {
       display: -webkit-flex;
       display: flex;
+      position: relative;
 
       text-transform: uppercase;
       font-size: .85rem;
