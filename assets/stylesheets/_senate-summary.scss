@@ -10,15 +10,35 @@
 
   }
   h1 {
-    font-family: $header-font-family;
     font-size: 3.5rem;
     line-height: 4.5rem;
     text-transform: uppercase;
     text-align: left;
     margin-top: 0px;
-    text-decoration: underline;
     
+
+    .senate-header a {
+      font-family: $header-font-family;
+      color: black;
+      text-decoration: underline;
+    }
   }
+
+
+    .prez-header {
+      color: $very-muted-color;
+      text-decoration: none;
+      margin: 0px 0px;
+        font-family:$nav-font-family;
+        font-size: 1.2rem;
+        height: 50px;
+        font-weight: bold;
+        font-style: italic;
+        text-transform: uppercase;
+
+      }
+    
+
 
   .bylines {
     color: $muted-color;
