@@ -114,3 +114,61 @@ S3_BUCKET=example.org \
 
 ... You can even keep it running while in a GitHub repo; just update the repo
 and it'll work with the new files.
+
+## Server setup
+
+Here's how we set up our "staging" server:
+
+1. Create a server
+2. On the server, `sudo mkdir /opt/predictions-2016 && sudo chown USER:USER /opt/predictions-2016 && cd /opt/predictions-2016 && git init && git config receive.denyCurrentBranch updateInstead` ([updateInstead documentation](https://github.com/blog/1957-git-2-3-has-been-released))
+3. On each dev machine, `git remote add staging USER@[server]:/opt/predictions-2016`
+4. On a dev machine, do a bootstrap push: `git push staging master`
+5. On the server, start up `rebuild-continually.js`:
+
+```sh
+screen -L -D -m \
+AIRBRAKE_PROJECT_ID=101010 \
+AIRBRAKE_PROJECT_KEY=1f1f1ff... \
+BASE_URL=http://example.org \
+S3_BUCKET=example.org \
+./rebuild-continually.js`
+```
+
+The output will be logged to `screenlog.0`, and it will run forever. On dev
+machines, `git push staging master` to deploy new code; when
+`./rebuild-continually.js` next calls `./rebuild.sh`, it will pick up the
+changes.
+
+### Pragmatic, Buggy Hack For Faster Deploys
+
+Most code changes don't change the model, and we don't want to wait hours before
+they show up online. So you can use this hack:
+
+On the server, run write this to `/opt/predictions-2016/.git/hooks/post-receive`:
+
+```
+#!/bin/sh
+
+pushd /opt/predictions-2016 >/dev/null
+
+BASE_URL=... \
+S3_BUCKET=... \
+generator/upload.js
+```
+
+Then `chmod +x /opt/predictions-2016/.git/hooks/post-receive`
+
+Now, when you `git push staging master` on a client, that line of code will
+compile and upload a new version of the website. It will use the latest output
+from the model.
+
+Why "buggy"? Because there's a race. If you deploy exactly when `./rebuild.sh`
+is deploying, you might upload an older version of the file, or (more likely)
+the deploy could fail because a directory or file is missing. This is all
+extremely unlikely, and the good outweighs the harm. Just push a dummy deploy
+if you think it has happened.
+
+(How unlikely? If it takes 5s to deploy and 10min to run the models -- both
+_extremely_ pessimistic -- then you can expect a race to be _possible_ once
+every 120 deploys. We anticipate faster deploys and hours to run the models, so
+we're more likely than not to avoid this race entirely.
