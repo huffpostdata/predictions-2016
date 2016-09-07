@@ -151,6 +151,8 @@ On the server, run write this to `/opt/predictions-2016/.git/hooks/post-receive`
 
 pushd /opt/predictions-2016 >/dev/null
 
+npm install
+
 BASE_URL=... \
 S3_BUCKET=... \
 generator/upload.js
