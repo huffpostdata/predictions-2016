@@ -14,6 +14,7 @@ const SortFunctions = {
 class SenateRaces {
   constructor(all) {
     this.all = all
+    this.updated_at = new Date(Math.max.apply(null, all.map(race => race.updated_at)))
     this._by = {}
   }
 

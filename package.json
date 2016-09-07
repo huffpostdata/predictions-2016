@@ -17,6 +17,7 @@
     "glob": "^7.0.5",
     "js-yaml": "^3.6.0",
     "marko": "^3.1.6",
+    "moment-timezone": "^0.5.5",
     "node-sass": "^3.5.3"
   },
   "devDependencies": {

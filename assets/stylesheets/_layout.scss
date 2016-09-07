@@ -15,6 +15,7 @@ $min-desktop-width: 640px;
 $min-margin: 16px; // (used in max-width calculations) -- We're assuming 16px == 1rem, though it isn't strictly necessary
 
 @mixin with-width($width) {
+  width: 100%;
   max-width: $width;
   margin-left: auto;
   margin-right: auto;
@@ -47,14 +48,6 @@ body {
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
-
-    .bylines {
-    color: $muted-color;
-    font-style: italic;
-    font-family: $nav-font-family;
-    font-size: 1rem;
-    line-height: 1rem;
-  }
 }
 
 nav, footer {
