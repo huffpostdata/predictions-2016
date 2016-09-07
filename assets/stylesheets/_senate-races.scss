@@ -4,6 +4,14 @@
   $state-width: 3rem;
   $collapsed-height: 2rem;
 
+  h3 {
+    margin-top: 2rem;
+  }
+
+  .flip-subhed {
+    margin-top: 0px;
+  }
+
   @include full-width();
 
   &>* {
