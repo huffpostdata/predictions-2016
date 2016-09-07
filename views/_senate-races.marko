@@ -1,12 +1,26 @@
 var races=data.model.races
 
 #senate-races
-  h2 - State By State
+  h2 - By-State Probabilities
 
   p - Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day.
 
   p - The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50.
 
+  var all_races=races.sorted_by('flip-probability')
+  var likely_flips=all_races.filter(function(race) { return race.flip_prob >= 0.5 })
+  var unlikely_flips=all_races.filter(function(race) { return race.flip_prob < 0.5 })
+
+  h3 - Likely to flip
+  p - <small>Ordered from most- to least-likely</small>
+
   ul
-    for(race in races.sorted_by('flip-probability'))
+    for(race in likely_flips)
+      $!{data.helpers.partial('_senate-race', { model: { race: race } })}
+
+  h3 - Not likely to flip
+  p - <small>Ordered from most- to least-likely</small>
+
+  ul
+    for(race in unlikely_flips)
       $!{data.helpers.partial('_senate-race', { model: { race: race } })}
