@@ -10,9 +10,18 @@
     @include page_width();
   }
 
-  .container {
+  &>ul {
     margin: 0 auto; // nix margins on mobile
-    position: relative;
+    padding: 0;
+    list-style: none;
+
+    &>li {
+      position: relative; // absolutely-positioned stuff inside
+      border-top: 1px solid $border-color;
+      &:last-child {
+        border-bottom: 1px solid $border-color;
+      }
+    }
   }
 
   @mixin chart-label() {
@@ -25,20 +34,6 @@
 
   label, input {
     cursor: pointer;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    &>li {
-      position: relative;
-      border-top: 1px solid $border-color;
-      &:last-child {
-        border-bottom: 1px solid $border-color;
-      }
-    }
   }
 
   .state-code {
