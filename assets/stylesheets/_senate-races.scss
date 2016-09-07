@@ -10,17 +10,34 @@
     @include page_width();
   }
 
-  &>ul {
+  @mixin svg-arrow() {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99 7" preserveAspectRatio="none"><path d="M0,3h96L95.5,0L99,3.5L95.5,7L96,4h-96z" stroke="none" fill="%23ddd"/></svg>');
+    background-size: 100% .5rem;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  @mixin svg-pointer() {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.261 25"><path style="fill:%23231F20;" d="M13.898,9.193c-0.451,0-0.831,0.355-0.831,0.783v0.308c0-0.877-0.734-1.589-1.659-1.589c-0.449,0-0.83,0.355-0.83,0.783v0.308c0-0.878-0.734-1.589-1.659-1.589c-0.45,0-0.831,0.356-0.831,0.783v0.309L8.064,8.957L7.804,4.901C7.756,4.356,7.305,3.929,6.76,3.929S5.788,4.379,5.788,4.901v3.913v4.885L4.91,12.372c-0.593-0.903-1.708-1.282-2.679-0.807c-0.237,0.119-0.285,0.38-0.167,0.617l1.209,3.105c0.189,0.498,0.689,1.187,1.067,1.542c0,0,2.419,1.992,2.419,2.752v0.947h3.911h1.946h0.947v-0.947c0-0.76,1.471-3.107,1.471-3.107c0.285-0.45,0.497-1.282,0.497-1.802v-3.89C15.558,9.905,14.823,9.193,13.898,9.193zM4.957,7.13C3.463,5.542,4.435,2.838,6.64,2.625c2.443-0.261,3.795,2.561,2.325,4.435C8.727,7.368,9.154,7.771,9.392,7.486c1.731-2.206,0.379-5.62-2.61-5.478C3.96,2.126,2.657,5.542,4.53,7.533C4.79,7.818,5.217,7.391,4.957,7.13z"/></svg>');
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    background-position: left center;
+  }
+
+  &>ul, &>.races-legend {
     margin: 0 auto; // nix margins on mobile
+  }
+
+  &>ul {
     padding: 0;
     list-style: none;
+  }
 
-    &>li {
-      position: relative; // absolutely-positioned stuff inside
-      border-top: 1px solid $border-color;
-      &:last-child {
-        border-bottom: 1px solid $border-color;
-      }
+  &>ul>li {
+    position: relative; // absolutely-positioned stuff inside
+    border-top: 1px solid $border-color;
+    &:last-child {
+      border-bottom: 1px solid $border-color;
     }
   }
 
@@ -119,13 +136,6 @@
   .lean-dem .marker { background: $strong-dem; }
   .lean-gop .marker { background: $strong-gop; }
   .toss-up .marker { background: $toss-up; }
-
-  svg.arrow {
-    path {
-      stroke: none;
-      fill: $very-muted-color;
-    }
-  }
 
   svg.plot {
     display: block;
@@ -250,9 +260,11 @@
       div.arrow {
         -webkit-flex: 1 1 auto;
         flex: 1 1 auto;
-        padding: .2rem;
-        height: .4rem;
+        height: 1rem;
+        margin-left: .2rem;
+        margin-right: .2rem;
         position: relative;
+        @include svg-arrow();
       }
 
       svg.arrow {
@@ -404,5 +416,76 @@
     span.dem { color: $strong-dem; }
     span.gop { color: $strong-gop; }
     span.undecided { color: $toss-up; }
+  }
+
+  p.instruction {
+    position: relative;
+    text-align: right;
+    font-size: .85rem;
+    line-height: 1.3rem;
+    color: $muted-color;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      width: 1.3rem;
+      height: 1.3rem;
+      @include svg-pointer();
+    }
+  }
+
+  .races-legend {
+    h5 {
+      font-family: $header-font-family;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .axis, h5 {
+      padding-left: $state-width;
+      padding-right: $state-width;
+    }
+
+    .axis {
+      display: -webkit-flex;
+      display: flex;
+
+      text-transform: uppercase;
+      font-size: .85rem;
+    }
+
+    .arrow {
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      margin-left: .2rem;
+      margin-right: .2rem;
+      @include svg-arrow();
+
+      @media (max-width: 24rem) {
+        background: none;
+      }
+    }
+    .arrow-left {
+      transform: scaleX(-1);
+    }
+
+    .lean-dem { color: $strong-dem; }
+    .lean-gop { color: $strong-gop; }
+    .toss-up { color: $toss-up; }
+
+    // There's no way to _really_ center "toss-up". But we can fake it by
+    // placing it in the middle with a background.
+    .toss-up {
+      position: absolute;
+      left: 50%;
+      width: 4rem;
+      text-align: center;
+      margin-left: -2rem;
+      background: white;
+    }
   }
 }
