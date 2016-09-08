@@ -13,14 +13,14 @@ var races=data.model.races
 
   h3 - States Likely To Flip
 
-  p.flip-subhed - Our algorithm suggests these states have at least a 50 percent chance of flipping. Click or tap a race to see our calculations.
-
+  p.flip-subhed - Our algorithm suggests these states have at least a 50 percent chance of flipping. 
+  p.instruction - Click or tap a race to see our calculations
   $!{data.helpers.partial('_senate-races-legend')}
   ul
     for(race in likely_flips | status-var=loop)
       $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}
 
-  p.instruction - Click or tap a race to see our calculations
+  
 
   h3 - States Less Likely To Flip
 
