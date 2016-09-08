@@ -32,8 +32,8 @@ class SenateSeatCounts {
     let x_max = null
     for (let e = 0; e < dem_counts.length; e++) {
       const p = dem_count_probs[e]
-      if (x_min === null && p > 0.0001) x_min = e
-      if (p > 0.0001) x_max = e
+      if (x_min === null && p > 0.00025) x_min = e
+      if (p > 0.00025) x_max = e
     }
     this.bars = []
     for (let e = x_min; e <= x_max; e++) {
@@ -46,9 +46,17 @@ class SenateSeatCounts {
       })
     }
 
+    this.n_dem = dem_counts
+      .slice(51 - this.n_existing_dem)
+      .reduce(((a, s) => a + s), 0)
+
+    this.n_dem_millions = this.n_dem / 1e6
+
     this.prob_dem = dem_count_probs
       .slice(51 - this.n_existing_dem)
       .reduce(((a, s) => a + s), 0)
+
+    this.prob_dem_percent = 100 * this.prob_dem
 
     this.prob_tie = dem_count_probs[50 - this.n_existing_dem]
 
