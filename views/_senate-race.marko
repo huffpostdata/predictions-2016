@@ -10,7 +10,7 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
       span.box
         span.marker style="left: ${100 * (1 - race.dem_win_prob_with_undecided)}%"
           if(data.model.show_help_label)
-            span.help-label - ${race.seat_party_name} incumbent
+            span.help-label - Currently ${race.seat_party_name}
 
     .details
       var o=race.calculations
