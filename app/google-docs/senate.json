@@ -98,28 +98,28 @@
     "type": "p",
     "texts": [
       {
-        "text": "We estimate the probability of a win for each individual Senate race using publicly available polls in the "
+        "text": "We estimate the probability of a win in each Senate race using publicly-available polls in the "
       },
       {
         "text": "HuffPost Pollster",
         "href": "http://elections.huffingtonpost.com/pollster#2016-senate-races"
       },
       {
-        "text": " database. We average the polls using Pollster’s "
+        "text": " database. We use Pollster’s "
       },
       {
         "text": "Bayesian Kalman filter model",
         "href": "http://eppsac.utdallas.edu/files/jackman/CAJP%2040-4%20Jackman.pdf"
       },
       {
-        "text": " that runs 100,000 simulations of the data to find the most likely polling average. (We show a random sample of 5,000 simulations). The model uses "
+        "text": " to simulate 100,000 populations whose voting intentions correspond to the poll results. (We sample 5,000 of those simulations in our calculations, for speed.) The model uses "
       },
       {
         "text": "Cook Political Report",
         "href": "http://cookpolitical.com/senate/charts/race-ratings"
       },
       {
-        "text": " ratings as “priors” -- starting points based on how accurately the Cook rating has predicted the outcome of Senate contests in the past."
+        "text": " ratings as “priors” -- starting points based on how accurately the Cook rating has predicted the outcome of Senate contests from 2004-2014."
       }
     ]
   },
@@ -127,7 +127,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "When there are fewer than five available polls in 2016 or fewer than two polls since July 2016, we use the Cook ratings as our probabilities."
+        "text": "When there are fewer than five available polls in 2016 or fewer than two polls since July 2016, the Cook ratings provide our estimates of where the race stands."
       }
     ]
   },
@@ -135,7 +135,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "We run the simulations of the polling data out to Election Day, November 8. Obviously we don’t have polling data for the future, so the model assumes that the race generally continues along its current trajectory. The lack of new data means that the outcomes of the races get less certain as time goes on, so the probability of a leading candidate winning drops slightly over the gap between today and the election."
+        "text": "We run the simulations out to Election Day, Nov. 8. Obviously we don’t have polling data for the future, so the model assumes voter intentions generally continue along their current trajectories. The lack of poll data means that the outcomes of the races get less certain as time goes on, which moves the probability closer to 50 percent."
       }
     ]
   },
@@ -143,7 +143,22 @@
     "type": "p",
     "texts": [
       {
-        "text": "The model also estimates what proportion of voters are undecided in the polls as of today. We calculate the ratio of undecided voters to the margin of the difference between the top two candidates. This is because the smaller the margin between candidates, the more the undecideds will matter. We subtract that ratio of undecideds relative to the margin between the candidates from the overall probability of a candidate winning. The result is the our estimate of the final probability of a candidate winning on Election Day. "
+        "text": "The model also estimates what proportion of voters is undecided according to the polls as of today. We penalize the leader’s win probability based on this formula: "
+      },
+      {
+        "text": "percent undecided / (leader’s poll average - runner-up’s poll average) * 100 percent",
+        "italic": true
+      },
+      {
+        "text": ". The smaller the margin between candidates, the greater the chance that undecided voters will affect the outcome. We subtract that number from the overall probability of a candidate winning."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Download our by-state probabilities as a TSV file.TK"
       }
     ]
   },
@@ -159,7 +174,15 @@
     "type": "p",
     "texts": [
       {
-        "text": "Finally, we simulated a Nov. 8 election 100 million times using the by-state probabilities. The number of times Democrats ended up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count landed at 50-50."
+        "text": "Finally, we simulated a Nov. 8 election 100 million times using the by-state probabilities. The proportion of times Democrats ended up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count landed at 50-50."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Download our seat counts as a TSV file.TK"
       }
     ]
   }
