@@ -6,10 +6,11 @@ senate:
   path: senate
   model: senate
 
+senate-race-svg:
+  path: senate-race-:state_code.svg
+  collection: senate_races
+  content-type: image/svg+xml; charset=utf-8
+
 senate-rail:
   path: senate/right-rail
-  model: senate
-
-senate-embed:
-  path: senate/embed
   model: senate

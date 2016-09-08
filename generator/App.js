@@ -77,22 +77,11 @@ class BuildOutput {
         headers: {
           'Content-Type': asset.content_type,
           'Cache-Control': `public, max-age=${asset.max_age / 1000}`,
-          'Expires': new Date(Date.now() + asset.max_age).toGMTString()
+          'ETag': 'this-file-should-never-change'
         }
       }
     } else if (this.pages[key]) {
-      const page = this.pages[key]
-
-      if (page.hasOwnProperty('redirect')) {
-        return page
-      } else {
-        return {
-          body: page,
-          headers: {
-            'Content-Type': 'text/html; charset=utf-8'
-          }
-        }
-      }
+      return this.pages[key]
     } else {
       return null
     }

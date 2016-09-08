@@ -27,6 +27,10 @@ module.exports = class PageContext {
     return `${this.base_path}/${this.assets.asset_path(type, key)}`
   }
 
+  asset_contents(type, key) {
+    return this.assets.data(type, key)
+  }
+
   /**
    * Builds a URL to a page.
    *

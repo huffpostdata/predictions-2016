@@ -32,8 +32,32 @@ function tie_expanded_senate_races_to_hash() {
     }
   }
 
+  function load_missing_senate_race_svg(loading_div) {
+    var parentNode = loading_div.parentNode;
+    var img = new Image();
+    img.src = loading_div.getAttribute('data-url');
+    img.className = 'loading';
+    parentNode.appendChild(img);
+    img.onload = function() {
+      parentNode.removeChild(loading_div);
+      img.className = '';
+    };
+  }
+
+  function load_missing_senate_race_svgs() {
+    var divs = container.querySelectorAll('input.expand:checked + .content-to-expand div.placeholder');
+    for (var i = 0; i < divs.length; i++) {
+      divs[i].className = 'loading';
+      load_missing_senate_race_svg(divs[i]);
+    }
+  }
+
   read_hash();
-  container.addEventListener('change', update_hash);
+  load_missing_senate_race_svgs();
+  container.addEventListener('change', function() {
+    update_hash();
+    load_missing_senate_race_svgs();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -41,8 +41,8 @@ class AWS {
     const max_age = 30000
     const params = this.build_params({
       Key: key.substring(1),
-      Body: page,
-      ContentType: 'text/html; charset=utf-8'
+      Body: page.body,
+      ContentType: page.content_type
     }, max_age)
     console.log(`PUT s3://${params.Bucket}/${params.Key} ${params.ContentType} ${max_age}`)
     return S3.putObject(params).promise()
@@ -61,8 +61,7 @@ class AWS {
     return Object.assign({
       Bucket: process.env.S3_BUCKET || this.config.upload_to_s3_bucket,
       ACL: 'public-read',
-      CacheControl: `public, max-age=${Math.round(max_age / 1000)}`,
-      Expires: new Date(Date.now() + max_age)
+      CacheControl: `public, max-age=${Math.round(max_age / 1000)}`
     }, params)
   }
 }

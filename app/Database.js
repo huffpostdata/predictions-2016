@@ -32,5 +32,7 @@ module.exports = class Database {
       senate_seats: senate_seats
     })
     this.senate.metadata.date_updated = format_date_full(this.senate.races.updated_at)
+
+    this.senate_races = this.senate.races.all
   }
 }

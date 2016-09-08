@@ -1,8 +1,16 @@
 'use strict'
 
+const crypto = require('crypto')
 const glob = require('glob')
 const marko = require('marko')
+
 const PageContext = require('./PageContext')
+
+function md5sum(string) {
+  const hash = crypto.createHash('md5')
+  hash.update(string)
+  return hash.digest('hex')
+}
 
 module.exports = class PageCompiler {
   constructor(config, base_path, base_url, assets, database, helpers_ctor) {
@@ -30,9 +38,20 @@ module.exports = class PageCompiler {
     return template.renderSync(context)
   }
 
-  render(template_key, data) {
+  render(key, object, data) {
+    const template_key = object.template || key
+
     const context = new PageContext(this, data)
-    return this.render_template(template_key, context)
+    const body = this.render_template(template_key, context)
+
+    return {
+      body: body,
+      headers: {
+        'Content-Type': object['content-type'] || 'text/html; charset=utf-8',
+        'Cache-Control': 'max-age=30',
+        'ETag': md5sum(body)
+      }
+    }
   }
 
   render_all() {
@@ -42,23 +61,22 @@ module.exports = class PageCompiler {
     for (const key of keys) {
       const object = this.config[key]
       const path = this.key_to_path(key)
-      const template = object.template || key
 
       if (object.collection) {
         for (const model of this.database[object.collection]) {
           const out_path = path.replace(/:(\w+)/, (_, name) => model[name])
-          out[out_path] = this.render(template, { model: model })
+          out[out_path] = this.render(key, object, { model: model })
         }
       } else if (object.model) {
         const model = this.database[object.model];
         if (!model) {
           throw new Error(`There is no model for "${key}" in app/Database.js. Add one.`)
         }
-        out[path] = this.render(template, { model: model })
+        out[path] = this.render(key, object, { model: model })
       } else if (object.redirect) {
         out[path] = { redirect: this.key_to_path(object.redirect) }
       } else {
-        out[path] = this.render(template, {})
+        out[path] = this.render(key, object, {})
       }
     }
   }

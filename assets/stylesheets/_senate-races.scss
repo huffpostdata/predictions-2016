@@ -174,57 +174,6 @@
   .incumbent-dem .marker { background: $strong-dem; }
   .incumbent-gop .marker { background: $strong-gop; }
 
-  svg.plot {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    rect.dem {
-      stroke: none;
-      fill: $background-dem;
-    }
-
-    rect.gop {
-      stroke: none;
-      fill: $background-gop;
-    }
-
-    path.diff {
-      stroke: black;
-      stroke-width: 6px;
-      fill: none;
-    }
-
-    path.sample {
-      stroke: #333;
-      stroke-width: 1.2px;
-      opacity: .1;
-      fill: none;
-    }
-
-    path.x-axis {
-      stroke: black;
-      stroke-width: 1px;
-      fill: none;
-    }
-
-    path.x-updated-at, path.x-start-day, path.x-election-day {
-      stroke: black;
-      stroke-width: 1px;
-      stroke-dasharray: 10, 10;
-      fill: none;
-    }
-
-    circle.poll {
-      stroke: $color;
-      stroke-width: 2px;
-      fill: $toss-up;
-    }
-  }
-
   .content-to-expand {
     max-height: $collapsed-height;
     transition: max-height 150ms ease-in-out, background-color 150ms ease-in-out, margin-bottom 150ms ease-in-out;
@@ -409,6 +358,25 @@
         display: block;
         height: 0;
         padding-bottom: 60%;
+      }
+
+      div.loading, div.placeholder {
+        height: 2rem;
+        line-height: 2rem;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        margin-top: -1rem;
+        left: 0;
+        width: 100%;
+      }
+
+      img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
       }
     }
   }

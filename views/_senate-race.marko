@@ -57,15 +57,8 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
                 .end-date - Nov. 8
                 .label-election-day - Election Day
               .plot
-                svg.plot viewBox="0 0 1000 600"
-                  rect.dem x="0" y="0" width="1000" height="300"
-                  rect.gop x="0" y="300" width="1000" height="300"
-                  path.x-axis d="M0,300H1000"
-                  if(race.curve.updated_at_x != race.curve.x_max)
-                    path.x-updated-at d="M${Math.round(race.curve.date_width * race.curve.updated_at_x)},0V600"
-                  path.diff d="${race.curve.svg_path('diff_xibar')}"
-                  path.sample d="${d}" for(d in race.curve.calculate_sample_svg_paths())
-                  circle.poll.${pt.html_class} cx="${pt.x}" cy="${pt.y}" r="8" for(pt in race.curve.calculate_poll_coordinates())
+                .placeholder data-url="${data.path_to('senate-race-svg', race.state_code)}" - Loading…
+
               <!-- always show ".today", for sizing; but leave it empty after election day. -->
               .today
                 if(race.curve.updated_at_x != race.curve.x_max)

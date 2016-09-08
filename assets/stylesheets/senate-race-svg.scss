@@ -1,0 +1,43 @@
+@import '_variables.scss';
+
+rect.dem {
+  stroke: none;
+  fill: $background-dem;
+}
+
+rect.gop {
+  stroke: none;
+  fill: $background-gop;
+}
+
+path.diff {
+  stroke: black;
+  stroke-width: 6px;
+  fill: none;
+}
+
+path.sample {
+  stroke: #333;
+  stroke-width: 1.2px;
+  opacity: .1;
+  fill: none;
+}
+
+path.x-axis {
+  stroke: black;
+  stroke-width: 1px;
+  fill: none;
+}
+
+path.x-updated-at {
+  stroke: $muted-color;
+  stroke-width: 1px;
+  stroke-dasharray: 10, 10;
+  fill: none;
+}
+
+circle.poll {
+  stroke: $color;
+  stroke-width: 2px;
+  fill: $toss-up;
+}
