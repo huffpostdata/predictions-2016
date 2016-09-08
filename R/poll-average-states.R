@@ -138,8 +138,6 @@ mcmc_list_to_xi_array <- function(mcmc_list) {
 # In other words, arr[,1,'2016-08-04'] pulls one xi value from each entry in
 # candidate_xis and normalizes so they all add up to 1.0.
 build_normalized_array <- function(candidate_xis) {
-    cat('combining/renormaling output for: ', names(candidate_xis), '\n')
-
     # All candidate_xi arrays have the same dims; make a big, 3D array
     arr <- array(
       unlist(candidate_xis),
@@ -347,7 +345,7 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
   #######################################
   ## loop over the responses to be modelled
   for (who in calculate_labels(colnames(data))) {
-    cat(sprintf("Running for outcome %s\n", who))
+    cat(paste0('[', state_code, '] running for outcome ', who, '\n'))
 
     jags_data <- makeJagsObject(data, thePollsters, who)
 
@@ -374,6 +372,7 @@ calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, 
     candidate_xis[[who]] <- xi_array
   }
 
+  cat(paste0('[', state_code, '] combining/renormaling output for: ', names(candidate_xis), '\n'))
   normalized_array <- build_normalized_array(candidate_xis)
 
   frame <- data.frame(

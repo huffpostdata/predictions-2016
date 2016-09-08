@@ -1,3 +1,5 @@
+library('parallel')
+
 source('poll-average-states.R')
 
 args <- commandArgs(TRUE)
@@ -45,7 +47,11 @@ load_or_calculate_senate_data_for_races <- function(races) {
   races_lists <- apply(races, 1, as.list)
   names(races_lists) <- races$state
 
-  data_list <- lapply(races_lists, load_or_calculate_senate_data_for_race)
+  data_list <- mclapply(
+    races_lists,
+    FUN=load_or_calculate_senate_data_for_race,
+    mc.cores=min(4, detectCores())
+  )
 
   curves_list <- lapply(data_list, function(x) x$curve)
   curves <- do.call(rbind, curves_list)
