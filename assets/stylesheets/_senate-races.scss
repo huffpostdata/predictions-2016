@@ -503,4 +503,25 @@
       background: white;
     }
   }
+
+  // Increase spacing of race details on desktop
+  @media (min-width: $min-desktop-width) {
+    h4 {
+      margin-top: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .chart-container {
+      margin: 1rem 2rem;
+    }
+
+    .legend, .source, ol.calculations li {
+      margin: 1rem 2rem;
+    }
+
+    .source {
+      margin-bottom: 2rem;
+    }
+  }
 }
