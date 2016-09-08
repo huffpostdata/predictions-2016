@@ -82,7 +82,15 @@
     "type": "p",
     "texts": [
       {
-        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+        "text": "We calculate the probable outcome for each individual Senate race, and then we use those probabilities to determine the likely seat counts on election night."
+      }
+    ]
+  },
+  {
+    "type": "h3",
+    "texts": [
+      {
+        "text": "1. By-State Probabilities"
       }
     ]
   },
@@ -90,7 +98,28 @@
     "type": "p",
     "texts": [
       {
-        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+        "text": "We estimate the probability of a win for each individual Senate race using publicly available polls in the "
+      },
+      {
+        "text": "HuffPost Pollster",
+        "href": "http://elections.huffingtonpost.com/pollster#2016-senate-races"
+      },
+      {
+        "text": " database. We average the polls using Pollster’s "
+      },
+      {
+        "text": "Bayesian Kalman filter model",
+        "href": "http://eppsac.utdallas.edu/files/jackman/CAJP%2040-4%20Jackman.pdf"
+      },
+      {
+        "text": " that runs 100,000 simulations of the data to find the most likely polling average. (We show a random sample of 5,000 simulations). The model uses "
+      },
+      {
+        "text": "Cook Political Report",
+        "href": "http://cookpolitical.com/senate/charts/race-ratings"
+      },
+      {
+        "text": " ratings as “priors” -- starting points based on how accurately the Cook rating has predicted the outcome of Senate contests in the past."
       }
     ]
   },
@@ -98,7 +127,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+        "text": "When there are fewer than five available polls in 2016 or fewer than two polls since July 2016, we use the Cook ratings as our probabilities."
       }
     ]
   },
@@ -106,7 +135,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+        "text": "We run the simulations of the polling data out to Election Day, November 8. Obviously we don’t have polling data for the future, so the model assumes that the race generally continues along its current trajectory. The lack of new data means that the outcomes of the races get less certain as time goes on, so the probability of a leading candidate winning drops slightly over the gap between today and the election."
       }
     ]
   },
@@ -114,7 +143,15 @@
     "type": "p",
     "texts": [
       {
-        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
+        "text": "The model also estimates what proportion of voters are undecided in the polls as of today. We calculate the ratio of undecided voters to the margin of the difference between the top two candidates. This is because the smaller the margin between candidates, the more the undecideds will matter. We subtract that ratio of undecideds relative to the margin between the candidates from the overall probability of a candidate winning. The result is the our estimate of the final probability of a candidate winning on Election Day. "
+      }
+    ]
+  },
+  {
+    "type": "h3",
+    "texts": [
+      {
+        "text": "2. Likely Seat Counts"
       }
     ]
   },
@@ -122,39 +159,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
-      }
-    ]
-  },
-  {
-    "type": "p",
-    "texts": [
-      {
-        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
-      }
-    ]
-  },
-  {
-    "type": "p",
-    "texts": [
-      {
-        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
-      }
-    ]
-  },
-  {
-    "type": "p",
-    "texts": [
-      {
-        "text": "Our algorithm simulates 5,000TK random populations who conform to poll results. It counts how many populations vote Republican and how many populations vote Democrat on election day."
-      }
-    ]
-  },
-  {
-    "type": "p",
-    "texts": [
-      {
-        "text": "The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) If two states flip from Republican to Democratic and all other states stay consistent, the 2017 Senate will be split 50-50."
+        "text": "Finally, we simulated a Nov. 8 election 100 million times using the by-state probabilities. The number of times Democrats ended up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count landed at 50-50."
       }
     ]
   }
