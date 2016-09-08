@@ -5,7 +5,7 @@ var races=data.model.races
 
   p - The 2016 Senate consists of 54 Republicans and 46 Democrats. (The two independent senators caucus with Democrats.) Voters usually re-elect their incumbent senators, but some seats will flip to the other party.
 
-  p - If four Republican Senate seats flip to Democrats and there are no other flips, the 2017 Senate will be split 50-50.
+  p - If four Republican Senate seats flip to Democrats and there are no other changes, the 2017 Senate will be split 50-50.
 
   var all_races=races.sorted_by('flip-probability')
   var likely_flips=all_races.filter(function(race) { return race.flip_prob >= 0.5 })
