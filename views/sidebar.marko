@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+html lang="en"
+  head
+    meta charset="utf-8"
+    title - Predictions 2016
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link rel="stylesheet" href="${data.path_to_asset('scss', 'stylesheets/sidebar.css')}"
+  body
+    h1
+      span.color-dem - Election
+      span.color-gop - 2016
+
+    h2 - Senate Forecast
+
+    a href="${data.path_to('senate')}" target="_blank" - How we calculate this »
+
+    p - Percent of simulations where each party gains control of Senate
+
+    .senate-summary
+      var seat_counts=data.model.seat_counts
+      .prob-dem style="width: ${100 * seat_counts.prob_dem}%"
+        .name - Dem
+        .icon
+        .percent - ${Math.round(100 * seat_counts.prob_dem)}%
+      .prob-tie style="width: ${100 * seat_counts.prob_tie}%"
+        .name - 50/50<br>Split
+        .icon
+        .percent - ${Math.round(100 * seat_counts.prob_tie)}%
+        .what-happens-if-tied - (VP determines<br>balance of power)
+      .prob-gop style="width: ${100 * seat_counts.prob_gop}%"
+        .name - GOP
+        .icon
+        .percent - ${Math.round(100 * seat_counts.prob_gop)}%
+
+    .senate-races
+      h3 - States Most Likely To Flip
+
+      .legend
+        .label - Win Probability
+        .chances
+          .lean-dem - Dem<br>Chance
+          .lean-tie - 50/50
+          .lean-gop - GOP<br>Chance
+
+      ul.senate-races
+        li.${race.lean_html_class} for(race in data.model.races.sorted_by('flip-probability').slice(0, 5))
+          .state-name - ${race.state_name}
+          .prob-dem - ${Math.round(100 * race.dem_win_prob_with_undecided)}%
+          .bar
+            .border
+            .marker style="left: ${100 - 100 * race.dem_win_prob_with_undecided}%"
+          .prob-gop - ${Math.round(100 * (1 - race.dem_win_prob_with_undecided))}%
+
+      a href="${data.path_to('senate')}#by-state-probabilities" target="_blank" - See all states »
+
+      script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
+      script src="${data.path_to_asset('plain', 'javascripts/pym.min.js')}"
+      script - new pym.Child()
+      script
+        ---
+        document.addEventListener('DOMContentLoaded', function() {
+          function mark_thin_summary_bars() {
+            var bars = document.querySelectorAll('.senate-summary .percent');
+            for (var i = 0; i < bars.length; i++) {
+             console.log(bars[i].clientWidth);
+              bars[i].className = 'percent' +
+               (bars[i].clientWidth < 45 ? ' thin' : '') +
+               (bars[i].clientWidth < 25 ? ' very-thin' : '');
+            }
+          }
+
+          mark_thin_summary_bars();
+          window.addEventListener('resize', mark_thin_summary_bars);
+        });
+        ---

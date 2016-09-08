@@ -11,6 +11,9 @@ senate-race-svg:
   collection: senate_races
   content-type: image/svg+xml; charset=utf-8
 
-senate-rail:
-  path: senate/right-rail
+sidebar:
+  path: sidebar
   model: senate
+
+sidebar-test:
+  path: sidebar-test

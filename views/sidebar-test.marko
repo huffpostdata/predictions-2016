@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+html lang="en"
+  head
+    meta charset="utf-8"
+    title - Test
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    style
+      ---
+      body {
+        margin: 0 auto;
+        max-width: 25rem;
+        padding: 0;
+        background: #eee;
+        height: 100%;
+      }
+      ---
+
+  body
+    #forecast-sidebar
+    script src="${data.path_to_asset('plain', 'javascripts/pym.min.js')}"
+    script - new pym.Parent('forecast-sidebar', '${data.path_to('sidebar')}');(function(){var i=document.querySelector('#forecast-sidebar>iframe');i.style.minWidth='100%';i.style.width='1px';})()

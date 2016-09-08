@@ -1,5 +1,6 @@
 scss:
   index.css: stylesheets/index.scss
+  sidebar.css: stylesheets/sidebar.scss
   senate-race-svg.css: stylesheets/senate-race-svg.scss
 
 plain:
