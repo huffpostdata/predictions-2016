@@ -85,9 +85,9 @@ module.exports = class AssetCompiler {
   build_all() {
     this.assets = {}
 
-    this.build_scss()
     this.build_digest()
     this.build_plain()
+    this.build_scss()
   }
 
   build_plain() {
@@ -130,7 +130,19 @@ module.exports = class AssetCompiler {
       try {
         css = sass.renderSync({
           file: filename,
-          outputStyle: 'compact'
+          outputStyle: 'compact',
+          functions: {
+            'asset-as-url($type, $key)': (type, key) => {
+              const asset = this.get_asset(type.getValue(), key.getValue())
+              switch (asset.content_type) {
+                case 'image/svg+xml':
+                  return new sass.types.String(`url('data:image/svg+xml;base64,${asset.data.toString('base64')}')`)
+                  break
+                default:
+                  throw new Error(`Don't know how to encode a ${asset.content_type} as a CSS URL. Write code here?`)
+              }
+            }
+          }
         }).css
       } catch (e) {
         // node-sass errors are weird
