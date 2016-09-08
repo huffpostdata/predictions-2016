@@ -42,7 +42,7 @@ class AWS {
     const params = this.build_params({
       Key: key.substring(1),
       Body: page.body,
-      ContentType: page.content_type
+      ContentType: page.headers['Content-Type']
     }, max_age)
     console.log(`PUT s3://${params.Bucket}/${params.Key} ${params.ContentType} ${max_age}`)
     return S3.putObject(params).promise()
