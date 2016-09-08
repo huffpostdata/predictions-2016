@@ -11,7 +11,8 @@ function tie_expanded_senate_races_to_hash() {
     }
 
     if (state_codes.length == 0) {
-      window.location.hash = '#-';
+      //window.location.hash = '#-';
+      window.history.replaceState({}, '', window.location.pathname);
     } else {
       window.location.hash = '#expand-states:' + state_codes.join(',');
     }

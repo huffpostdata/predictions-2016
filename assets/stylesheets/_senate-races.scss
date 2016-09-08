@@ -146,6 +146,7 @@
       padding: .25rem;
       line-height: 1;
       color: $muted-color;
+      transition: background-color 150ms ease-in-out;
     }
 
     .marker {
@@ -159,6 +160,10 @@
       border-radius: $half-marker-width;
       //border: 1px solid black;
     }
+  }
+
+  input.expand:checked + .content-to-expand .help-label {
+    background-color: $alt-background;
   }
 
   .lean-dem .help-label, .toss-up .help-label {
