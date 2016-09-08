@@ -63,10 +63,9 @@ html lang="en"
           function mark_thin_summary_bars() {
             var bars = document.querySelectorAll('.senate-summary .percent');
             for (var i = 0; i < bars.length; i++) {
-             console.log(bars[i].clientWidth);
               bars[i].className = 'percent' +
-               (bars[i].clientWidth < 45 ? ' thin' : '') +
-               (bars[i].clientWidth < 25 ? ' very-thin' : '');
+                (bars[i].clientWidth < 45 ? ' thin' : '') +
+                (bars[i].clientWidth < 25 ? ' very-thin' : '');
             }
           }
 
