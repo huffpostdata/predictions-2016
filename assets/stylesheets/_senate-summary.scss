@@ -12,13 +12,12 @@
       -webkit-flex: 0 0 auto;
       flex: 0 0 auto;
       position: relative;
-
       box-sizing: border-box;
       padding: .5rem;
       margin-top: 3rem;
       line-height: 1;
       color: $background;
-      outline: 2px solid $background;
+      border: 1px solid $background;
 
       &>strong {
         font-size: 2rem;

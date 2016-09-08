@@ -433,6 +433,7 @@
     padding: .25rem 0;
     background: $highlight-background;
     font-style: italic;
+    border-radius: 5px;
 
     &::before {
       content: '';
