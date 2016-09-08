@@ -8,8 +8,8 @@
     margin-top: 2rem;
   }
 
-  .flip-subhed {
-    margin-top: 0px;
+  h3 + p {
+    margin-top: 0;
   }
 
   @include full-width();
@@ -428,10 +428,11 @@
 
   p.instruction {
     position: relative;
-    text-align: right;
+    text-align: center;
     font-size: .85rem;
-    line-height: 1.3rem;
-    color: $muted-color;
+    padding: .25rem 0;
+    background: $highlight-background;
+    font-style: italic;
 
     &::before {
       content: '';
