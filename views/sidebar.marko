@@ -52,7 +52,7 @@ html lang="en"
             .marker style="left: ${100 - 100 * race.dem_win_prob_with_undecided}%"
           .prob-gop - ${Math.round(100 * (1 - race.dem_win_prob_with_undecided))}%
 
-      a href="${data.path_to('senate')}#by-state-probabilities" target="_blank" - See all states »
+      a href="${data.path_to('senate')}" target="_blank" - See all states »
 
       script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
       script src="${data.path_to_asset('plain', 'javascripts/pym.min.js')}"

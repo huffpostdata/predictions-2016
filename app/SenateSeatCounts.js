@@ -77,7 +77,7 @@ class SenateSeatCounts {
         party_name: 'Tie',
         percent: 100 * this.prob_tie,
         is_most_probable: this.prob_tie > Math.max(this.prob_dem, this.prob_gop),
-        sentence_html: `The Senate splits 50-50 in <strong>${Math.round(100 * this.prob_tie)}%</strong> of our simulations. <small>The vice-president decides the balance of power in that case.</small>`,
+        sentence_html: `The Senate splits 50-50 in <strong>${Math.round(100 * this.prob_tie)}%</strong> of our simulations. <small>The vice president decides the balance of power in that case.</small>`,
         sentence_left: `-${100 * this.prob_dem / this.prob_tie}%`,
         sentence_width: `${100 / this.prob_tie}%`
       },
