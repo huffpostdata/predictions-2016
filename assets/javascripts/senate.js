@@ -71,7 +71,7 @@ function shrink_senate_summary_percents() {
     for (var i = 0; i < bars.length; i++) {
       var bar = bars[i];
       var w = bar.clientWidth;
-      bar.className = w < 35 ? 'tiny' : (w < 70 ? 'small' : '');
+      bar.className = w < 45 ? 'tiny' : (w < 70 ? 'small' : '');
     }
   }
 
