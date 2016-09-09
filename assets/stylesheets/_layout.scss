@@ -23,6 +23,7 @@ $min-margin: 16px; // (used in max-width calculations) -- We're assuming 16px ==
   @if $width != 100% {
     // left/right margins are min 16px, max auto.
     @media (max-width: ($width + (2 * $min-margin))) {
+      max-width: 90%;
       margin-left: $min-margin;
       margin-right: $min-margin;
     }
