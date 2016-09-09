@@ -24,7 +24,7 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
           -  chance ${race.state_name} will 
           span.flip-or-stay - ${race.flip_prob > .5 ? 'flip to' : 'remain with'}
           -  a 
-          span.party - ${o.winner_party_full}
+          span.party - ${o.winner.party_full}
       if(!race.curve.is_plottable)
         ol.calculations
           li - Since we haven't collected enough polls, we rely on Cook Political Report's <a href="http://cookpolitical.com/senate/charts/race-ratings">Senate Ratings</a>.
@@ -35,14 +35,14 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
             li - We consider this a <strong>50.0%</strong> chance the seat will flip.
       else
         ol.calculations
-          li - <span class="${o.winner_party}">${o.winner_name} (${o.winner_party_letter_and_incumbent})</span> won against <span class="${o.loser_party}">${o.loser_name} (${o.loser_party_letter_and_incumbent})</span> in <strong>${o.raw_prob}%</strong> of our simulations.
+          li - <span class="${o.winner.party}">${o.winner.Incumbent_}${o.winner.name} (${o.winner.party_letter})</span> won against <span class="${o.loser.party}">${o.loser.incumbent_}${o.loser.name} (${o.loser.party_letter})</span> in <strong>${o.raw_prob}%</strong> of our simulations.
 
           if(race.dem_win_prob != 0.5)
             li - Our simulated populations were <span class="undecided">${o.undecided}% undecided</span> on average. We penalized the winner's chances by <strong>${o.undecided_penalty}</strong> ${o.undecided_penalty == 1 ? 'percentage point' : 'percentage points'}.
             if(o.tie)
               li - That left us with a toss-up.
             else
-              li - Our adjusted probability is <span class="${o.winner_party}">${o.prob_with_undecided}% ${o.winner_party_full}</span>.
+              li - Our adjusted probability is ${o.prob_with_undecided}% ${o.winner.party_full}.
 
         .chart-container
           .y-axis-and-rest

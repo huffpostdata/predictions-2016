@@ -94,15 +94,24 @@ module.exports = class SenateRace {
     const winner = this.dem_win_prob > 0.5 ? 'dem' : 'gop'
     const loser = this.dem_win_prob > 0.5 ? 'gop' : 'dem'
 
+    const build_candidate = (party) => {
+      const ret = {
+        name: this[party + '_name'],
+        label: this[party + '_label'],
+        party: party,
+        party_letter: party === 'dem' ? 'D' : 'R',
+        party_full: party === 'dem' ? 'Democrat' : 'Republican'
+      };
+      ret.incumbent_ = ret.label === this.seat.label ? 'incumbent ' : ''
+      ret.Incumbent_ = ret.label === this.seat.label ? 'Incumbent ' : ''
+
+      return ret;
+    }
+
     this.calculations = {
       tie: Math.round(this.dem_win_prob_with_undecided * 1000) === 500,
-      winner_name: this[winner + '_name'],
-      loser_name: this[loser + '_name'],
-      winner_party: winner,
-      winner_party_letter: winner === 'dem' ? 'D' : 'R',
-      winner_party_full: winner === 'dem' ? 'Democrat' : 'Republican',
-      loser_party: loser,
-      loser_party_letter: loser === 'dem' ? 'D' : 'R',
+      winner: build_candidate(winner),
+      loser: build_candidate(loser),
       raw_prob: (100 * Math.max(this.dem_win_prob, 1 - this.dem_win_prob)).toFixed(1),
       undecided: (100 * curve.election_day_point.undecided_xibar).toFixed(1),
       undecided_penalty: (100 * Math.abs(this.dem_win_prob_with_undecided - this.dem_win_prob)).toFixed(1),
