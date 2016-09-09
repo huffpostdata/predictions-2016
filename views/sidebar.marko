@@ -44,7 +44,7 @@ html lang="en"
           .lean-gop - GOP<br>Chance
 
       ul.senate-races
-        li.${race.lean_html_class} for(race in data.model.races.sorted_by('flip-probability').slice(0, 5))
+        li.${race.lean_html_class} for(race in data.model.races.sorted_by('flip-probability').slice(0, 5).sort(function(a, b) { return a.state_name.localeCompare(b.state_name); }))
           .state-name - ${race.state_name}
           .prob-dem - ${Math.round(100 * race.dem_win_prob_with_undecided)}%
           .bar
