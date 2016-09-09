@@ -15,6 +15,7 @@ body {
   padding: 0;
   font-family: $body-font-family;
   line-height: 1.4;
+  overflow: hidden;
 }
 
 h1, h2, h3, h4 {
@@ -27,7 +28,7 @@ h1 {
   background: $alt-background;
   text-align: center;
   font-size: 1.4rem;
-  padding: .5rem;
+  padding: .5rem 0;
   .color-dem { color: $strong-dem; }
   .color-gop { color: $strong-gop; }
 }
@@ -35,13 +36,11 @@ h1 {
 h2 {
   font-size: 1.7rem;
   margin-top: 1rem;
-  padding: 0 .5rem;
   border-bottom: 1px solid $very-very-muted-color;
 }
 
 h3 {
   margin-top: 2rem;
-  padding: 0 .5rem;
   border-bottom: 1px solid $very-very-muted-color;
 }
 
@@ -50,7 +49,7 @@ h1, h2, h3, h4, p, a {
 }
 
 p {
-  margin: 1rem .5rem;
+  margin: 1rem 0;
   line-height: 1.2rem;
 }
 
@@ -60,7 +59,7 @@ a {
   font-size: .7rem;
   text-decoration: underline;
   text-transform: uppercase;
-  margin: .5rem .5rem 0;
+  margin: .5rem 0 0;
 }
 
 .senate-summary {
@@ -68,8 +67,6 @@ a {
   display: flex;
   &>* { -webkit-flex: 0 0 auto; flex: 0 0 auto; }
 
-  padding: 0 .5rem;
-  margin-left: -1px; margin-right: -1px; // for the 1px outline around .percent
   margin-top: 1rem;
   padding-bottom: 2rem; // .what-happens-if-tied is position: absolute
   font-family: $body-font-family;
@@ -187,7 +184,7 @@ a {
   }
 
   .legend {
-    margin: .75rem .5rem 0 ($state-width + .5rem);
+    margin: .75rem 0 0 $state-width;
     text-align: center;
     text-transform: uppercase;
     font-size: .6rem;
@@ -210,7 +207,6 @@ a {
   }
 
   .state-name {
-    margin-left: .5rem;
     font-family: $header-font-family;
     font-weight: bold;
     width: $state-width;
@@ -263,10 +259,6 @@ a {
       border-radius: .6rem;
       z-index: 1;
     }
-  }
-
-  .prob-gop {
-    margin-right: .5rem;
   }
 
   .prob-dem, .prob-gop {
