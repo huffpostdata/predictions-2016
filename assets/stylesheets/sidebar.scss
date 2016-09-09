@@ -43,6 +43,10 @@ h3 {
   padding: 0 .5rem;
 }
 
+h1, h2, h3, h4, p, a {
+  text-align: center;
+}
+
 p {
   margin: 1rem .5rem;
   line-height: 1.2rem;
@@ -245,13 +249,13 @@ a {
 
     .marker {
       position: absolute;
-      top: .5rem;
+      top: .4rem;
       box-sizing: border-box;
-      height: 1rem;
-      margin-left: -.5rem;
-      width: 1rem;
-      //border: 1px solid $color;
-      border-radius: .5rem;
+      height: 1.2rem;
+      margin-left: -.6rem;
+      width: 1.2rem;
+      border: 2px solid $background;
+      border-radius: .6rem;
       z-index: 1;
     }
   }
