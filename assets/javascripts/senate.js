@@ -61,6 +61,25 @@ function tie_expanded_senate_races_to_hash() {
   });
 }
 
+function shrink_senate_summary_percents() {
+  var container = document.getElementById('senate-summary');
+  if (!container) return;
+
+  var bars = container.querySelectorAll('ol.chart>li>strong');
+
+  function refresh() {
+    for (var i = 0; i < bars.length; i++) {
+      var bar = bars[i];
+      var w = bar.clientWidth;
+      bar.className = w < 35 ? 'tiny' : (w < 70 ? 'small' : '');
+    }
+  }
+
+  refresh();
+  window.addEventListener('resize', refresh);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   tie_expanded_senate_races_to_hash();
+  shrink_senate_summary_percents();
 });

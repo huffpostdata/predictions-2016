@@ -26,19 +26,32 @@
         height: 2.25rem;
         margin-top: 4rem; // space for .sentence.
         margin-bottom: .25rem;
-        background-size: auto 100%;
+        background-size: contain;
         background-repeat: no-repeat;
       }
 
       &>strong {
         display: block;
+        box-sizing: border-box;
         border: 1px solid $background;
+        text-align: center;
+        height: 3rem;
         font-size: 2rem;
         line-height: 1;
         padding: .5rem;
         color: $background;
+
         span.unit {
-          font-size: 1.8rem;
+          font-size: .9em;
+        }
+
+        &.small {
+          padding-top: .9rem;
+          font-size: 1rem;
+        }
+
+        &.tiny {
+          color: transparent;
         }
       }
 
