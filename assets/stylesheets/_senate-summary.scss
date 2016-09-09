@@ -2,42 +2,71 @@
   ol.chart {
     list-style: none;
     padding: 0;
+    margin: 0;
+
     display: -webkit-flex;
     display: flex;
-    text-align: center;
-    cursor: pointer;
-    margin-top: 9rem;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+
+    margin-top: 6rem;
+    position: relative; // so .sentence can be position:absolute
+    // The margin-top incorporates about 3rem which is not actually margin: it's
+    // space for the .sentence. But our CSS-only :hover effect kicks in when we
+    // hover over the <li>. So we don't want the <li> to extend vertically
+    // beyond the top of a <div class="sentence"> or the div might disappear.
 
     li {
       -webkit-flex: 0 0 auto;
       flex: 0 0 auto;
-      position: relative;
-      box-sizing: border-box;
-      padding: .5rem;
-      margin-top: 3rem;
-      line-height: 1;
-      color: $background;
-      border: 1px solid $background;
+
+      cursor: pointer;
+
+      .party-icon {
+        height: 2.25rem;
+        margin-top: 4rem; // space for .sentence.
+        margin-bottom: .25rem;
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+      }
 
       &>strong {
+        display: block;
+        border: 1px solid $background;
         font-size: 2rem;
+        line-height: 1;
+        padding: .5rem;
+        color: $background;
         span.unit {
           font-size: 1.8rem;
         }
       }
 
-      &.prob-dem { background: $strong-dem; .sentence strong { color: $strong-dem; } }
-      &.prob-gop { background: $strong-gop; .sentence strong { color: $strong-gop; } }
-      &.prob-tie { background: $toss-up;    .sentence strong { color: $toss-up; } }
+      &.prob-dem {
+        .party-icon {
+          background-image: asset-as-url('digest', 'images/dem.svg');
+          background-position: bottom left;
+        }
+        &>strong { background-color: $strong-dem; }
+        .sentence strong { color: $strong-dem; }
+      }
 
-      .party-icon {
-        position: absolute;
-        top: -2.5rem;
-        height: 2.25rem;
-        left: 0;
-        width: 100%;
-        background-size: auto 100%;
-        background-repeat: no-repeat;
+      &.prob-gop {
+        .party-icon {
+          background-image: asset-as-url('digest', 'images/gop.svg');
+          background-position: bottom right;
+        }
+        &>strong { background-color: $strong-gop; }
+        .sentence strong { color: $strong-gop; }
+      }
+
+      &.prob-tie {
+        .party-icon {
+          background-image: asset-as-url('digest', 'images/tie.svg');
+          background-position: bottom center;
+        }
+        &>strong { background-color: $toss-up; }
+        .sentence strong { color: $toss-up; }
       }
 
       &.prob-gop .party-icon { background-position: right; }
@@ -46,9 +75,11 @@
       .sentence {
         display: none;
         position: absolute;
-        z-index: 1;
+        bottom: 6.5rem; // grows upwards when wrapping
+        left: 0;
+        width: 100%;
         box-sizing: border-box;
-        bottom: 7rem;
+        text-align: center;
         padding: 1.5rem;
         background: $background;
         border: 1px solid black;
@@ -74,8 +105,8 @@
           box-sizing: border-box;
           background: $background;
           transform: rotate(45deg);
-          border-bottom: 1px solid black;
-          border-right: 1px solid black;
+          border-bottom: 1px solid $color;
+          border-right: 1px solid $color;
           border-top: 1px solid $background;
           border-left: 1px solid $background;
         }

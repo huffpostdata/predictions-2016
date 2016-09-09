@@ -3,6 +3,6 @@ var seat_counts=data.model.seat_counts
 #senate-summary
   ol.chart
     li.prob-${o.result} class="${o.is_most_probable ? 'most-probable' : ''}" style="width: ${o.percent}%" for(o in seat_counts.summary_chart_data)
-      .party-icon style="background-image: url(${data.path_to_asset('digest', 'images/' + o.result + '.svg')})"
+      .party-icon
       strong - ${Math.round(o.percent)}<span class="unit">%</span>
-      .sentence style="left: ${o.sentence_left}; width: ${o.sentence_width}" - $!{o.sentence_html}
+      .sentence - $!{o.sentence_html}
