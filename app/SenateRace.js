@@ -108,5 +108,8 @@ module.exports = class SenateRace {
       undecided_penalty: (100 * Math.abs(this.dem_win_prob_with_undecided - this.dem_win_prob)).toFixed(1),
       prob_with_undecided: (100 * Math.max(this.dem_win_prob_with_undecided, 1 - this.dem_win_prob_with_undecided)).toFixed(1)
     }
+
+    this.calculations.winner_party_letter_and_incumbent = this.calculations.winner_party_letter + (this[winner + '_label'] === this.seat.label ? ' incumbent' : '')
+    this.calculations.loser_party_letter_and_incumbent = this.calculations.loser_party_letter + (this[loser + '_label'] === this.seat.label ? ' incumbent' : '')
   }
 }
