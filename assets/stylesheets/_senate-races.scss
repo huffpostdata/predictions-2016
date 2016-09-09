@@ -1,7 +1,8 @@
 #senate-races {
   $marker-width: 1rem;
   $half-marker-width: $marker-width / 2;
-  $state-width: 3rem;
+  $state-code-width: 3rem;
+  $state-name-width: 10rem;
   $collapsed-height: 2rem;
 
   h3 {
@@ -68,22 +69,32 @@
     cursor: pointer;
   }
 
-  .state-code {
+  label.state-code, label.state-name {
     display: inline-block;
     box-sizing: border-box;
     padding-left: 1rem;
-    width: $state-width;
+    white-space: nowrap;
+    width: $state-code-width;
     line-height: $collapsed-height;
     height: $collapsed-height;
     font-family: $header-font-family;
     font-size: 1.2rem;
   }
 
+  label.state-code {
+    width: $state-code-width;
+  }
+
+  label.state-name {
+    width: $state-name-width;
+    display: none;
+  }
+
   input.expand {
     position: absolute;
     box-sizing: border-box;
     right: 0;
-    width: $state-width;
+    width: $state-code-width;
     top: 0;
     height: $collapsed-height;
     opacity: 0;
@@ -112,8 +123,8 @@
   label.probability {
     display: block;
     position: absolute;
-    left: $state-width + $half-marker-width;
-    right: $state-width + $half-marker-width;
+    left: $state-code-width + $half-marker-width;
+    right: $state-code-width + $half-marker-width;
     top: 0;
     height: $collapsed-height;
 
@@ -461,8 +472,8 @@
     }
 
     .axis, h5 {
-      padding-left: $state-width;
-      padding-right: $state-width;
+      margin-left: $state-code-width;
+      margin-right: $state-code-width;
     }
 
     .axis {
@@ -523,6 +534,19 @@
 
     .source {
       margin-bottom: 2rem;
+    }
+  }
+
+  @media(min-width: 30rem) { // eyeing it
+    label.state-code { display: none; }
+    label.state-name { display: inline-block; }
+    label.probability {
+      left: $state-name-width + $half-marker-width;
+    }
+    .races-legend {
+      .axis, h5 {
+        margin-left: $state-name-width;
+      }
     }
   }
 }
