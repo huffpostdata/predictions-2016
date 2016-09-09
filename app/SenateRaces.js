@@ -4,10 +4,10 @@ const SenateRace = require('./SenateRace')
 
 const SortFunctions = {
   'dem-win-probability': function(a, b) {
-    return (b.dem_win_probability - a.dem_win_probability) || a.state_code.localeCompare(b.state_code)
+    return (Math.round(1000 * b.dem_win_probability) - Math.round(1000 * a.dem_win_probability)) || a.state_name.localeCompare(b.state_name)
   },
   'flip-probability': function(a, b) {
-    return (b.flip_prob - a.flip_prob) || a.state_code.localeCompare(b.state_code)
+    return (Math.round(1000 * b.flip_prob) - Math.round(1000 * a.flip_prob)) || a.state_code.localeCompare(b.state_code)
   }
 }
 
