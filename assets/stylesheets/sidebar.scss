@@ -36,11 +36,13 @@ h2 {
   font-size: 1.7rem;
   margin-top: 1rem;
   padding: 0 .5rem;
+  border-bottom: 1px solid $very-very-muted-color;
 }
 
 h3 {
   margin-top: 2rem;
   padding: 0 .5rem;
+  border-bottom: 1px solid $very-very-muted-color;
 }
 
 h1, h2, h3, h4, p, a {
@@ -97,6 +99,7 @@ a {
   }
 
   .percent {
+    font-family: $header-font-family;
     height: 2rem;
     box-sizing: border-box;
     font-size: 1.2rem;
@@ -108,6 +111,7 @@ a {
     text-align: center;
 
     &.thin { // set in JS
+      font-family: $header-font-family;
       font-size: .6rem;
       padding-top: .8rem;
     }
@@ -266,7 +270,7 @@ a {
   }
 
   .prob-dem, .prob-gop {
-    font-size: .85rem;
+    font-size: .8rem;
     width: 2rem;
     color: $very-muted-color;
     text-align: center;
