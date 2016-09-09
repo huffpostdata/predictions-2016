@@ -98,7 +98,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "We estimate the probability of a win in each Senate race using publicly-available polls in the "
+        "text": "We estimate the probability of a win in each Senate race using publicly available polls in the "
       },
       {
         "text": "HuffPost Pollster",
@@ -112,14 +112,22 @@
         "href": "http://eppsac.utdallas.edu/files/jackman/CAJP%2040-4%20Jackman.pdf"
       },
       {
-        "text": " to simulate 100,000 populations whose voting intentions correspond to the poll results. (We sample 5,000 of those simulations in our calculations, for speed.) The model uses "
+        "text": " to simulate 100,000 populations whose voting intentions correspond to the poll results. (We sample 5,000 of those simulations in our calculations, for speed.)"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "When there were fewer than five available polls in 2016 or fewer than two polls since July 2016, we used "
       },
       {
         "text": "Cook Political Report",
         "href": "http://cookpolitical.com/senate/charts/race-ratings"
       },
       {
-        "text": " ratings as “priors” -- starting points based on how accurately the Cook rating has predicted the outcome of Senate contests from 2004-2014."
+        "text": " ratings to estimate where the race stands."
       }
     ]
   },
@@ -127,15 +135,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "When there are fewer than five available polls in 2016 or fewer than two polls since July 2016, the Cook ratings provide our estimates of where the race stands."
-      }
-    ]
-  },
-  {
-    "type": "p",
-    "texts": [
-      {
-        "text": "We run the simulations out to Election Day, Nov. 8. Obviously we don’t have polling data for the future, so the model assumes voter intentions generally continue along their current trajectories. The lack of poll data means that the outcomes of the races get less certain as time goes on, which moves the probability closer to 50 percent."
+        "text": "We run the simulations out to Election Day, Nov. 8. Since we don’t have polling data for the future, the model assumes voter intentions generally continue along their current trajectories. The lack of poll data means that the outcomes of the races get less certain as time goes on, which moves the probability closer to 50 percent."
       }
     ]
   },
@@ -146,7 +146,7 @@
         "text": "The model also estimates what proportion of voters is undecided according to the polls as of today. We penalize the leader’s win probability based on this formula: "
       },
       {
-        "text": "percent undecided / (leader’s poll average - runner-up’s poll average) * 100 percent",
+        "text": "percent undecided ÷ (leader’s poll average − runner-up’s poll average) × 100 percent",
         "italic": true
       },
       {
@@ -183,6 +183,14 @@
     "texts": [
       {
         "text": "Download our seat counts as a TSV file.TK"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "To find out more about our methodology, go here."
       }
     ]
   }
