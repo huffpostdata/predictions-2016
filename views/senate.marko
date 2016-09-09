@@ -21,7 +21,9 @@ html lang="en"
 
       $!{data.render_template('_senate-races', data)}
 
-      h2#methodology - Methodology
+      h2.with-toc-link#methodology
+        a href="#methodology" - Methodology
+
       $!{data.model.render(data)}
 
       <!--
