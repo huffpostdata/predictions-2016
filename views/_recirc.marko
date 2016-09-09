@@ -1,0 +1,60 @@
+#recirculation
+
+script
+  ---
+  function buildLink(entry) {
+    var img = document.createElement('img');
+    img.height = 314;
+    img.width = 628;
+    img.src = entry.image.thumb;
+    img.alt = '';
+
+    var img_container = document.createElement('div');
+    img_container.className = 'image';
+    img_container.appendChild(img);
+
+    var span = document.createElement('span');
+    span.textContent = entry.full_title;
+
+    var a = document.createElement('a');
+    a.setAttribute('href', entry.url);
+    a.appendChild(img_container);
+    a.appendChild(span);
+
+    return a;
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://staging.www.huffingtonpost.com/mapi/v2/us/section/politics/trending?device=desktop', true);
+    xhr.send(null);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+      if (xhr.status !== 200) {
+        console.warn('XMLHttpRequest got non-200 status code: ' + xhr.status, xhr);
+      }
+
+      var entries;
+      try {
+        var text = xhr.responseText;
+        var json = JSON.parse(text);
+        entries = json.results.entries.slice(0, 3);
+      } catch (e) {
+        console.warn(e);
+        return;
+      }
+
+      var links = entries.map(buildLink);
+
+      var container = document.getElementById('recirculation');
+      var h2 = document.createElement('h2');
+      h2.textContent = 'TK(nix staging.www) Trending Politics Stories On The Huffington Post';
+      container.appendChild(h2);
+      var div = document.createElement('div');
+      container.appendChild(div);
+      links.forEach(function(link) {
+        div.appendChild(link);
+      });
+    };
+  });
+  ---
