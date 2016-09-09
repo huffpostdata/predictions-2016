@@ -16,6 +16,11 @@ class SenateRaces {
     this.all = all
     this.updated_at = new Date(Math.max.apply(null, all.map(race => race.updated_at)))
     this._by = {}
+
+    this.state_names_without_model_with_cook_rating_tied = all
+      .filter(race => race.cook_rating === 'Toss Up' && !race.curve.is_plottable)
+      .map(race => race.state_name)
+      .sort((a, b) => a.localeCompare(b))
   }
 
   sorted_by(key) {

@@ -1,8 +1,12 @@
 var seat_counts=data.model.seat_counts
+var races=data.model.races
 
 #senate-summary
   ol.chart
     li.prob-${o.result} class="${o.is_most_probable ? 'most-probable' : ''}" style="width: ${o.percent}%" for(o in seat_counts.summary_chart_data)
       .party-icon
       strong - ${Math.round(o.percent)}<span class="unit">%</span>
-      .sentence - $!{o.sentence_html}
+      .sentence
+        - $!{o.sentence_html}
+        if(races.state_names_without_model_with_cook_rating_tied.length > 0)
+          p.cook-rating-disclaimer - Our estimate may change substantially once we see more polls in ${races.state_names_without_model_with_cook_rating_tied.join(' and ')}.

@@ -9,7 +9,7 @@
     -webkit-align-items: flex-end;
     align-items: flex-end;
 
-    margin-top: 6rem;
+    margin-top: 9rem;
     position: relative; // so .sentence can be position:absolute
     // The margin-top incorporates about 3rem which is not actually margin: it's
     // space for the .sentence. But our CSS-only :hover effect kicks in when we
@@ -98,15 +98,13 @@
         background: $background;
         border: 1px solid black;
         font-size: 1.2rem;
-        line-height: 1.5rem;
+        line-height: 1.25;
         color: $color;
 
         small {
           display: block;
-          font-style: italic;
-          margin-top: .5rem;
+          margin: .5rem 0;
           font-size: .85rem;
-          line-height: 1rem;
           color: $muted-color;
         }
 
@@ -134,4 +132,10 @@
 
   ol.chart li:hover .sentence { display: block; }
   &:not(:hover) ol.chart li.most-probable .sentence { display: block; }
+
+  p.cook-rating-disclaimer {
+    margin: .5rem 0 0;
+    font-size: .85rem;
+    font-style: italic;
+  }
 }
