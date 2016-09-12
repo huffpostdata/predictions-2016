@@ -48,6 +48,7 @@ module.exports = class Database {
       seat_counts: SenateSeatCounts.load(senate_seats),
       senate_seats: senate_seats
     })
+    this.senate.metadata.suggested_tweet = `Latest HuffPost Senate forecast: ${this.senate.seat_counts.prob_dem_percent.toFixed(1)}% chance Dem control / ${this.senate.seat_counts.prob_gop_percent.toFixed(1)}% GOP / ${this.senate.seat_counts.prob_tie_percent.toFixed(1)}% tie.`
     this.senate.metadata.date_updated = format_date_full(this.senate.races.updated_at)
 
     this.senate_races = this.senate.races.all

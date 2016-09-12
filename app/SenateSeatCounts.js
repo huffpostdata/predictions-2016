@@ -61,11 +61,13 @@ class SenateSeatCounts {
       .slice(51 - this.n_existing_dem)
       .reduce(((a, s) => a + s), 0)
 
-    this.prob_dem_percent = 100 * this.prob_dem
-
     this.prob_tie = dem_count_probs[50 - this.n_existing_dem]
 
     this.prob_gop = 1.0 - this.prob_dem - this.prob_tie
+
+    this.prob_dem_percent = 100 * this.prob_dem
+    this.prob_gop_percent = 100 * this.prob_gop
+    this.prob_tie_percent = 100 * this.prob_tie
 
     this.summary_chart_data = [
       {
