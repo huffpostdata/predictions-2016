@@ -52,24 +52,26 @@ html lang="en"
             .marker style="left: ${100 - 100 * race.dem_win_prob_with_undecided}%"
           .prob-gop - ${Math.round(100 * (1 - race.dem_win_prob_with_undecided))}%
 
-      a href="${data.path_to('senate')}" target="_blank" - See all states »
+    a href="${data.path_to('senate')}" target="_blank" - See all states »
 
-      script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
-      script src="${data.path_to_asset('plain', 'javascripts/pym.min.js')}"
-      script - new pym.Child()
-      script
-        ---
-        document.addEventListener('DOMContentLoaded', function() {
-          function mark_thin_summary_bars() {
-            var bars = document.querySelectorAll('.senate-summary .percent');
-            for (var i = 0; i < bars.length; i++) {
-              bars[i].className = 'percent' +
-                (bars[i].clientWidth < 45 ? ' thin' : '') +
-                (bars[i].clientWidth < 25 ? ' very-thin' : '');
-            }
+    footer - Poll data from <a href="//elections.huffingtonpost.com/pollster">HuffPost Pollster</a>
+
+    script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
+    script src="${data.path_to_asset('plain', 'javascripts/pym.min.js')}"
+    script - new pym.Child()
+    script
+      ---
+      document.addEventListener('DOMContentLoaded', function() {
+        function mark_thin_summary_bars() {
+          var bars = document.querySelectorAll('.senate-summary .percent');
+          for (var i = 0; i < bars.length; i++) {
+            bars[i].className = 'percent' +
+              (bars[i].clientWidth < 45 ? ' thin' : '') +
+              (bars[i].clientWidth < 25 ? ' very-thin' : '');
           }
+        }
 
-          mark_thin_summary_bars();
-          window.addEventListener('resize', mark_thin_summary_bars);
-        });
-        ---
+        mark_thin_summary_bars();
+        window.addEventListener('resize', mark_thin_summary_bars);
+      });
+      ---

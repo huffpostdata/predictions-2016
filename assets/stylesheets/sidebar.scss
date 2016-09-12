@@ -55,11 +55,21 @@ p {
 
 a {
   color: $toss-up;
+  text-decoration: underline;
+}
+
+body>a {
   display: block;
   font-size: .7rem;
-  text-decoration: underline;
   text-transform: uppercase;
   margin: .5rem 0 0;
+}
+
+footer {
+  font-size: .85rem;
+  margin: 1rem 0 0;
+  font-style: italic;
+  color: $muted-color;
 }
 
 .senate-summary {
