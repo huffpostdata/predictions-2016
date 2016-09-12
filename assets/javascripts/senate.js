@@ -20,7 +20,7 @@ function tie_expanded_senate_races_to_hash() {
 
   function read_hash() {
     var hash = window.location.hash;
-    if (!hash.startsWith('#expand-states:')) return;
+    if (!/^#expand-states:/.test(hash)) return;
 
     var state_codes = hash.slice('#expand-states:'.length).split(',');
     var state_code_set = {};

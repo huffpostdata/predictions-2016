@@ -1,11 +1,9 @@
 nav
-  .nav-logo
-    a.only-desktop href="//www.huffingtonpost.com"
-      img alt="The Huffington Post" class="logo logo-desktop" src="${data.path_to_asset('digest', 'images/hplogo.svg')}" width="265" height="16"
-    a.only-mobile href="//www.huffingtonpost.com"
-      img alt="The Huffington Post" class="logo logo-mobile" src="${data.path_to_asset('digest', 'images/hplogo.svg')}" width="148" height="93" 
-  .election-header
-  	<p class='election-header-text'><span class='election-header-blue'>Election</span><span class='election-header-red'>2016</span></p>
+  a.nav-logo href="//www.huffingtonpost.com"
+    img alt="The Huffington Post" src="${data.path_to_asset('digest', 'images/hplogo.svg')}" width="52" height="52"
+  h2.election-header
+    span.dem - Election
+    span.gop - 2016
   .share-buttons
     button.facebook-share - Share on Facebook
     button.twitter-share - Share on Twitter
