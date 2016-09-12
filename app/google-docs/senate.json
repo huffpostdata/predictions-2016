@@ -158,7 +158,14 @@
     "type": "p",
     "texts": [
       {
-        "text": "Download our by-state probabilities as a TSV file.TK"
+        "text": "Download our "
+      },
+      {
+        "text": "link_to(`by-state probabilities TSV`, `senate-curves-tsv`, page_context.model.races.updated_at_s)",
+        "underline": true
+      },
+      {
+        "text": " file."
       }
     ]
   },
@@ -182,7 +189,14 @@
     "type": "p",
     "texts": [
       {
-        "text": "Download our seat counts as a TSV file.TK"
+        "text": "Download our "
+      },
+      {
+        "text": "link_to(`likely seat counts TSV`, `senate-seat-counts-tsv`, page_context.model.races.updated_at_s)",
+        "underline": true
+      },
+      {
+        "text": " file."
       }
     ]
   },
@@ -190,7 +204,14 @@
     "type": "p",
     "texts": [
       {
-        "text": "To find out more about our methodology, go here."
+        "text": "Find out more about "
+      },
+      {
+        "text": "our methodology",
+        "href": "http://www.huffingtonpost.com/entry/huffpost-pollster-poll-averages-methodology_us_57d1a3b2e4b06a74c9f361cb?"
+      },
+      {
+        "text": "."
       }
     ]
   }

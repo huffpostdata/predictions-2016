@@ -200,30 +200,8 @@ class GoogleDoc {
   //
   // Want a backtick in a string? Too bad -- build a new syntax.
   _render_code(marked_up_code, page_context) {
-    const code = marked_up_code
-      .replace(/"/g, '\\"')
-      .replace(/`/g, '"')
-
-    // render('foo', 'bar') --> ('render', [ 'foo', 'bar' ])
-    const m = /^([^(]+)\((.*)\)/.exec(code)
-    if (!m) throw new Error(`Invalid syntax ${code}. Maybe fix the Google Doc and 'npm run update-google-docs'?`)
-    const method = m[1]
-    const args_json = `[${m[2]}]`
-
-    let args
-    try {
-      // We parse as YAML, not JSON. That parses something like "{ foo: 'bar' }"
-      // ... which looks more like JavaScript.
-      args = yaml.load(args_json)
-    } catch (e) {
-      throw new Error(`Could not parse ${args_json} as YAML: ${e}. Maybe fix the Google Doc and 'npm run update-google-docs'?`)
-    }
-
-    if (!page_context.helpers[method]) {
-      throw new Error(`Invalid method ${method} in the Google Doc. Maybe code it? Or maybe fix the Google Doc and 'npm run update-google-docs'?`)
-    }
-
-    return page_context.helpers[method].apply(page_context.helpers, args)
+    const code = `page_context.helpers.${marked_up_code}`
+    return eval(code)
   }
 }
 

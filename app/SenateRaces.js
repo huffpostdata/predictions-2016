@@ -1,5 +1,7 @@
 'use strict'
 
+const moment = require('moment-timezone')
+
 const SenateRace = require('./SenateRace')
 
 const SortFunctions = {
@@ -15,6 +17,7 @@ class SenateRaces {
   constructor(all) {
     this.all = all
     this.updated_at = new Date(Math.max.apply(null, all.map(race => race.updated_at)))
+    this.updated_at_s = moment(this.updated_at).tz('UTC').format('YYYY-MM-DDThh-mm-ss[Z]'),
     this._by = {}
 
     this.state_names_without_model_with_cook_rating_tied = all

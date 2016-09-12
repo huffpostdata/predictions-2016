@@ -2,6 +2,16 @@ index:
   path: _root
   redirect: senate
 
+senate-curves-tsv:
+  path: senate-curves-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  collection: senate_races_for_tsv
+
+senate-seat-counts-tsv:
+  path: senate-seat-counts-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  collection: senate_races_for_tsv
+
 senate:
   path: senate
   model: senate

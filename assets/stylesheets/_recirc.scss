@@ -5,6 +5,13 @@
     @include with-width($wide-width);
   }
 
+  h2 {
+    // styles copied from www.huffingtonpost.com
+    font-size: 1.75rem;
+    line-height: 1.1em;
+    text-transform: uppercase;
+  }
+
   &>div {
     text-align: center;
   }
@@ -19,7 +26,7 @@
     margin-top: 2rem;
     color: $color;
     font-family: $header-font-family;
-    font-size: 1.1rem;
+    font-size: 1.125rem;
 
     @media (min-width: $min-desktop-width) {
       width: 33%;

@@ -8,8 +8,6 @@ Shows readers who's most likely to win in senate and presidential elections.
 | `forecast/sidebar` | Predictions sidebar |
 | `forecast/senate-curves.tsv` | Prediction CSV for all states |
 | `forecast/senate-seat-counts.tsv` | Seat-count distribution CSV for senate |
-| `forecast/senate-before-election.tsv` | Information about every senate seat |
-| `forecast/senate-races.tsv` | Information about every 2016 senate race |
 
 # Data pipeline
 

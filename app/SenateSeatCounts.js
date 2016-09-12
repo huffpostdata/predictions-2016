@@ -20,6 +20,11 @@ class SenateSeatCounts {
     this.n_existing_dem = seats.all.filter(is_seat_existing_dem).length
     this.n_existing_gop = seats.all.filter(is_seat_existing_gop).length
 
+    this.all = []
+    for (let i = 0; i < dem_counts.length; i++) {
+      this.all.push({ n_dem_wins: i, n: dem_counts[i] })
+    }
+
     this.dem_count_probs = dem_count_probs
     this.dem_counts = dem_counts
 

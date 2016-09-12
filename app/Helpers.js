@@ -20,8 +20,8 @@ class Helpers {
     return this.context.render_template(name, context)
   }
 
-  link_to(name, route) {
-    return `<a href="${escape_html(this.context.path_to(route))}">${escape_html(name)}</a>`
+  link_to(name, ...route) {
+    return `<a href="${escape_html(this.context.path_to(...route))}">${escape_html(name)}</a>`
   }
 
   // Changes 'Written by [Adam Hooper]' to 'Written by <a href="..."></a>'

@@ -34,5 +34,11 @@ module.exports = class Database {
     this.senate.metadata.date_updated = format_date_full(this.senate.races.updated_at)
 
     this.senate_races = this.senate.races.all
+
+    this.senate_races_for_tsv = [{
+      date: this.senate.races.updated_at_s,
+      races: this.senate_races,
+      seat_counts: this.senate.seat_counts.all
+    }]
   }
 }
