@@ -60,7 +60,7 @@ const CookRatingToCookName = {
   'R-Solid': 'solidly Republican',
   'R-Likely': 'likely Republican',
   'R-Lean': 'leaning Republican',
-  'Toss Up': 'a toss-up',
+  'Toss Up': 'toss-up',
   'D-Lean': 'leaning Democrat',
   'D-Likely': 'likely Democrat',
   'D-Solid': 'solidly Democrat'
