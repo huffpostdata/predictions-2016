@@ -3,7 +3,7 @@
 
   .container {
     position: relative;
-    margin-top: 1rem;
+    margin-top: 3rem;
   }
 
   $area-height: 12rem;
@@ -29,7 +29,9 @@
   .y-axis {
     position: absolute;
     top: 0;
-    height: $area-height;
+    max-width: 30%;
+    color: $muted-color;
+    font-size: .85rem;
   }
 
   .x-axis {

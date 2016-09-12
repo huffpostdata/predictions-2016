@@ -7,11 +7,12 @@ var seat_counts=data.model.seat_counts
   p
     - We simulated a Nov. 8 election ${Math.round(seat_counts.n / 1e6)} million times using our <a href="#by-state-probabilities">by-state probabilities</a>. In <strong>${seat_counts.n_dem_millions.toFixed(1)} million</strong> simulations, Democrats ended up with at least 51 seats. Therefore, we say Democrats have a <strong>${seat_counts.prob_dem_percent.toFixed(1)} percent</strong> chance of gaining control of the Senate.
 
-  h4 - Number of election nights (millions)
   .container
+    .y-axis
+      .label - Number of simulated elections (in millions)
     .x-axis
       .label
-        .total - Seats by party
+        .total - Seats controlled by each party
         .dem - ← Democrat majority
         .gop - Republican majority →
     ul.bars
