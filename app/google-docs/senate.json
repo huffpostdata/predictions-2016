@@ -90,7 +90,7 @@
     "type": "h3",
     "texts": [
       {
-        "text": "1. By-State Probabilities"
+        "text": "1. State-By-State Probabilities"
       }
     ]
   },
@@ -161,7 +161,7 @@
         "text": "Download our "
       },
       {
-        "text": "link_to(`by-state probabilities TSV`, `senate-curves-tsv`, page_context.model.races.updated_at_s)",
+        "text": "link_to(`state-by-state probabilities TSV`, `senate-curves-tsv`, page_context.model.races.updated_at_s)",
         "underline": true
       },
       {
@@ -181,7 +181,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Finally, we simulated a Nov. 8 election 100 million times using the by-state probabilities. The proportion of times Democrats ended up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count landed at 50-50."
+        "text": "Finally, we simulated a Nov. 8 election 100 million times using the state-by-state probabilities. The proportion of times Democrats ended up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count landed at 50-50."
       }
     ]
   },
