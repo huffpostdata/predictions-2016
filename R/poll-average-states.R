@@ -38,7 +38,7 @@ CookPriors <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
   prior1=c(0.4823, 0.4881, 0.4865, 0.4792, 0.4746, 0.4879, 0.4783),
   prior2=c(0.1584, 0.1205, 0.0706, 0.0619, 0.0824, 0.0824, 0.1807),
-  dem_win_prob=c(0.99, 0.90, 0.80, 0.5, 0.20, 0.10, 0.01)
+  dem_win_prob=c(0.9877, 0.9333, 0.8095, 0.5, 1.0 - 0.8095, 1.0 - 0.9333, 1.0 - 0.9877)
 )
 
 calculate_labels <- function(col_names) {
