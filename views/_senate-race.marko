@@ -27,7 +27,7 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
           span.party - ${o.winner.party_full}
       if(!race.curve.is_plottable)
         ol.calculations
-          li - Since we haven't collected enough polls, we rely on Cook Political Report's <a href="http://cookpolitical.com/senate/charts/race-ratings">Senate Ratings</a>.
+          li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/senate/charts/race-ratings">Senate Ratings</a>.
           li - Cook suggests the ${race.state_name} Senate race is <strong class="cook-rating">${race.cook_rating_name}</strong>.
           if(!o.tie)
             li - Since 2004, Cook has been right about this call in <strong>${o.raw_prob}%</strong> of all Senate races.
