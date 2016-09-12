@@ -1,5 +1,29 @@
 Shows readers who's most likely to win in senate and presidential elections.
 
+# Requirements
+
+* [NodeJS 6](https://nodejs.org/en/)
+* [R 3.3](https://www.r-project.org/) (see `R/README.md` for installation instructions)
+
+# Getting started (development)
+
+```
+npm install
+cp -a data/sheets/sample-output/* data/sheets/output/
+node generator/dev.js
+```
+
+... and browse to [http://localhost:3000](http://localhost:3000)
+
+To re-run R models with the latest data:
+
+```
+./update-polls.js > data/sheets/output/senate-polls.tsv
+(cd R && Rscript --vanilla all-states.R) # You'll need to install stuff first, see Requirements
+```
+
+After the R script finishes, refresh the page to see the changes.
+
 # URLs
 
 | Path | Description |
