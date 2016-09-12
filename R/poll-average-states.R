@@ -236,6 +236,22 @@ center_probability_with_undecided <- function(dem_win_prob, diff_xibar, undecide
 
 #########################################
 
+stub_CA_diff_curve <- function() {
+  return(list(
+    curve=data.frame(
+      state=c('CA'),
+      date=c(EndDate),
+      diff_xibar=NA,
+      diff_low=NA,
+      diff_high=NA,
+      undecided_xibar=NA,
+      dem_win_prob=c(1.0),
+      dem_win_prob_with_undecided=c(1.0)
+    ),
+    samples_string=''
+  ))
+}
+
 stub_diff_curve <- function(state_code, cook_rating) {
   cook_index <- match(cook_rating, CookPriors$rating)
   dem_win_prob <- CookPriors[cook_index,'dem_win_prob']
@@ -279,6 +295,10 @@ calculate_diff_curve_samples_string <- function(normalized_array, dem_label, gop
 }
 
 calculate_diff_data <- function(state_code, chart_slug, cook_rating, dem_label, gop_label, fast) {
+  if (state_code == 'CA') {
+    return(stub_CA_diff_curve())
+  }
+
   if (chart_slug == '') {
     return(stub_diff_curve(state_code, cook_rating))
   }

@@ -25,7 +25,11 @@ li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${
           span.flip-or-stay - ${race.flip_prob > .5 ? 'flip to' : 'remain with'}
           -  a 
           span.party - ${o.winner.party_full}
-      if(!race.curve.is_plottable)
+      if(race.state_code == 'CA')
+        ol.calculations
+          li - In California, Democrat <span class="dem">Kamala Harris</span> is competing against Democrat <span class="dem">Loretta Sanchez</span>.
+          li - Therefore, the probability of a Democrat winning is <strong>100.0%</strong>.
+      else-if(!race.curve.is_plottable)
         ol.calculations
           li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/senate/charts/race-ratings">Senate Ratings</a>.
           li - The Cook rating for the ${race.state_name} Senate race is: <strong class="cook-rating">${race.cook_rating_name}</strong>.
