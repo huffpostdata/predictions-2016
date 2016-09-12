@@ -14,9 +14,26 @@ const SenateSeatCounts = require('./SenateSeatCounts')
 const SenateSeats = require('./SenateSeats')
 
 function format_date_full(date) {
-  return moment(date)
-    .tz('America/New_York')
-    .format('LLLL z')
+  const m = moment(date).tz('America/New_York')
+
+  const month = [
+    'Jan.',
+    'Feb.',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'Aug.',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Dec.'
+  ][m.month()]
+
+  return m
+    .format(`dddd, [${month}] D, YYYY, h:mm A z`)
+    .replace(/([AP])M/, '$1.M.') // 'AM' => 'A.M.'
 }
 
 module.exports = class Database {
