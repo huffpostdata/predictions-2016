@@ -1,4 +1,4 @@
-source('poll-average-states.R')
+source('../common/calculate-diff-data.R')
 
 args <- commandArgs(TRUE)
 
@@ -13,7 +13,7 @@ dem_label <- args[4]
 gop_label <- args[5]
 fast <- !is.na(args[6]) && args[6] == 'fast'
 
-frame <- calculate_diff_data(state_code, chart_slug, cook_rating, dem_label, gop_label, fast)
+frame <- CalculateDiffData(state_code, chart_slug, cook_rating, dem_label, gop_label, fast)
 options(scipen=999)
 options(digits=20)
 write.table(frame$curve, '', na='', quote=FALSE, sep='\t', row.names=FALSE)

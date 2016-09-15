@@ -1,6 +1,6 @@
 library('parallel')
 
-source('poll-average-states.R')
+source('../common/calculate-diff-data.R')
 
 args <- commandArgs(TRUE)
 fast <- !is.na(args[1]) && args[1] == 'fast'
@@ -29,7 +29,7 @@ load_or_calculate_senate_data_for_race <- function(race) {
   tryCatch({
     load(file_path)
   }, error = function(e) {
-    data <<- calculate_diff_data(
+    data <<- CalculateDiffData(
       race$state,
       race$pollster_slug,
       race$cook_rating,
