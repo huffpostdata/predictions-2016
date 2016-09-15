@@ -1,7 +1,7 @@
 /node_modules/
 *.marko.js
 __MACOSX
-R/interim-results/
+R/senate/interim-results/
 data/sheets/output/*.tsv
 data/sheets/output-archives/
 data/sheets/output-backup/

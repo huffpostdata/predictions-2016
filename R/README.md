@@ -36,7 +36,7 @@ R --vanilla -e 'install.packages(c("rjags", "truncnorm", "coda", "httr"), repos=
 # Usage
 
 ```sh
-cd R
+cd R/senate
 Rscript --vanilla ./main.R
 ```
 
