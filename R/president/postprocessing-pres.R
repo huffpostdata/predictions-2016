@@ -853,6 +853,8 @@ write.csv(allstates,"post/allstates.csv")
 outPres16 <- allstates[, c("state", "call", "finalprob", "Dprob")]
 write.csv(outPres16, "post/outPres16.csv")
 
+save("allstates", "outUS", file="postprocessing-pres-2.RData")
+
 
 
 

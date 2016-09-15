@@ -88,7 +88,7 @@ thePollsters <- sort(unique(data$pp))	#list of pollsters w/populations
 dataDir <- paste0("data/",chart)
 dir.create(dataDir, showWarnings=FALSE, recursive=TRUE)
 
-if (1 > 0) {							#changed from git code
+if (1 < 0) {							#changed from git code
   M <- 1E5                              ## number of MCMC iterates, default 100,000
   keep <- if (NDAYS > 600) 1E3 else 5E3 ## how many to keep
 } else {
@@ -100,7 +100,7 @@ thin <- M/keep            ## thinning interval
 
 
 ##      FOR FORECAST MODEL, COOK RATINGS PRIORS            
-state_name <- gsub('2016-|-president.*', '', chart)
+state_name <- gsub('2016-|-president.*', '', chart)
 all_priors <- read.csv("./priors-pres.csv")
 cookPrior1 <- all_priors[all_priors$state == state_name,'prior1']
 cookPrior2 <- all_priors[all_priors$state == state_name,'prior2']

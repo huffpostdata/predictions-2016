@@ -57,7 +57,7 @@ for (c in charts) {
   system(paste("Rscript poll-average-states.R '",c,"'",sep=''))
 }
 
-system("RScript poll-average-natl2016.R")
+system("Rscript poll-average-natl2016.R")
 system("Rscript postprocessing-pres.R") 
 #system("Rscript houseeff-pres.R") 
 #system("Rscript pointests.R") 
