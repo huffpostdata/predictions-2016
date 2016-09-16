@@ -18,3 +18,7 @@ sheets:
   -
     slug: senate-races
     url: 'https://docs.google.com/spreadsheets/d/1JPWFj9tbSat_wGd5yJ-3-X5w03R1zwtxStO2jITGLEo/pub?output=tsv'
+
+  -
+    slug: president-races
+    url: 'https://docs.google.com/spreadsheets/d/1btWRh4Ur9rCFNii3yn4PMkSntTJ4k9FvwGcyF1J2Kh0/pub?output=tsv'

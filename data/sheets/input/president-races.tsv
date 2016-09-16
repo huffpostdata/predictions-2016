@@ -1,0 +1,52 @@
+state_code	state_name	state_abbreviation	pollster_slug	cook_rating	n_electoral_votes	split_cook_ratings_by_cd
+AL	Alabama	Ala.	2016-alabama-president-trump-vs-clinton	R-Solid	9	
+AK	Alaska	Alaska	2016-alaska-president-trump-vs-clinton	R-Solid	3	
+AZ	Arizona	Ariz.	2016-arizona-president-trump-vs-clinton	R-Lean	11	
+AR	Arkansas	Ark.	2016-arkansas-president-trump-vs-clinton	R-Solid	6	
+CA	California	Calif.	2016-california-presidential-general-election-trump-vs-clinton	D-Solid	55	
+CO	Colorado	Colo.	2016-colorado-president-trump-vs-clinton	D-Likely	9	
+CT	Connecticut	Conn.	2016-connecticut-president-trump-vs-clinton	D-Solid	7	
+DE	Delaware	Del.	2016-delaware-president-trump-vs-clinton	D-Solid	3	
+DC	Dist. of Columbia	D.C.		D-Solid	3	
+FL	Florida	Fla.	2016-florida-presidential-general-election-trump-vs-clinton	Toss Up	29	
+GA	Georgia	Ga.	2016-georgia-president-trump-vs-clinton	R-Lean	16	
+HI	Hawaii	Hawaii	2016-hawaii-president-trump-vs-clinton	D-Solid	4	
+ID	Idaho	Idaho	2016-idaho-president-trump-vs-clinton	R-Solid	4	
+IL	Illinois	Ill.	2016-illinois-president-trump-vs-clinton	D-Solid	20	
+IN	Indiana	Ind.	2016-indiana-president-trump-vs-clinton	R-Likely	11	
+IA	Iowa	Iowa	2016-iowa-president-trump-vs-clinton	Toss Up	6	
+KS	Kansas	Kans.	2016-kansas-president-trump-vs-clinton	R-Solid	6	
+KY	Kentucky	Ky.	2016-kentucky-president-trump-vs-clinton	R-Solid	8	
+LA	Louisiana	La.	2016-louisiana-president-trump-vs-clinton	R-Solid	8	
+ME	Maine	Maine	2016-maine-president-trump-vs-clinton	D-Solid	4	D-Solid,Toss Up
+MD	Maryland	Md.	2016-maryland-president-trump-vs-clinton	D-Solid	10	
+MA	Massachusetts	Mass.	2016-massachusetts-president-trump-vs-clinton	D-Solid	11	
+MI	Michigan	Mich.	2016-michigan-president-trump-vs-clinton	D-Lean	16	
+MN	Minnesota	Minn.	2016-minnesota-president-trump-vs-clinton	D-Likely	10	
+MS	Mississippi	Miss.	2016-mississippi-president-trump-vs-clinton	R-Solid	6	
+MO	Missouri	Mo.	2016-missouri-president-trump-vs-clinton	R-Likely	10	
+MT	Montana	Mont.	2016-montana-president-trump-vs-clinton	R-Solid	3	
+NE	Nebraska	Nebr.	2016-nebraska-president-trump-vs-clinton	R-Solid	5	R-Solid,Toss Up,R-Solid
+NV	Nevada	Nev.	2016-nevada-president-trump-vs-clinton	Toss Up	6	
+NH	New Hampshire	N.H.	2016-new-hampshire-president-trump-vs-clinton	D-Lean	4	
+NJ	New Jersey	N.J.	2016-new-jersey-president-trump-vs-clinton	D-Solid	14	
+NM	New Mexico	N.M.	2016-new-mexico-president-trump-vs-clinton	D-Solid	5	
+NY	New York	N.Y.	2016-new-york-president-trump-vs-clinton	D-Solid	29	
+NC	North Carolina	N.C.	2016-north-carolina-president-trump-vs-clinton	Toss Up	15	
+ND	North Dakota	N.D.	2016-north-dakota-president-trump-vs-clinton	R-Solid	3	
+OH	Ohio	Ohio	2016-ohio-president-trump-vs-clinton	Toss Up	18	
+OK	Oklahoma	Okla.	2016-oklahoma-president-trump-vs-clinton	R-Solid	7	
+OR	Oregon	Ore.	2016-oregon-president-trump-vs-clinton	D-Solid	7	
+PA	Pennsylvania	Pa.	2016-pennsylvania-president-trump-vs-clinton	D-Lean	20	
+RI	Rhode Island	R.I.	2016-rhode-island-president-trump-vs-clinton	D-Solid	4	
+SC	South Carolina	S.C.	2016-south-carolina-president-trump-vs-clinton	R-Solid	9	
+SD	South Dakota	S.D.	2016-south-dakota-president-trump-vs-clinton	R-Solid	3	
+TN	Tennessee	Tenn.	2016-tennessee-president-trump-vs-clinton	R-Solid	11	
+TX	Texas	Tex.	2016-texas-president-trump-vs-clinton	R-Solid	38	
+UT	Utah	Utah	2016-utah-president-trump-vs-clinton	R-Likely	6	
+VT	Vermont	Vt.	2016-vermont-president-trump-vs-clinton	D-Solid	3	
+VA	Virginia	Va.	2016-virginia-president-trump-vs-clinton	D-Likely	13	
+WA	Washington	Wash.	2016-washington-president-trump-vs-clinton	D-Solid	12	
+WV	West Virginia	W.Va.	2016-west-virginia-president-trump-vs-clinton	R-Solid	5	
+WI	Wisconsin	Wis.	2016-wisconsin-president-trump-vs-clinton	D-Lean	10	
+WY	Wyoming	Wyo.	2016-wyoming-president-trump-vs-clinton	R-Solid	3	
