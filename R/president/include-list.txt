@@ -1,0 +1,21 @@
+ABC/Post
+Bloomberg/Selzer
+CBS
+CBS/Times
+CNBC
+CNN
+FOX
+GWU/Battleground
+IBD/TIPP
+Ipsos/Reuters
+McClatchy/Marist
+Monmouth University
+Morning Consult
+MSNBC/Telemundo/Marist
+NBC/SurveyMonkey
+NBC/WSJ
+Pew
+Quinnipiac
+Suffolk/USA Today
+University of Delaware/PSRAI
+YouGov/Economist

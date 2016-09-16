@@ -6,7 +6,7 @@
 
 #####################################
 
-CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_rating, dem_label, gop_label, fast) {
+CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_rating, dem_label, gop_label, fast, filter_polls=NULL) {
   # Uses an MCMC model to calculate a list(curve, samples_string)
   #
   # Args:
@@ -17,6 +17,7 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   #   dem_label: Democrat's label on the chart (e.g., "Clinton")
   #   gop_label: Republican's label on the chart (e.g., "Trump")
   #   fast: if true, don't run the MCMC model long enough (useful for debugging)
+  #   include_poll: NA, or function that takes a data.frame of polls and outputs TRUE for rows that should be included
   #
   # Returns:
   #   a list(curve, samples_string).
@@ -353,6 +354,10 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
     colClasses=c("start_date"="Date", "end_date"="Date"),
     check.names=FALSE
   )
+
+  if (!is.null(filter_polls)) {
+    data <- data[filter_polls(data), ]
+  }
 
   # Nix out-of-range polls
   data <- data[data$start_date >= StartDate & data$end_date <= EndDate,]
