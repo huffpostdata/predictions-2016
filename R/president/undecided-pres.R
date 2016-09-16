@@ -97,13 +97,13 @@ write.csv(outGA, file=paste('post/und/',chart,'.csv',sep='')) ##save file for me
 #outID$state<-"ID"
 #write.csv(outID, file=paste('post/und/',chart,'.csv',sep='')) ##save file for merging later
 
-chart <- '2016-illinois-president-trump-vs-clinton'
-outIL <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
-outIL <- outIL[min(grep("Undecided",outIL$who)):nrow(outIL),]
-outIL$date2 <- as.Date(outIL$date, format="%Y-%m-%d")
-outIL <- subset(outIL, date2==today)
-outIL$state<-"IL"
-write.csv(outIL, file=paste('post/und/',chart,'.csv',sep='')) ##save file for merging later
+#chart <- '2016-illinois-president-trump-vs-clinton'
+#outIL <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
+#outIL <- outIL[min(grep("Undecided",outIL$who)):nrow(outIL),]
+#outIL$date2 <- as.Date(outIL$date, format="%Y-%m-%d")
+#outIL <- subset(outIL, date2==today)
+#outIL$state<-"IL"
+#write.csv(outIL, file=paste('post/und/',chart,'.csv',sep='')) ##save file for merging later
 
 #chart <- '2016-indiana-president-trump-vs-clinton'
 #outIN <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
@@ -233,13 +233,13 @@ outNH <- subset(outNH, date2==today)
 outNH$state<-"NH"
 write.csv(outNH, file=paste('post/und/',chart,'.csv',sep='')) ##save file for merging later
 
-chart <- '2016-new-jersey-president-trump-vs-clinton'
-outNJ <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
-outNJ <- outNJ[min(grep("Undecided",outNJ$who)):nrow(outNJ),]
-outNJ$date2 <- as.Date(outNJ$date, format="%Y-%m-%d")
-outNJ <- subset(outNJ, date2==today)
-outNJ$state<-"NJ"
-write.csv(outNJ, file=paste('post/und/',chart,'.csv',sep='')) ##save file for merging later
+#chart <- '2016-new-jersey-president-trump-vs-clinton'
+#outNJ <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
+#outNJ <- outNJ[min(grep("Undecided",outNJ$who)):nrow(outNJ),]
+#outNJ$date2 <- as.Date(outNJ$date, format="%Y-%m-%d")
+#outNJ <- subset(outNJ, date2==today)
+#outNJ$state<-"NJ"
+#write.csv(outNJ, file=paste('post/und/',chart,'.csv',sep='')) ##save file for merging later
 
 #chart <- '2016-new-mexico-president-trump-vs-clinton'
 #outNM <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))

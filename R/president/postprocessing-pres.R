@@ -182,19 +182,19 @@ write.csv(outGA, file=paste('post/',chart,'.csv',sep='')) ##save file for mergin
 #outID$statedelta <- ifelse(outID$lead == "Democrat lead", outID$statedelta * -1, outID$statedelta)
 #write.csv(outID, file=paste('post/',chart,'.csv',sep='')) ##save file for merging later
 
-chart <- '2016-illinois-president-trump-vs-clinton'
-outIL <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
-outIL <- outIL[min(grep("minus",outIL$who)):nrow(outIL),] #this tells it to only import the "minus" data--which has the probability associated
-outIL$date2 <- as.Date(outIL$date, format="%Y-%m-%d") #date read in as a factor, convert to date for subsetting
-outIL <- subset(outIL, date2>=today) #deletes rows prior to today so that all files will have the same number of rows
-outIL$state<-"IL"
-outIL$lead<-ifelse(outIL$who=="Trump minus Clinton","Republican lead", "Democrat lead") ##code whether probability shows rep lead or dem lead
-outIL$numdays <- electionday - today #code number of days to election
-outIL$todayprob <- outIL$prob[outIL$date2 == today] 
-outIL$edayprob <- outIL$prob[outIL$date2 == electionday]
-outIL$statedelta <- outIL$todayprob - outIL$edayprob
-outIL$statedelta <- ifelse(outIL$lead == "Democrat lead", outIL$statedelta * -1, outIL$statedelta)
-write.csv(outIL, file=paste('post/',chart,'.csv',sep='')) ##save file for merging later
+#chart <- '2016-illinois-president-trump-vs-clinton'
+#outIL <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
+#outIL <- outIL[min(grep("minus",outIL$who)):nrow(outIL),] #this tells it to only import the "minus" data--which has the probability associated
+#outIL$date2 <- as.Date(outIL$date, format="%Y-%m-%d") #date read in as a factor, convert to date for subsetting
+#outIL <- subset(outIL, date2>=today) #deletes rows prior to today so that all files will have the same number of rows
+#outIL$state<-"IL"
+#outIL$lead<-ifelse(outIL$who=="Trump minus Clinton","Republican lead", "Democrat lead") ##code whether probability shows rep lead or dem lead
+#outIL$numdays <- electionday - today #code number of days to election
+#outIL$todayprob <- outIL$prob[outIL$date2 == today] 
+#outIL$edayprob <- outIL$prob[outIL$date2 == electionday]
+#outIL$statedelta <- outIL$todayprob - outIL$edayprob
+#outIL$statedelta <- ifelse(outIL$lead == "Democrat lead", outIL$statedelta * -1, outIL$statedelta)
+#write.csv(outIL, file=paste('post/',chart,'.csv',sep='')) ##save file for merging later
 
 #chart <- '2016-indiana-president-trump-vs-clinton'
 #outIN <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
@@ -420,19 +420,19 @@ outNH$statedelta <- outNH$todayprob - outNH$edayprob
 outNH$statedelta <- ifelse(outNH$lead == "Democrat lead", outNH$statedelta * -1, outNH$statedelta)
 write.csv(outNH, file=paste('post/',chart,'.csv',sep='')) ##save file for merging later
 
-chart <- '2016-new-jersey-president-trump-vs-clinton'
-outNJ <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
-outNJ <- outNJ[min(grep("minus",outNJ$who)):nrow(outNJ),] #this tells it to only import the "minus" data--which has the probability associated
-outNJ$date2 <- as.Date(outNJ$date, format="%Y-%m-%d") #date read in as a factor, convert to date for subsetting
-outNJ <- subset(outNJ, date2>=today) #deletes rows prior to today so that all files will have the same number of rows
-outNJ$state<-"NJ"
-outNJ$lead<-ifelse(outNJ$who=="Trump minus Clinton","Republican lead", "Democrat lead") ##code whether probability shows rep lead or dem lead
-outNJ$numdays <- electionday - today #code number of days to election
-outNJ$todayprob <- outNJ$prob[outNJ$date2 == today] 
-outNJ$edayprob <- outNJ$prob[outNJ$date2 == electionday]
-outNJ$statedelta <- outNJ$todayprob - outNJ$edayprob
-outNJ$statedelta <- ifelse(outNJ$lead == "Democrat lead", outNJ$statedelta * -1, outNJ$statedelta)
-write.csv(outNJ, file=paste('post/',chart,'.csv',sep='')) ##save file for merging later
+#chart <- '2016-new-jersey-president-trump-vs-clinton'
+#outNJ <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
+#outNJ <- outNJ[min(grep("minus",outNJ$who)):nrow(outNJ),] #this tells it to only import the "minus" data--which has the probability associated
+#outNJ$date2 <- as.Date(outNJ$date, format="%Y-%m-%d") #date read in as a factor, convert to date for subsetting
+#outNJ <- subset(outNJ, date2>=today) #deletes rows prior to today so that all files will have the same number of rows
+#outNJ$state<-"NJ"
+#outNJ$lead<-ifelse(outNJ$who=="Trump minus Clinton","Republican lead", "Democrat lead") ##code whether probability shows rep lead or dem lead
+#outNJ$numdays <- electionday - today #code number of days to election
+#outNJ$todayprob <- outNJ$prob[outNJ$date2 == today] 
+#outNJ$edayprob <- outNJ$prob[outNJ$date2 == electionday]
+#outNJ$statedelta <- outNJ$todayprob - outNJ$edayprob
+#outNJ$statedelta <- ifelse(outNJ$lead == "Democrat lead", outNJ$statedelta * -1, outNJ$statedelta)
+#write.csv(outNJ, file=paste('post/',chart,'.csv',sep='')) ##save file for merging later
 
 #chart <- '2016-new-mexico-president-trump-vs-clinton'
 #outNM <- read.csv(paste(dataDir,chart,'/out.csv',sep=''))
@@ -852,8 +852,6 @@ write.csv(allstates,"post/allstates.csv")
 
 outPres16 <- allstates[, c("state", "call", "finalprob", "Dprob")]
 write.csv(outPres16, "post/outPres16.csv")
-
-save("allstates", "outUS", file="postprocessing-pres-2.RData")
 
 
 
