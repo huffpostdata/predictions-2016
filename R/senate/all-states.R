@@ -31,6 +31,7 @@ load_or_calculate_senate_data_for_race <- function(race) {
   }, error = function(e) {
     data <<- CalculateDiffData(
       race$state,
+      'senate',
       race$pollster_slug,
       race$cook_rating,
       race$dem_label,

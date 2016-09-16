@@ -6,13 +6,14 @@
 
 #####################################
 
-CalculateDiffData <- function(state_code, chart_slug, cook_rating, dem_label, gop_label, fast) {
+CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_rating, dem_label, gop_label, fast) {
   # Uses an MCMC model to calculate a list(curve, samples_string)
   #
   # Args:
   #   state_code: two-letter state code that we'll add to the curve
+  #   senate_or_president: either 'senate' or 'president' (determines Cook constants)
   #   chart_slug: slug we'll query Pollster for. If empty, we'll use cook_rating instead
-  #   cook_rating: Cook rating: one of {D-Solid,D-Likely,D-Lean,Toss Up,R-Lean,R-Likely,R-Solid}
+  #   cook_rating: Cook rating: one of {D-Solid,D-Likely,D-Lean,Toss Up,R-Lean,R-Likely,R-Solid} (or 'US' for presidential)
   #   dem_label: Democrat's label on the chart (e.g., "Clinton")
   #   gop_label: Republican's label on the chart (e.g., "Trump")
   #   fast: if true, don't run the MCMC model long enough (useful for debugging)
@@ -60,12 +61,23 @@ CalculateDiffData <- function(state_code, chart_slug, cook_rating, dem_label, go
   NOutputSamples <- 200 # 1,000 looks cluttered
   Uint16Factor <- 2**16 - 1 # to convert [0.0,1.0] fractions to [0, 65536) 16-bit integers
 
-  CookPriors <- data.frame(
+  CookPriors.senate <- data.frame(
     rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
     prior1=c(0.4823, 0.4881, 0.4865, 0.4792, 0.4746, 0.4879, 0.4783),
     prior2=c(0.1584, 0.1205, 0.0706, 0.0619, 0.0824, 0.0824, 0.1807),
     dem_win_prob=c(0.9877, 0.9333, 0.8095, 0.5, 1.0 - 0.8095, 1.0 - 0.9333, 1.0 - 0.9877)
   )
+  CookPriors.president <- data.frame(
+    rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid', 'US'),
+    prior1=c(0.4915, 0.4862, 0.4925, 0.4927, 0.4931, 0.4933, 0.4906, 0.47),
+    prior2=c(0.1603, 0.0632, 0.0497, 0.0233, 0.0599, 0.0614, 0.1246, 0.05),
+    dem_win_prob=c(0.9975, 0.9490, 0.8565, 0.5, 1.0 - 0.8565, 1.0 - 0.9490, 1.0 - 0.9975, NA)
+  )
+  if (senate_or_president == 'senate') {
+    CookPriors <- CookPriors.senate
+  } else {
+    CookPriors <- CookPriors.president
+  }
 
   #################
   # Functions we'll use in our main code
@@ -327,7 +339,7 @@ CalculateDiffData <- function(state_code, chart_slug, cook_rating, dem_label, go
 
   suppressPackageStartupMessages(library('rjags'))
 
-  if (state_code == 'CA') {
+  if (chart_slug == '2016-california-senate-harris-vs-sanchez') {
     return(stub_CA_diff_curve())
   }
 
@@ -404,7 +416,7 @@ CalculateDiffData <- function(state_code, chart_slug, cook_rating, dem_label, go
     initFunc <- function() { return(makeInits(jags_data, cookPrior1, cookPrior2)) }
     ## call JAGS
     jags_model <- jags.model(
-      file="singleTarget.bug",
+      file="../common/singleTarget.bug",
       data=jags_data,
       n.chains=mcmc_params$n_chains,
       inits=initFunc,
@@ -424,7 +436,7 @@ CalculateDiffData <- function(state_code, chart_slug, cook_rating, dem_label, go
     candidate_xis[[who]] <- xi_array
   }
 
-  cat(paste0('[', state_code, '] combining/renormaling output for: ', names(candidate_xis), '\n'))
+  cat(paste0('[', state_code, '] combining/renormaling output\n'))
   normalized_array <- build_normalized_array(candidate_xis)
 
   frame <- data.frame(
