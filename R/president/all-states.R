@@ -1,5 +1,7 @@
 library('parallel')
 
+options(error=traceback, warn=1, showWarnCalls=TRUE)
+
 source('../common/calculate-diff-data.R')
 
 args <- commandArgs(TRUE)
@@ -28,9 +30,9 @@ load_or_calculate_president_data_for_race <- function(race) {
 
   data <- NA
   tryCatch({
-    load(file_path)
+    suppressWarnings(load(file_path))
   }, error = function(e) {
-    data <<- CalculateDiffData(
+    x <- CalculateDiffData(
       race$state_code,
       'president',
       race$pollster_slug,
@@ -39,7 +41,7 @@ load_or_calculate_president_data_for_race <- function(race) {
       'Trump',
       fast
     )
-    data$race <- race
+    data <<- list(curve=x$curve, samples_string=x$samples_string, race=race)
     save(data, file=file_path)
   })
 
@@ -47,11 +49,11 @@ load_or_calculate_president_data_for_race <- function(race) {
 }
 
 load_or_calculate_national_president_data <- function() {
-  file_path <- paste0('interim-results/US.RData')
+  file_path <- 'interim-results/US.RData'
 
   data <- NA
   tryCatch({
-    load(file_path)
+    suppressWarnings(load(file_path))
   }, error = function(e) {
     filter_polls <- function(polls) {
       include_list = c(read.table('include-list.txt', sep='\n', header=FALSE, as.is='V1')$V1)
@@ -67,26 +69,25 @@ load_or_calculate_national_president_data <- function() {
       'Clinton',
       'Trump',
       fast,
-      filter_polls
+      filter_polls=filter_polls
     )
 
     save(data, file=file_path)
   })
 
-  return(data$curve)
+  return(data)
 }
 
 calculate_race_summary <- function(race, national) {
   Today <- Sys.Date()
 
   curve <- race$curve
-
   today <- curve[curve$date == Today, c('diff_xibar', 'undecided_xibar')]
   end_prob <- curve[curve$date == EndDate, c('dem_win_prob')]
 
   if (nrow(today) == 0) {
     # This is a stub. Ignore all our cool calculations.
-    return(list(
+    return(data.frame(
       state_code=c(race$race$state_code),
       n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
       dem_win_prob=c(end_prob),
@@ -138,7 +139,7 @@ calculate_race_summary <- function(race, national) {
     min(0.5, prob_with_adjustment + undecided_margin)
   )
 
-  return(list(
+  return(data.frame(
     state_code=c(race$race$state_code),
     n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
     dem_win_prob=c(end_prob),
@@ -154,7 +155,7 @@ calculate_race_summary <- function(race, national) {
 calculate_race_summaries <- function(races, national) {
   lists <- lapply(
     races,
-    FUN=function(race) data.frame(calculate_race_summary(race, national))
+    FUN=function(race) calculate_race_summary(race, national)
   )
 
   frame <- do.call(rbind, lists)
@@ -172,11 +173,10 @@ load_or_calculate_president_data_for_races <- function(races) {
     mc.cores=min(4, detectCores())
   )
 
-  national <- load_or_calculate_national_president_data()
-
   curves_list <- lapply(data_list, function(x) x$curve)
   curves <- do.call(rbind, curves_list)
 
+  national <- load_or_calculate_national_president_data()$curve
   summaries <- calculate_race_summaries(data_list, national)
 
   state_samples_strings <- lapply(data_list, function(x) x$samples_string)
