@@ -194,18 +194,48 @@ load_or_calculate_president_data_for_races <- function(races) {
 # times; two votes won 400 times; etc.
 #
 # The output vector always size 539.
-predict_n_dem_president_votes <- function(summaries) {
+predict_n_dem_president_votes <- function(summaries, races) {
   cat('Running', NMonteCarloSimulations, 'president simulations...\n')
 
-  n_states <- nrow(summaries)
-  win_prob <- summaries$dem_win_prob_with_adjustment_and_undecided
-  win_n_votes <- summaries$n_electoral_votes
+  # Separate out ME-01, ME-02, NE-01, NE-02, NE-03: they're their own races,
+  # and we don't have enough polling data for them, so we'll use their Cook
+  # Ratings alone.
+
+  # c('', '', '', 'D-Solid,Toss Up', '', ...)
+  split_ratings_by_state <- as.character(
+    races$split_cook_ratings_by_cd[match(summaries$state_code, races$state_code)]
+  )
+
+  # c(0, 0, 0, 2, 0, ...)
+  summaries$n_split_votes <- nchar(gsub(',?[^,]+', ',', split_ratings_by_state))
+
+  # c("D-Solid", "Toss Up", ...)
+  split_cook_ratings <- unlist(strsplit(split_ratings_by_state, ',', fixed=TRUE))
+
+  # c(0.25, 0.75, 0.99, ...) -- win probabilities, each for one vote
+  Cook <- CookPriors.president[c('rating', 'dem_win_prob')]
+  split_cook_dem_win_probs <- Cook$dem_win_prob[match(split_cook_ratings, Cook$rating)]
+
+  # Probabilities -- one per race. The "split" votes are their own races, so
+  # the total number of races is 50 states + 1 DC + 2 ME + 3 NE = 56 races.
+  win_prob <- append(
+    summaries$dem_win_prob_with_adjustment_and_undecided, # states (at-large) and DC
+    split_cook_dem_win_probs                              # ME and NE split votes
+  )
+
+  # Number of votes each probability maps to. The "split" votes are each worth
+  # one.
+  win_n_votes <- append(
+    summaries$n_electoral_votes - summaries$n_split_votes, # states (at-large) and DC
+    rep(1, times=length(split_cook_dem_win_probs))         # ME and NE split votes
+  )
 
   # 1 -> 0 votes; 2 -> 1 vote; etc.
   n_counts <- rep(0, 539)
+  n_races <- length(win_prob)
 
   for (n in 1:NMonteCarloSimulations) {
-    random_numbers <- runif(n=n_states)
+    random_numbers <- runif(n=n_races)
     n_votes <- sum((win_prob > random_numbers) * win_n_votes)
     index <- n_votes + 1
     n_counts[index] <- n_counts[index] + 1
@@ -259,7 +289,7 @@ run_all_president <- function() {
   dump_president_samples(president_data$state_samples_strings)
   dump_president_summaries(president_data$summaries)
 
-  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries)
+  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries, races)
   dump_president_vote_counts(n_dem_votes)
 }
 
