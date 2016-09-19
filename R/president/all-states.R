@@ -78,7 +78,6 @@ load_or_calculate_national_president_data <- function() {
 
 calculate_race_summary <- function(race, national) {
   Today <- Sys.Date()
-  EndDate <- as.Date('2016-11-08')
 
   curve <- race$curve
 
@@ -193,22 +192,26 @@ load_or_calculate_president_data_for_races <- function(races) {
 # return the distribution of electoral votes won by Democrats -- e.g.,
 # c(1, 2, 400, 30, ...) means zero votes won by Dems 1 time; one vote won 2
 # times; two votes won 400 times; etc.
-predict_n_dem_president_seats <- function(dem_win_probs) {
+#
+# The output vector always size 539.
+predict_n_dem_president_votes <- function(summaries) {
   cat('Running', NMonteCarloSimulations, 'president simulations...\n')
 
-  n_seats <- length(dem_win_probs)
+  n_states <- nrow(summaries)
+  win_prob <- summaries$dem_win_prob_with_adjustment_and_undecided
+  win_n_votes <- summaries$n_electoral_votes
 
-  # 1 -> 0 seats won; 2 -> 1 seat won; etc.
-  n_seat_event_counts <- rep(0, n_seats + 1)
+  # 1 -> 0 votes; 2 -> 1 vote; etc.
+  n_counts <- rep(0, 539)
 
   for (n in 1:NMonteCarloSimulations) {
-    random_numbers <- runif(n=n_seats)
-    n_won <- sum(dem_win_probs > random_numbers)
-    index <- n_won + 1
-    n_seat_event_counts[index] <- n_seat_event_counts[index] + 1
+    random_numbers <- runif(n=n_states)
+    n_votes <- sum((win_prob > random_numbers) * win_n_votes)
+    index <- n_votes + 1
+    n_counts[index] <- n_counts[index] + 1
   }
 
-  return(n_seat_event_counts)
+  return(n_counts)
 }
 
 dump_president_curves <- function(curves) {
@@ -243,7 +246,7 @@ dump_president_vote_counts <- function(vote_counts) {
     p=(vote_counts / sum(vote_counts))
   )
 
-  write.table(vote_counts, format(frame, digits=6), file=output_president_vote_counts_path, quote=FALSE, sep='\t', row.names=FALSE)
+  write.table(format(frame, digits=6), file=output_president_vote_counts_path, quote=FALSE, sep='\t', row.names=FALSE)
 }
 
 run_all_president <- function() {
@@ -256,8 +259,7 @@ run_all_president <- function() {
   dump_president_samples(president_data$state_samples_strings)
   dump_president_summaries(president_data$summaries)
 
-  election_day_vote_probabilities = c(president_curves[president_curves$date==EndDate,'dem_win_prob_with_undecided'])
-  n_dem_votes <- predict_n_dem_president_votes(election_day_vote_probabilities)
+  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries)
   dump_president_vote_counts(n_dem_votes)
 }
 
