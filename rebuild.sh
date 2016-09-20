@@ -21,13 +21,17 @@ mkdir $TEMP_OUTDIR
 touch $TEMP_OUTDIR/.gitkeep # because the _real_ outdir has a .gitkeep
 
 # Update poll data
-echo >&2 'Running ./update-polls.js...'
-./update-polls.js >$TEMP_OUTDIR/senate-polls.tsv
+echo >&2 'Running ./update-polls.js senate...'
+./update-polls.js senate >$TEMP_OUTDIR/senate-polls.tsv
+echo >&2 'Running ./update-polls.js president...'
+./update-polls.js president >$TEMP_OUTDIR/president-polls.tsv
 
 # Run model
-echo >&2 "Running Rscript --vanilla ./all-states.R \"$1\"..."
 rm -rf R/interim-results
+echo >&2 "Running Rscript --vanilla ./all-states.R \"$1\" (for senate)..."
 (cd R/senate && OUTPUT_DIR=../../$TEMP_OUTDIR Rscript --vanilla ./all-states.R "$1")
+echo >&2 "Running Rscript --vanilla ./all-states.R \"$1\" (for president)..."
+(cd R/president && OUTPUT_DIR=../../$TEMP_OUTDIR Rscript --vanilla ./all-states.R "$1")
 
 # Move files around
 echo >&2 'Archiving and placing new results in data/sheets/output...'
