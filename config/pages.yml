@@ -1,16 +1,6 @@
 index:
   path: _root
-  redirect: senate
-
-senate-curves-tsv:
-  path: senate-curves-:date.tsv
-  content-type: text/tab-separated-values; charset=utf-8
-  collection: senate_races_for_tsv
-
-senate-seat-counts-tsv:
-  path: senate-seat-counts-:date.tsv
-  content-type: text/tab-separated-values; charset=utf-8
-  collection: senate_races_for_tsv
+  redirect: president
 
 senate:
   path: senate
@@ -20,6 +10,39 @@ senate-race-svg:
   path: senate-race-:state_code.svg
   collection: senate_races
   content-type: image/svg+xml; charset=utf-8
+
+senate-curves-tsv:
+  path: senate-curves-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  template: curves-tsv
+  collection: senate_races_for_tsv
+
+senate-seat-counts-tsv:
+  path: senate-seat-counts-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  template: event-counts-tsv
+  collection: senate_races_for_tsv
+
+president:
+  path: president
+  model: president
+
+president-race-svg:
+  path: president-race-:state_code.svg
+  collection: president_races
+  content-type: image/svg+xml; charset=utf-8
+
+president-curves-tsv:
+  path: president-curves-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  template: curves-tsv
+  collection: president_races_for_tsv
+
+president-vote-counts-tsv:
+  path: president-vote-counts-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  template: event-counts-tsv
+  collection: president_races_for_tsv
 
 sidebar:
   path: sidebar

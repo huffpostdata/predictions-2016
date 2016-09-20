@@ -7,6 +7,8 @@ const GoogleDocs = require('../generator/GoogleDocs')
 const GoogleSheets = require('../generator/GoogleSheets')
 
 const Curves = require('./Curves')
+const PresidentRaces = require('./PresidentRaces')
+const PresidentVoteCounts = require('./PresidentVoteCounts')
 const SenateRace = require('./SenateRace')
 const SenateRaces = require('./SenateRaces')
 const SenateSeat = require('./SenateSeat')
@@ -57,6 +59,19 @@ module.exports = class Database {
       date: this.senate.races.updated_at_s,
       races: this.senate_races,
       seat_counts: this.senate.seat_counts.all
+    }]
+
+    this.president = Object.assign(google_docs.load('president'), {
+      vote_counts: PresidentVoteCounts.load(),
+      races: PresidentRaces.load()
+    })
+
+    this.president_races = this.president.races.all
+
+    this.president_races_for_tsv = [{
+      date: 'TKupdated_at_s',
+      races: this.president.races,
+      vote_counts: this.president.vote_counts
     }]
   }
 }

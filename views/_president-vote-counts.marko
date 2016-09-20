@@ -1,0 +1,30 @@
+var vote_counts=data.model.vote_counts
+
+#president-vote-counts
+  h2.with-toc-link#possible-vote-counts
+    a.href="#possible-vote-counts" - Possible Electoral Vote Counts
+
+  p
+    - We simulated a Nov. 8 election ${Math.round(vote_counts.n / 1e6)} million times using our <a href="#state-by-state-probabilities">state-by-state probabilities</a>. In <strong>${vote_counts.n_clinton_millions.toFixed(1)} million</strong> simulations, Hillary Clinton ended up with at least 270 electoral votes. Therefore, we say Clinton has a <strong>${vote_counts.percent_clinton.toFixed(1)} percent</strong> chance of becoming president.
+
+  .container
+    .y-axis
+      .label - TK axis ticks
+    ol.bars
+      li.bar.bar-clinton data-count="${538 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(270).reverse() | status-var=loop)
+      li.bar.bar-tie data-count="269" data-n="${vote_counts.n_tie}" style="height: ${100 * vote_counts.n_tie / vote_counts.max}%"
+      li.bar.bar-trump data-count="${268 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(0, 269).reverse() | status-var=loop)
+    .x-axis
+      .label
+        .units - Electoral votes per candidate
+        .clinton - ← Clinton wins
+        .trump - Trump wins →
+      .all-clinton
+        .clinton - 538
+        .trump - 0
+      .mid
+        .clinton - 269
+        .trump - 269
+      .all-trump
+        .clinton - 0
+        .trump - 538

@@ -1,0 +1,71 @@
+#president-vote-counts {
+  .container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+
+  ol.bars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: 10rem;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+
+    li.bar-clinton { background: $strong-dem; }
+    li.bar-trump { background: $strong-gop; }
+    li.bar-tie { background: $toss-up; }
+  }
+
+  li.bar {
+    display: block;
+    width: 1px;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+  }
+
+  .x-axis {
+    padding-bottom: 3rem;
+    position: relative;
+    display: -webkit-flex;
+    display: flex;
+
+    .all-trump { text-align: right; }
+    .mid { text-align: center; }
+
+    &>*:not(.label) {
+      width: 1px;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+
+    .clinton { color: $strong-dem; }
+    .trump { color: $strong-gop; }
+
+    .label {
+      .units {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .clinton {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+
+      .trump {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+var vote_counts=data.model.vote_counts
+
+#president-summary
+  ul
+    li.clinton style="width: ${vote_counts.percent_clinton}%"
+      .image
+      .text
+        h3 - Clinton
+        strong - ${vote_counts.percent_clinton.toFixed(1)}%
+      .bar
+    li.tie style="width: ${vote_counts.percent_tie}"
+    li.trump style="width: ${vote_counts.percent_trump}%"
+      .image
+      .text
+        h3 - Trump
+        strong - ${vote_counts.percent_trump.toFixed(1)}%
+      .bar

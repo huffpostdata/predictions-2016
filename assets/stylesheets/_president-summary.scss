@@ -1,0 +1,76 @@
+#president-summary {
+  margin-top: 4rem;
+
+  $image-size: 6rem;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  li {
+    position: relative;
+  }
+
+  .image {
+    position: absolute;
+    top: 0;
+    height: $image-size;
+    width: $image-size;
+    background-size: 100%;
+    // we'll position with left: or right:
+  }
+
+  .text {
+    position: absolute;
+    top: 0;
+    // we'll position with left: or right:
+  }
+
+  .bar {
+    margin-top: $image-size;
+    height: 2rem;
+    box-sizing: border-box;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.75rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  li.clinton {
+    text-align: left;
+    .image {
+      left: 0;
+      background-image: asset-url('digest', 'images/clinton-head.jpg');
+    }
+    .text { left: $image-size; }
+    strong { color: $strong-dem; }
+    .bar { background-color: $strong-dem; border-right: 1px solid $background; }
+  }
+
+  li.tie {
+  }
+
+  li.trump {
+    text-align: right;
+    .image {
+      right: 0;
+      background-image: asset-url('digest', 'images/trump-head.jpg');
+    }
+    .text { right: $image-size; }
+    strong { color: $strong-gop; }
+    .bar { background-color: $strong-gop; border-left: 1px solid $background; }
+  }
+}
