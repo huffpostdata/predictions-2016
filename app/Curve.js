@@ -87,7 +87,7 @@ function values_to_path_d(raw_values, y_max) {
   return render_path_d_for_ys(values, y_max)
 }
 
-module.exports = class SenateCurve {
+module.exports = class Curve {
   constructor(updated_at, points, polls, uint16_samples) {
     this.updated_at = updated_at
     this.election_day_point = points[points.length - 1]

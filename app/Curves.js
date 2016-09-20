@@ -3,12 +3,12 @@
 const fs = require('fs')
 const csv_parse = require('csv-parse/lib/sync')
 
-const SenateCurve = require('./SenateCurve')
-const SenateCurvePoint = require('./SenateCurvePoint')
+const Curve = require('./Curve')
+const CurvePoint = require('./CurvePoint')
 
 const ElectionDayS = '2016-11-08'
 
-class SenateCurves {
+class Curves {
   constructor(state_code_to_curve) {
     this.state_code_to_curve = state_code_to_curve
   }
@@ -41,9 +41,12 @@ function load_state_samples(state_code) {
 
 /**
  * Returns a Map from state_code to [ { end_date_s: '2016-XX-XX', diff: -3 }, ... ]
+ *
+ * Args:
+ *   senate_or_president: "senate" or "president"
  */
-function load_all_state_polls() {
-  const input_path = `${__dirname}/../data/sheets/output/senate-polls.tsv`
+function load_all_state_polls(senate_or_president) {
+  const input_path = `${__dirname}/../data/sheets/output/${senate_or_president}-polls.tsv`
   const tsv = fs.readFileSync(input_path)
   const array = csv_parse(tsv, { delimiter: '\t', columns: true })
 
@@ -58,13 +61,17 @@ function load_all_state_polls() {
   return ret
 }
 
-SenateCurves.load = function() {
-  const input_path = `${__dirname}/../data/sheets/output/senate-curves.tsv`
+/**
+ * Args:
+ *   senate_or_president: "senate" or "president"
+ */
+Curves.load = function(senate_or_president) {
+  const input_path = `${__dirname}/../data/sheets/output/${senate_or_president}-curves.tsv`
   const tsv = fs.readFileSync(input_path)
   const array = csv_parse(tsv, { delimiter: '\t', columns: true })
   const updated_at = fs.statSync(input_path).mtime
 
-  const curve_points = array.map(hash => new SenateCurvePoint(hash))
+  const curve_points = array.map(hash => new CurvePoint(hash))
 
   const state_code_to_points = new Map()
   curve_points.forEach(p => {
@@ -74,16 +81,16 @@ SenateCurves.load = function() {
     state_code_to_points.get(p.state_code).push(p)
   })
 
-  const state_code_to_polls = load_all_state_polls()
+  const state_code_to_polls = load_all_state_polls(senate_or_president)
 
   const state_code_to_curve = new Map()
   state_code_to_points.forEach((points, state_code) => {
     const samples = load_state_samples(state_code)
     const polls = state_code_to_polls.get(state_code) || []
-    state_code_to_curve.set(state_code, new SenateCurve(updated_at, points, polls, samples))
+    state_code_to_curve.set(state_code, new Curve(updated_at, points, polls, samples))
   })
 
-  return new SenateCurves(state_code_to_curve)
+  return new Curves(state_code_to_curve)
 }
 
-module.exports = SenateCurves
+module.exports = Curves

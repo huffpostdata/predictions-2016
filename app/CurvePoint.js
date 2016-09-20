@@ -9,7 +9,7 @@ function parse_float_or_null(s) {
   }
 }
 
-module.exports = class SenateCurvePoint {
+module.exports = class CurvePoint {
   constructor(hash) {
     const n = parse_float_or_null
 
