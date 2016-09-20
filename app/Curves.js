@@ -30,8 +30,8 @@ function string_to_sample(string) {
   return uint16s
 }
 
-function load_state_samples(state_code) {
-  const input_path = `${__dirname}/../data/sheets/output/senate-samples-${state_code}`
+function load_state_samples(senate_or_president, state_code) {
+  const input_path = `${__dirname}/../data/sheets/output/${senate_or_president}-samples-${state_code}`
   const one_big_string = fs.readFileSync(input_path, 'binary')
 
   return one_big_string.split('\n')
@@ -62,6 +62,8 @@ function load_all_state_polls(senate_or_president) {
 }
 
 /**
+ * Return a Curves: a collection with every curve.
+ *
  * Args:
  *   senate_or_president: "senate" or "president"
  */
@@ -85,7 +87,7 @@ Curves.load = function(senate_or_president) {
 
   const state_code_to_curve = new Map()
   state_code_to_points.forEach((points, state_code) => {
-    const samples = load_state_samples(state_code)
+    const samples = load_state_samples(senate_or_president, state_code)
     const polls = state_code_to_polls.get(state_code) || []
     state_code_to_curve.set(state_code, new Curve(updated_at, points, polls, samples))
   })

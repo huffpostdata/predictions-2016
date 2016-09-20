@@ -1,5 +1,5 @@
 function tie_expanded_senate_races_to_hash() {
-  var container = document.getElementById('senate-races');
+  var container = document.getElementById('senate-races') || document.getElementById('president-races');
   if (!container) return;
 
   function update_hash() {

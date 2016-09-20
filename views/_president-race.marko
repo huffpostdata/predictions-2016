@@ -1,0 +1,74 @@
+var race=data.model.race
+
+li.${race.lean_html_class} data-state-code="${race.state_code}"
+  input.expand#state-race-expand-${race.state_code} data-state-code="${race.state_code}" type="checkbox" value="${race.state_code}"
+
+  .content-to-expand
+    label.state-code for="state-race-expand-${race.state_code}" - ${race.state_code}
+    label.state-name for="state-race-expand-${race.state_code}" - ${race.state_name}
+
+    label.probability for="state-race-expand-${race.state_code}"
+      span.box
+        span.marker style="left: ${100 * (1 - race.dem_win_prob_with_adjustment_and_undecided)}%"
+
+    .details
+      h4
+        if(race.toss_up)
+          strong.probability - Toss-up
+          -  in ${race.state_name}
+        else
+          strong.probability - ${race.win_prob_100}%
+          -  chance ${race.winner_name} will win
+          -  ${race.state_name}
+      if(!race.curve.is_plottable)
+        ol.calculations
+          li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/presidential/charts/scorecard">Electoral College Ratings</a>.
+          li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>.
+          if(!race.toss_up)
+            li - Since 2004, Cook has been right about this call in <strong>${race.win_prob_100}%</strong> of all Senate races.
+          else
+            li - We consider this a <strong>50.0%</strong> chance the seat will flip.
+      else
+        ol.calculations
+          li - <span class="${race.winner}">${race.winner_name}</span> won against <span class="${race.loser}">${race.loser_name}</span> in <strong>${race.raw_win_prob_100}%</strong> of our simulations.
+
+          if(race.dem_win_prob != 0.5)
+            li - TK national adjustment: <strong>${race.national_adjustment_100} points</strong>
+            li - TK undecided adjustment: <strong>${race.undecided_margin_100} points</strong>
+
+            if(race.toss_up)
+              li - That left us with a toss-up.
+            else
+              li - Our adjusted probability is ${race.win_prob_100}% ${race.winner_name}.
+
+        .chart-container
+          .y-axis-and-rest
+            .y-axis
+              .label - Percentage<br>Point Lead
+              .values
+                .max-dem - D+${race.curve.y_max * 100}
+                .mid-dem - D+${race.curve.y_max * 50}
+                .zero - 0
+                .mid-gop - R+${race.curve.y_max * 50}
+                .max-gop - R+${race.curve.y_max * 100}
+            .rest
+              .x-axis
+                .start-date - July 1
+                .arrow
+                .end-date - Nov. 8
+                .label-election-day - Election Day
+              .plot
+                .placeholder data-url="${data.path_to('president-race-svg', race.state_code)}" - Loading…
+
+              <!-- always show ".today", for sizing; but leave it empty after election day. -->
+              .today
+                if(race.curve.updated_at_x != race.curve.x_max)
+                  .today-inner style="right: ${100 * (1 - race.curve.updated_at_x / (race.curve.NDays - 1))}%"
+                    .label - Latest Average
+                    .date-and-spread
+                      time datetime="${race.curve.updated_at.toISOString()}" - ${data.helpers.format_date(race.curve.updated_at)}
+                      strong.spread - $!{race.curve.today_spread_html()}
+
+        .legend - Our algorithm simulates 5,000 random populations whose voting intentions correspond to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> poll results</span>. For illustration, we plot <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> 200</span> of these populations and show the <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
+
+        .source - Poll data from <a href="//elections.huffingtonpost.com/pollster/${race.pollster_slug}">HuffPost Pollster</a>

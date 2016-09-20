@@ -61,16 +61,19 @@ module.exports = class Database {
       seat_counts: this.senate.seat_counts.all
     }]
 
+    const president_curves = Curves.load('president')
+
     this.president = Object.assign(google_docs.load('president'), {
       vote_counts: PresidentVoteCounts.load(),
-      races: PresidentRaces.load()
+      races: PresidentRaces.load(president_curves)
     })
+    this.president.metadata.date_updated = format_date_full(this.president.races.updated_at)
 
     this.president_races = this.president.races.all
 
     this.president_races_for_tsv = [{
-      date: 'TKupdated_at_s',
-      races: this.president.races,
+      date: this.president.races.updated_at_s,
+      races: this.president.races.all,
       vote_counts: this.president.vote_counts
     }]
   }

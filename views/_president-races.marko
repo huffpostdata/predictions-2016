@@ -1,0 +1,14 @@
+var races=data.model.races
+
+#president-races
+  h2.with-toc-link#state-by-state-probabilities
+    a href="#state-by-state-probabilities" - State-By-State Probabilities
+
+  p - Our algorithm calculates the probable outcome in each state.
+
+  p.instruction - Click or tap a race to see our calculations
+
+  $!{data.helpers.partial('_president-races-legend')}
+  ul
+    for(race in races.all)
+      $!{data.helpers.partial('_president-race', { model: { race: race } })}

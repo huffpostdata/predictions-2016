@@ -1,4 +1,4 @@
-#senate-races {
+#senate-races, #president-races {
   $marker-width: 1rem;
   $half-marker-width: $marker-width / 2;
   $state-code-width: 3rem;
@@ -187,8 +187,8 @@
     right: $marker-width;
   }
 
-  .incumbent-dem .marker { background: $strong-dem; }
-  .incumbent-gop .marker { background: $strong-gop; }
+  .incumbent-dem .marker, .lean-clinton .marker { background: $strong-dem; }
+  .incumbent-gop .marker, .lean-trump .marker { background: $strong-gop; }
 
   .content-to-expand {
     max-height: $collapsed-height;
@@ -223,8 +223,8 @@
     }
 	}
 
-  .lean-dem strong.probability { background: $strong-dem; }
-  .lean-gop strong.probability { background: $strong-gop; }
+  .lean-dem strong.probability, .lean-clinton strong.probability { background: $strong-dem; }
+  .lean-gop strong.probability, .lean-trump strong.probability { background: $strong-gop; }
   .toss-up strong.probability { background: $toss-up; }
 
   .chart-container {
@@ -428,7 +428,7 @@
     padding: 0;
     list-style: none;
 
-    span.dem, span.gop, span.undecided {
+    span.dem, span.gop, span.undecided, span.clinton, span.trump {
       font-weight: bold;
     }
 
@@ -437,8 +437,8 @@
       margin: .75rem;
     }
 
-    span.dem { color: $strong-dem; }
-    span.gop { color: $strong-gop; }
+    span.dem, span.clinton { color: $strong-dem; }
+    span.gop, span.trump { color: $strong-gop; }
     span.undecided { color: $toss-up; }
   }
 

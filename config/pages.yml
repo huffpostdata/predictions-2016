@@ -9,6 +9,7 @@ senate:
 senate-race-svg:
   path: senate-race-:state_code.svg
   collection: senate_races
+  template: curve-svg
   content-type: image/svg+xml; charset=utf-8
 
 senate-curves-tsv:
@@ -30,6 +31,7 @@ president:
 president-race-svg:
   path: president-race-:state_code.svg
   collection: president_races
+  template: curve-svg
   content-type: image/svg+xml; charset=utf-8
 
 president-curves-tsv:
