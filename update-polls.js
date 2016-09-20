@@ -13,7 +13,24 @@ function get_race_tsv_lines(race) {
   console.warn(`GET ${url}`)
   const text = sync_request('GET', url).getBody()
   const rows = csv_parse(text, { columns: true })
-  return rows.map(row => `${race.state}\t${row.end_date}\t${parseFloat(row[race.dem_label]) - parseFloat(row[race.gop_label])}`)
+
+  function rowDelta(row) {
+    if (race.hasOwnProperty('dem_label')) {
+      return parseFloat(row[race.dem_label]) - parseFloat(row[race.gop_label])
+    } else {
+      return parseFloat(row.Clinton) - parseFloat(row.Trump)
+    }
+  }
+
+  function rowToLine(row) {
+    return [
+      race.state || race.state_code,
+      row.end_date,
+      rowDelta(row)
+    ].join('\t')
+  }
+
+  return rows.map(rowToLine)
 }
 
 function get_all_race_tsv_lines(races) {
@@ -23,13 +40,18 @@ function get_all_race_tsv_lines(races) {
   return Array.prototype.concat.apply([], lines_per_race)
 }
 
-function refresh_polls_tsv() {
+function refresh_polls_tsv(senate_or_president) {
   const google_sheets = new GoogleSheets(read_config('google-sheets'))
-  const races = google_sheets.slug_to_array('senate-races')
+  const races = google_sheets.slug_to_array(`${senate_or_president}-races`)
   const lines = get_all_race_tsv_lines(races)
   const text = `state\tend_date\tdem_lead\n${lines.join('\n')}`
 
   console.log(text)
 }
 
-refresh_polls_tsv()
+if (process.argv.length != 3 || [ 'senate', 'president' ].indexOf(process.argv[2]) == -1) {
+  console.error(`Usage: ${process.argv[0]} ${process.argv[1]} (senate|president)`)
+  process.exit(1)
+}
+
+refresh_polls_tsv(process.argv[2])
