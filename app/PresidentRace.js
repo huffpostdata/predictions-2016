@@ -37,7 +37,7 @@ module.exports = class PresidentRace {
     this.updated_at = curve.updated_at
 
     const p = this.dem_win_prob_with_adjustment_and_undecided
-    this.lean_html_class = p === 0.5 ? 'toss-up' : (p > 0.5 ? 'lean-clinton' : 'lean-trump')
+    this.lean_html_class = p > 0.5 ? 'lean-clinton' : (p < 0.5 ? 'lean-trump' : 'toss-up')
     this.call_html_class = p > 0.9 ? 'probably-clinton' : (p < 0.9 ? 'probably-trump' : 'no-call')
 
     this.raw_win_prob_100 = (100 * Math.max(this.dem_win_prob, 1 - this.dem_win_prob)).toFixed(1)

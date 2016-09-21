@@ -8,7 +8,36 @@ var races=data.model.races
 
   p.instruction - Click or tap a race to see our calculations
 
-  $!{data.helpers.partial('_president-races-legend')}
-  ul
-    for(race in races.all)
-      $!{data.helpers.partial('_president-race', { model: { race: race } })}
+  .three-column
+    .likely-clinton
+      h3
+        strong - ${races.likely_clinton_n_votes}
+        -  Probable Electoral Votes For Clinton
+      p - In each of these states, the polls suggest a 90 percent or higher chance Clinton will win.
+
+      $!{data.helpers.partial('_president-races-legend')}
+      ul
+        for(race in races.likely_clinton)
+          $!{data.helpers.partial('_president-race', { model: { race: race } })}
+
+    .battlegrounds
+      h3
+        strong - ${races.battlegrounds_n_votes}
+        -  Battleground Electoral Votes
+      p - These states may vote one way or the other.
+
+      $!{data.helpers.partial('_president-races-legend')}
+      ul
+        for(race in races.battlegrounds)
+          $!{data.helpers.partial('_president-race', { model: { race: race } })}
+
+    .likely-clinton
+      h3
+        strong - ${races.likely_trump_n_votes}
+        -  Probable Electoral Votes For Trump
+      p - In each of these states, the polls suggest a 90 percent or higher chance Trump will win.
+
+      $!{data.helpers.partial('_president-races-legend')}
+      ul
+        for(race in races.likely_trump)
+          $!{data.helpers.partial('_president-race', { model: { race: race } })}

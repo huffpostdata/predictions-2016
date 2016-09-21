@@ -7,6 +7,12 @@ const moment = require('moment-timezone')
 
 const PresidentRace = require('./PresidentRace')
 
+function countElectoralVotes(races) {
+  return races
+    .map(x => +x.n_electoral_votes)
+    .reduce(((s, n) => s + n), 0)
+}
+
 class PresidentRaces {
   constructor(all) {
     this.updated_at = new Date(Math.max.apply(null, all.map(race => race.updated_at)))
@@ -17,6 +23,20 @@ class PresidentRaces {
       if (d != 0) return d
       return a.state_name.localeCompare(b.state_name)
     })
+
+    this.likely_clinton = this.all
+      .filter(x => x.dem_win_prob_with_adjustment_and_undecided >= 0.9)
+      .reverse()
+
+    this.likely_trump = this.all
+      .filter(x => x.dem_win_prob_with_adjustment_and_undecided <= 0.1)
+
+    this.battlegrounds = this.all
+      .filter(x => x.dem_win_prob_with_adjustment_and_undecided > 0.1 && x.dem_win_prob_with_adjustment_and_undecided < 0.9)
+
+    this.likely_clinton_n_votes = countElectoralVotes(this.likely_clinton)
+    this.battlegrounds_n_votes = countElectoralVotes(this.battlegrounds)
+    this.likely_trump_n_votes = countElectoralVotes(this.likely_trump)
   }
 }
 

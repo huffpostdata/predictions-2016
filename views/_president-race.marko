@@ -7,6 +7,11 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
     label.state-code for="state-race-expand-${race.state_code}" - ${race.state_code}
     label.state-name for="state-race-expand-${race.state_code}" - ${race.state_name}
 
+    label.n-votes for="state-race-expand-${race.state_code}"
+      span.square-container
+        span.square style="width: ${Math.sqrt(+race.n_electoral_votes) * 13.4}%; height: ${Math.sqrt(+race.n_electoral_votes) * 13.4}%"
+      span.n - ${+race.n_electoral_votes}
+
     label.probability for="state-race-expand-${race.state_code}"
       span.box
         span.marker style="left: ${100 * (1 - race.dem_win_prob_with_adjustment_and_undecided)}%"

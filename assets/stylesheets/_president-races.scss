@@ -1,0 +1,84 @@
+#president-races {
+  // Remember: _senate-races.scss has a lot of the styles we use here
+  $marker-width: 1rem;
+  $half-marker-width: $marker-width / 2;
+  $collapsed-height: 2rem;
+  $state-code-width: 3rem;
+  $state-name-width: 10rem;
+  $n-votes-width: 7rem;
+  $n-votes-square-width: 1.5rem;
+
+  .races-legend {
+    .headings {
+      display: -webkit-inline-flex;
+      display: inline-flex;
+    }
+
+    h5 {
+      margin: 0;
+      text-align: center;
+    }
+
+    h5.state {
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: $state-name-width;
+    }
+
+    h5.n-votes {
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: $n-votes-width;
+    }
+
+    h5.likely-winner {
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+
+    .axis {
+      margin-left: $state-name-width + $n-votes-width;
+    }
+  }
+
+  label.n-votes {
+    display: inline-block;
+    width: $n-votes-width;
+    height: $collapsed-height;
+    vertical-align: middle;
+
+    .square-container {
+      display: inline-block;
+      width: $n-votes-square-width;
+      height: $n-votes-square-width;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 0;
+      line-height: $n-votes-square-width;
+    }
+
+    .square {
+      display: inline-block;
+      vertical-align: middle;
+      height: 0;
+    }
+
+    .n {
+      display: inline-block;
+      color: $muted-color;
+      font-size: .85rem;
+      line-height: 1.5rem;
+      padding-left: .25rem;
+      vertical-align: middle;
+    }
+  }
+
+  .toss-up .marker { background-color: $toss-up; }
+  .toss-up .square { background-color: $toss-up; }
+  .lean-clinton .square { background-color: $strong-dem; }
+  .lean-trump .square { background-color: $strong-gop; }
+
+  label.probability {
+    left: $state-name-width + $n-votes-width + $half-marker-width;
+  }
+}

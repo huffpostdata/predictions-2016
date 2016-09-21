@@ -40,16 +40,16 @@
     font-weight: bold;
   }
 
-  &>ul, &>.races-legend {
+  &>ul, .three-column>*>ul, .races-legend {
     margin: 0 auto; // nix margins on mobile
   }
 
-  &>ul {
+  &>ul, .three-column>*>ul {
     padding: 0;
     list-style: none;
   }
 
-  &>ul>li {
+  li[data-state-code] {
     position: relative; // absolutely-positioned stuff inside
     border-top: 1px solid $border-color;
     &:last-child {
