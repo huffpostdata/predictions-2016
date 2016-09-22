@@ -57,11 +57,14 @@
 
     .label {
       margin-top: -.5rem; // make room for labels. TODO work better, dynamically
+      padding-left: .5rem;
     }
 
     .horizontal-line {
       position: absolute;
       left: 0;
+      box-sizing: border-box;
+      padding-left: .5rem;
       width: 100%;
       // bottom: set in HTML
       border-bottom: 1px solid $border-color;
@@ -71,13 +74,14 @@
   .x-axis {
     height: $x-axis-height;;
     line-height: 1;
+    z-index: -2;
     position: relative;
     display: -webkit-flex;
     display: flex;
     -webkit-justify-content: space-between;
     justify-content: space-between;
 
-    &>*:not(.label) {
+    &>* {
       width: 2rem;
       -webkit-flex: 0 0 auto;
       flex: 0 0 auto;
@@ -86,34 +90,44 @@
       text-align: center;
 
       &::before {
+        display: block;
+        content: '';
         position: absolute;
-        top: 0;
-        bottom: 0;
+        top: -$grid-height;
+        height: $grid-height;
         left: 50%;
+        width: 0;
         margin-left: -1px;
         border-left: 1px solid $border-color;
       }
     }
 
-    .all-trump {
-      text-align: right;
-      &::before {
-        left: 0;
-        border: 0;
-        border-left: 1px solid $border-color;
-      }
-    }
-    .all-clinton {
+    &>.all-clinton {
       text-align: left;
       &::before {
-        right: 0;
+        left: 0;
         border: 0;
         border-right: 1px solid $border-color;
       }
     }
 
+    &>.all-trump {
+      text-align: right;
+      &::before {
+        left: auto;
+        right: 0;
+        border: 0;
+        border-left: 1px solid $border-color;
+      }
+    }
+
     .clinton { color: $strong-dem; }
     .trump { color: $strong-gop; }
+  }
+
+  .labels {
+    position: relative;
+    height: 0;
 
     .vertical-line {
       pointer-events: none;
@@ -126,37 +140,31 @@
       height: $grid-height + $tooltip-height + $top-x-axis-height;
     }
 
-    .label {
+    .units {
       position: absolute;
       left: 0;
       width: 100%;
-      height: 0;
-      top: 0;
+      bottom: -$x-axis-height;
+      text-align: center;
+    }
 
-      .units {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        bottom: -$x-axis-height;
-        text-align: center;
-      }
+    .clinton, .trump {
+      position: absolute;
+      top: -$grid-height - $top-x-axis-height - $tooltip-height;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
 
-      .clinton, .trump {
-        position: absolute;
-        top: -$grid-height - $top-x-axis-height - $tooltip-height;
-        text-transform: uppercase;
-        font-weight: bold;
-      }
+    .clinton {
+      right: 50%;
+      margin-right: .5rem;
+      color: $strong-dem;
+    }
 
-      .clinton {
-        right: 50%;
-        margin-right: .5rem;
-      }
-
-      .trump {
-        left: 50%;
-        margin-left: .5rem;
-      }
+    .trump {
+      left: 50%;
+      margin-left: .5rem;
+      color: $strong-gop;
     }
   }
 

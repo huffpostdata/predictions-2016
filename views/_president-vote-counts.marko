@@ -22,12 +22,12 @@ var vote_counts=data.model.vote_counts
       li.bar.bar-clinton data-count="${538 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(270).reverse() | status-var=loop)
       li.bar.bar-tie data-count="269" data-n="${vote_counts.n_tie}" style="height: ${100 * vote_counts.n_tie / vote_counts.max}%"
       li.bar.bar-trump data-count="${268 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(0, 269).reverse() | status-var=loop)
+    .labels
+      .vertical-line
+      .units - Electoral votes per candidate
+      .clinton - Clinton is president ←
+      .trump - → Trump is president
     .x-axis
-      .label
-        .vertical-line
-        .units - Electoral votes per candidate
-        .clinton - Clinton is president ←
-        .trump - → Trump is president
       .all-clinton
         .clinton - 538
         .trump - 0
