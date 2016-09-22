@@ -11,7 +11,7 @@
     -webkit-flex-direction: column;
     flex-direction: column;
     position: relative;
-    margin-top: $tooltip-height + $top-x-axis-height + 3rem; // for tooltip+legend
+    margin-top: $tooltip-height + $top-x-axis-height + 5rem; // for tooltip+legend
   }
 
   ol.bars {
@@ -56,8 +56,10 @@
     color: $muted-color;
 
     .label {
-      margin-top: -.5rem; // make room for labels. TODO work better, dynamically
+      margin-top: -10.5rem; // make room for labels. TODO work better, dynamically
       padding-left: .5rem;
+      font-style: italic;
+      font-size: 1rem;
     }
 
     .horizontal-line {
@@ -73,7 +75,7 @@
 
   .x-axis {
     height: $x-axis-height;;
-    line-height: 1;
+    line-height: 1.5rem;
     z-index: -2;
     position: relative;
     display: -webkit-flex;
@@ -137,22 +139,24 @@
       width: 0;
       border-left: 2px dotted $color;
       bottom: 0;
-      height: $grid-height + $tooltip-height + $top-x-axis-height;
+      height: $grid-height + $tooltip-height + $top-x-axis-height - 1rem;
     }
 
     .units {
       position: absolute;
       left: 0;
       width: 100%;
-      bottom: -$x-axis-height;
+      bottom: -$x-axis-height - 1rem;
       text-align: center;
+      font-weight:bold;
     }
 
     .clinton, .trump {
       position: absolute;
-      top: -$grid-height - $top-x-axis-height - $tooltip-height;
+      top: -$grid-height - $top-x-axis-height - $tooltip-height + 1rem;
       text-transform: uppercase;
       font-weight: bold;
+      font-size: .8rem;
     }
 
     .clinton {
@@ -223,6 +227,7 @@
         text-align: right;
         padding-right: .5rem;
         border-right: 1px solid $border-color;
+
       }
 
       .trump {
