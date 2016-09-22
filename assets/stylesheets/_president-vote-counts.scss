@@ -77,14 +77,39 @@
     -webkit-justify-content: space-between;
     justify-content: space-between;
 
-    .all-trump { text-align: right; }
-    .all-clinton { text-align: left; }
-    .mid-clinton, .mid, .mid-trump { text-align: center; }
-
     &>*:not(.label) {
       width: 2rem;
       -webkit-flex: 0 0 auto;
       flex: 0 0 auto;
+
+      position: relative;
+      text-align: center;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -1px;
+        border-left: 1px solid $border-color;
+      }
+    }
+
+    .all-trump {
+      text-align: right;
+      &::before {
+        left: 0;
+        border: 0;
+        border-left: 1px solid $border-color;
+      }
+    }
+    .all-clinton {
+      text-align: left;
+      &::before {
+        right: 0;
+        border: 0;
+        border-right: 1px solid $border-color;
+      }
     }
 
     .clinton { color: $strong-dem; }
