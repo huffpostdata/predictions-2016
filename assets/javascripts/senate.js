@@ -2,7 +2,29 @@ function tie_expanded_senate_races_to_hash() {
   var container = document.getElementById('senate-races') || document.getElementById('president-races');
   if (!container) return;
 
-  function update_hash() {
+  var scroll_anchors = container.querySelectorAll('.scroll-anchor');
+  var load_svgs_timeout = null;
+
+  function is_desktop() {
+    return window.getComputedStyle(scroll_anchors[0]).display !== 'none';
+  }
+
+  function scroll_to_state(state_code) {
+    var href = '#expand-states:' + state_code;
+    var scroll_anchor = container.querySelector('a[href="' + href + '"]');
+    if (scroll_anchor === null) return;
+    scroll_anchor.scrollIntoView(true);
+  }
+
+  function on_change_update_hash(ev) {
+    if (is_desktop()) {
+      ev.preventDefault(); // no, don't check it
+      var state_code = ev.target.getAttribute('data-state-code');
+      scroll_to_state(state_code);
+      on_scroll_or_resize_update_hash();
+      return;
+    }
+
     var inputs = container.querySelectorAll('input.expand:checked');
     var state_codes = [];
     for (var i = 0; i < inputs.length; i++) {
@@ -51,14 +73,55 @@ function tie_expanded_senate_races_to_hash() {
       divs[i].className = 'loading';
       load_missing_senate_race_svg(divs[i]);
     }
+
+    load_svgs_timeout = null;
+  }
+
+  function defer_load_missing_senate_race_svgs() {
+    // Avoid loading always: we don't want to make people download every SVG
+    // just to smooth-scroll to "methodology".
+    if (load_svgs_timeout !== null) return;
+    load_svgs_timeout = window.setTimeout(load_missing_senate_race_svgs, 250);
+  }
+
+  function on_scroll_or_resize_update_hash() {
+    if (!is_desktop()) return;
+
+    // binary-search for first visible anchor
+    var min = 0, max = scroll_anchors.length;
+    while (min < max) {
+      var mid = (min + max) >> 1; // min <= mid < max
+      if (scroll_anchors[mid].getBoundingClientRect().top < 0) {
+        min = mid + 1;
+      } else {
+        max = mid;
+      }
+    }
+
+    // Uncheck everything
+    var inputs = container.querySelectorAll('input.expand:checked');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].checked = false;
+    }
+
+    var scroll_anchor = scroll_anchors[min];
+    if (scroll_anchor) {
+      var input = scroll_anchor.parentNode.querySelector('input.expand');
+      input.checked = true;
+      window.location.hash = '#expand-states:' + input.getAttribute('data-state-code');
+
+      defer_load_missing_senate_race_svgs();
+    }
   }
 
   read_hash();
   load_missing_senate_race_svgs();
-  container.addEventListener('change', function() {
-    update_hash();
+  container.addEventListener('change', function(ev) {
+    on_change_update_hash(ev);
     load_missing_senate_race_svgs();
   });
+  window.addEventListener('scroll', on_scroll_or_resize_update_hash);
+  window.addEventListener('resize', on_scroll_or_resize_update_hash);
 }
 
 function shrink_senate_summary_percents() {
