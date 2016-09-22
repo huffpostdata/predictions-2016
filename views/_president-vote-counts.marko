@@ -15,22 +15,36 @@ var vote_counts=data.model.vote_counts
 
   .container
     .y-axis
-      .label - TK axis ticks
+      .label - Frequency of electoral<br>vote scenarios
+      .horizontal-line.point-five-percent style="bottom: ${vote_counts.point_five_percent}%"  - 0.5%
+      .horizontal-line.one-percent style="bottom: ${vote_counts.one_percent}%" - 1%
     ol.bars
       li.bar.bar-clinton data-count="${538 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(270).reverse() | status-var=loop)
       li.bar.bar-tie data-count="269" data-n="${vote_counts.n_tie}" style="height: ${100 * vote_counts.n_tie / vote_counts.max}%"
       li.bar.bar-trump data-count="${268 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(0, 269).reverse() | status-var=loop)
     .x-axis
       .label
+        .vertical-line
         .units - Electoral votes per candidate
-        .clinton - ← Clinton wins
-        .trump - Trump wins →
+        .clinton - Clinton is president ←
+        .trump - → Trump is president
       .all-clinton
         .clinton - 538
         .trump - 0
+      .mid-clinton
+        .clinton - 403
+        .trump - 135
       .mid
         .clinton - 269
         .trump - 269
+      .mid-trump
+        .clinton - 135
+        .trump - 403
       .all-trump
         .clinton - 0
         .trump - 538
+    .tooltip
+      .counts
+        .clinton - Clinton <strong></strong>
+        .trump - <strong></strong> Trump
+      p - Our model found this scenario<br><strong></strong> times

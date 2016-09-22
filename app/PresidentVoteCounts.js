@@ -26,6 +26,9 @@ class PresidentVoteCounts {
     this.percent_trump = 100 * this.n_trump / this.n
 
     this.n_clinton_millions = this.n_clinton / 1e6
+
+    this.one_percent = 100 * 0.01 / (this.max / this.n)
+    this.point_five_percent = 100 * .005 / (this.max / this.n)
   }
 }
 

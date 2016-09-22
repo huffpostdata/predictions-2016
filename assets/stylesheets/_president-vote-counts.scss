@@ -1,16 +1,26 @@
 #president-vote-counts {
+  $x-axis-height: 3.5rem;
+  $grid-height: 10rem;
+  $tooltip-height: 5.5rem;
+  $top-x-axis-height: 3rem;
+  $legend-width: 13rem;
+
   .container {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
     flex-direction: column;
+    position: relative;
+    margin-top: $tooltip-height + $top-x-axis-height + 3rem; // for tooltip+legend
   }
 
   ol.bars {
     margin: 0;
     padding: 0;
     list-style: none;
-    height: 10rem;
+    box-sizing: border-box;
+    height: $grid-height;
+    border-bottom: 2px solid $color;
     display: -webkit-flex;
     display: flex;
     -webkit-align-items: flex-end;
@@ -26,46 +36,176 @@
     width: 1px;
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
+
+    &.focus {
+      outline: 1px solid $color;
+      position: relative; // z-index
+    }
+  }
+
+  .y-axis {
+    position: absolute;
+    line-height: 1.2;
+    font-size: .85rem;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    height: $grid-height;
+    color: $muted-color;
+
+    .label {
+      margin-top: -.5rem; // make room for labels. TODO work better, dynamically
+    }
+
+    .horizontal-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      // bottom: set in HTML
+      border-bottom: 1px solid $border-color;
+    }
   }
 
   .x-axis {
-    padding-bottom: 3rem;
+    height: $x-axis-height;;
+    line-height: 1;
     position: relative;
     display: -webkit-flex;
     display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
 
     .all-trump { text-align: right; }
-    .mid { text-align: center; }
+    .all-clinton { text-align: left; }
+    .mid-clinton, .mid, .mid-trump { text-align: center; }
 
     &>*:not(.label) {
-      width: 1px;
-      -webkit-flex: 1 1 auto;
-      flex: 1 1 auto;
+      width: 2rem;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
     }
 
     .clinton { color: $strong-dem; }
     .trump { color: $strong-gop; }
 
+    .vertical-line {
+      pointer-events: none;
+      position: absolute;
+      left: 50%;
+      margin-left: -2px; // TODO why not 1px?
+      width: 0;
+      border-left: 2px dotted $color;
+      bottom: 0;
+      height: $grid-height + $tooltip-height + $top-x-axis-height;
+    }
+
     .label {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 0;
+      top: 0;
+
       .units {
         position: absolute;
         left: 0;
         width: 100%;
-        bottom: 1.5rem;
+        bottom: -$x-axis-height;
         text-align: center;
       }
 
-      .clinton {
+      .clinton, .trump {
         position: absolute;
-        bottom: 0;
-        left: 0;
+        top: -$grid-height - $top-x-axis-height - $tooltip-height;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .clinton {
+        right: 50%;
+        margin-right: .5rem;
       }
 
       .trump {
-        position: absolute;
-        bottom: 0;
-        right: 0;
+        left: 50%;
+        margin-left: .5rem;
       }
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    bottom: $grid-height + $x-axis-height + .75rem;
+    box-sizing: border-box;
+    background: $background;
+    height: $tooltip-height - .5rem;
+    padding: .5rem;
+    width: $legend-width;
+    margin-left: -($legend-width / 2); // so JS can just set "left"
+    border: 1px solid $color;
+    font-size: .85rem;
+    text-align: center;
+
+    &::before {
+      // arrow
+      content: '';
+      position: absolute;
+      bottom: -.5rem;
+      background: $background;
+      left: 50%;
+      box-sizing: border-box;
+      margin-left: -.5rem;
+      width: 1rem;
+      height: 1rem;
+      transform: scaleY(.75) rotate(-45deg);
+      border: 1px solid transparent;
+      border-bottom-color: $color;
+      border-left-color: $color;
+    }
+
+    &.flush-left {
+      left: 0;
+      margin-left: 0;
+      &::before { display: none; }
+    }
+    &.flush-right {
+      right: 0;
+      margin-left: 0;
+      &::before { display: none; }
+    }
+
+    .counts {
+      display: -webkit-flex;
+      display: flex;
+      padding-bottom: .5rem;
+
+      &>* {
+        box-sizing: border-box;
+        width: 50%;
+      }
+
+      .clinton {
+        text-align: right;
+        padding-right: .5rem;
+        border-right: 1px solid $border-color;
+      }
+
+      .trump {
+        text-align: left;
+        padding-left: .5rem;
+      }
+
+      .clinton strong { color: $strong-dem; }
+      .trump strong { color: $strong-gop; }
+    }
+
+    p {
+      position: relative; // appear above white "arrow" box
+      margin: 0;
+      line-height: 1.2;
+      color: $muted-color;
     }
   }
 }
