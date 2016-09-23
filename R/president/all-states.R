@@ -79,6 +79,20 @@ load_or_calculate_national_president_data <- function() {
   return(data)
 }
 
+CalculatedUndecidedStddevBoost <- function(diff_xibar, undecided_xibar) {
+  # Calculates what to add to our stddevs to account for the proportion of the
+  # electorate today who respond "Undecided" in the polls. Higher means less
+  # certainty.
+  #
+  # * Further from election day, there are more Undecideds -> higher.
+  # * When the margin between candidates beats Undecideds -> lower.
+
+  margin = max(1e-5, abs(diff_xibar))     # avoid div by zero
+  mean <- undecided_xibar / margin        # always positive
+  stddev <- sqrt((mean - margin) ^ 2) / 4 # stddev of undecided/margin
+  return(stddev) # magic number
+}
+
 calculate_race_summary <- function(race, national) {
   Today <- Sys.Date()
 
@@ -99,6 +113,7 @@ calculate_race_summary <- function(race, national) {
       n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
       diff_xibar=c(cook_mean),
       diff_stddev=c(cook_stddev),
+      undecided_stddev_boost=c(0.0),
       dem_win_prob=c(end_day$dem_win_prob),
       national_dem_win_prob=NA,
       national_delta=NA,
@@ -151,8 +166,11 @@ calculate_race_summary <- function(race, national) {
   return(data.frame(
     state_code=c(race$race$state_code),
     n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
-    diff_xibar=end_day$diff_xibar,
-    diff_stddev=end_day$diff_stddev,
+    diff_xibar=c(end_day$diff_xibar),
+    diff_stddev=c(end_day$diff_stddev),
+    undecided_stddev_boost=c(
+      CalculatedUndecidedStddevBoost(end_day$diff_xibar, end_day$undecided_xibar)
+    ),
     dem_win_prob=c(end_day$dem_win_prob),
     national_dem_win_prob=c(national_end_prob),
     national_delta=c(national_delta),
@@ -238,7 +256,10 @@ predict_n_dem_president_votes <- function(summaries, races) {
   # Means and stddevs -- one per race. The "split" votes are their own races, so
   # the total number of races is 50 states + 1 DC + 2 ME + 3 NE = 56 races.
   means <- append(summaries$diff_xibar, split_cook_means)
-  stddevs <- append(summaries$diff_stddev, split_cook_stddevs)
+  stddevs <- append(
+    summaries$diff_stddev + summaries$undecided_stddev_boost,
+    split_cook_stddevs
+  )
 
   # 1 -> 0 votes; 2 -> 1 vote; etc.
   n_counts <- rep(0, 539)
