@@ -38,6 +38,10 @@ $min-margin: 16px; // (used in max-width calculations) -- We're assuming 16px ==
   @include with-width($page-width);
 }
 
+@mixin wide-width() {
+  @include with-width($wide-width);
+}
+
 html, body {
   min-height: 100%; // when in an iframe, need min-height: otherwise height is set by parent
 }

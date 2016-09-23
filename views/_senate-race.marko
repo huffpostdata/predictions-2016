@@ -1,6 +1,7 @@
 var race=data.model.race
 
 li.${race.lean_html_class}.incumbent-${race.seat_party_code} data-state-code="${race.state_code}"
+  a.scroll-anchor href="#expand-states:${race.state_code}"
   input.expand#state-race-expand-${race.state_code} data-state-code="${race.state_code}" type="checkbox" value="${race.state_code}"
 
   .content-to-expand
