@@ -90,7 +90,7 @@ CalculatedUndecidedStddevBoost <- function(diff_xibar, undecided_xibar) {
   margin = max(1e-5, abs(diff_xibar))     # avoid div by zero
   mean <- undecided_xibar / margin        # always positive
   stddev <- sqrt((mean - margin) ^ 2) / 4 # stddev of undecided/margin
-  return(stddev) # magic number
+  return(stddev)
 }
 
 calculate_race_summary <- function(race, national) {
