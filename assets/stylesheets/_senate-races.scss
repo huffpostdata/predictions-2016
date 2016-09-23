@@ -43,11 +43,8 @@
     font-weight: bold;
   }
 
-  &>ul, .three-column>*>ul, .races-legend {
+  ul.races, .races-legend {
     margin: 0 auto; // nix margins on mobile
-  }
-
-  &>ul, .three-column>*>ul {
     padding: 0;
     list-style: none;
   }
@@ -519,7 +516,7 @@
 
     .lean-dem { color: $strong-dem; }
     .lean-gop { color: $strong-gop; }
-    .toss-up { color: $toss-up; }
+    .toss-up, .percent { color: $toss-up; }
 
     // There's no way to _really_ center "toss-up". But we can fake it by
     // placing it in the middle with a background.
@@ -574,14 +571,14 @@
       width: 50%;
       margin-left: 0;
     }
-    &>.races-legend, &>ul { // specificity
+    &>.races-legend, &>ul.races { // specificity
       margin-left: 0;
     }
 
     .races-legend {
       .axis, h5 {
         margin-left: $state-name-width + .5rem;
-        margin-right: 0;
+        margin-right: .5rem;
       }
     }
 

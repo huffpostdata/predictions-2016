@@ -1,6 +1,7 @@
 var race=data.model.race
 
 li.${race.lean_html_class} data-state-code="${race.state_code}"
+  a.scroll-anchor href="#expand-states:${race.state_code}"
   input.expand#state-race-expand-${race.state_code} data-state-code="${race.state_code}" type="checkbox" value="${race.state_code}"
 
   .content-to-expand
@@ -14,7 +15,7 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
 
     label.probability for="state-race-expand-${race.state_code}"
       span.box
-        span.marker style="left: ${100 * (1 - race.dem_win_prob_with_adjustment_and_undecided)}%"
+        span.marker style="left: ${100 * race.scale_final_win_prob_100(data.model.scale)}%"
 
     .details
       h4
@@ -30,9 +31,9 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
           li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/presidential/charts/scorecard">Electoral College Ratings</a>.
           li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>.
           if(!race.toss_up)
-            li - Since 2004, Cook has been right about this call in <strong>${race.win_prob_100}%</strong> of all Senate races.
+            li - Since 2004, Cook has been right about this call in <strong>${race.win_prob_100}%</strong> of all presidential races.
           else
-            li - We consider this a <strong>50.0%</strong> chance the seat will flip.
+            li - We give Clinton and Trump each a 50 percent chance.
       else
         ol.calculations
           li - <span class="${race.winner}">${race.winner_name}</span> won against <span class="${race.loser}">${race.loser_name}</span> in <strong>${race.raw_win_prob_100}%</strong> of our simulations.
