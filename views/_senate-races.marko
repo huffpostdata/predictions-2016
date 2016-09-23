@@ -28,6 +28,6 @@ var races=data.model.races
   p - Our algorithm suggests these states have less than a 50 percent chance of flipping.
 
   $!{data.helpers.partial('_senate-races-legend')}
-  ul
+  ul.races
     for(race in unlikely_flips | status-var=loop)
       $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}
