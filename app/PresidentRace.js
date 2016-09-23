@@ -48,4 +48,17 @@ module.exports = class PresidentRace {
     this.loser_name = p < 0.5 ? 'Clinton' : (p > 0.5 ? 'Trump' : '')
     this.loser = this.loser_name.toLowerCase()
   }
+
+  /**
+   * Returns this.dem_win_prob_with_adjustment_and_undecided ... scaled so that
+   * it's the fraction along range scale[0] to scale[1] (two Numbers).
+   */
+  scale_final_win_prob_100(scale) {
+    const min = scale[0]
+    const max = scale[1]
+
+    const x = this.dem_win_prob_with_adjustment_and_undecided
+
+    return (x - min) / (max - min)
+  }
 }

@@ -1,12 +1,26 @@
-.races-legend
+.races-legend.${data.model}
   .inner
     .headings
       h5.state - State
       h5.n-votes - Electoral Votes
-      h5.likely-winner - Likely Winner
+      if(data.model == 'battlegrounds')
+        h5.likely-winner - Likely Winner
+      else
+        h5.likely-winner - Win Probability
     .axis
-      .lean-dem - Clinton
-      .arrow.arrow-left
-      .toss-up - Toss-Up
-      .arrow.arrow-right
-      .lean-gop - Trump
+      if(data.model == 'likely-clinton')
+        .percent - 90%
+        .arrow.arrow-right
+        .percent - 100%
+
+      if(data.model == 'likely-trump')
+        .percent - 90%
+        .arrow.arrow-right
+        .percent - 100%
+
+      if(data.model == 'battlegrounds')
+        .lean-dem - Clinton
+        .arrow.arrow-left
+        .toss-up - Toss-Up
+        .arrow.arrow-right
+        .lean-gop - Trump

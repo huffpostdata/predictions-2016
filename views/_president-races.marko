@@ -8,36 +8,32 @@ var races=data.model.races
 
   p.instruction - Click or tap a race to see our calculations
 
-  .three-column
-    .likely-clinton
-      h3
-        strong - ${races.likely_clinton_n_votes}
-        -  Probable Electoral Votes For Clinton
-      p - In each of these states, the polls suggest a 90 percent or higher chance Clinton will win.
+  h3
+    strong - ${races.likely_clinton_n_votes}
+    -  Probable Electoral Votes For Clinton
+  p - In each of these states, the polls suggest a 90 percent or higher chance Clinton will win.
 
-      $!{data.helpers.partial('_president-races-legend')}
-      ul
-        for(race in races.likely_clinton)
-          $!{data.helpers.partial('_president-race', { model: { race: race } })}
+  $!{data.helpers.partial('_president-races-legend', { model: 'likely-clinton' })}
+  ul.races.likely-clinton
+    for(race in races.likely_clinton)
+      $!{data.helpers.partial('_president-race', { model: { race: race, scale: [ 0.9, 1.0 ] } })}
 
-    .battlegrounds
-      h3
-        strong - ${races.battlegrounds_n_votes}
-        -  Battleground Electoral Votes
-      p - These states may vote one way or the other.
+  h3
+    strong - ${races.battlegrounds_n_votes}
+    -  Battleground Electoral Votes
+  p - These states may vote one way or the other.
 
-      $!{data.helpers.partial('_president-races-legend')}
-      ul
-        for(race in races.battlegrounds)
-          $!{data.helpers.partial('_president-race', { model: { race: race } })}
+  $!{data.helpers.partial('_president-races-legend', { model: 'battlegrounds' })}
+  ul.races.battlegrounds
+    for(race in races.battlegrounds)
+      $!{data.helpers.partial('_president-race', { model: { race: race, scale: [ 0.9, 0.1 ] } })}
 
-    .likely-clinton
-      h3
-        strong - ${races.likely_trump_n_votes}
-        -  Probable Electoral Votes For Trump
-      p - In each of these states, the polls suggest a 90 percent or higher chance Trump will win.
+  h3
+    strong - ${races.likely_trump_n_votes}
+    -  Probable Electoral Votes For Trump
+  p - In each of these states, the polls suggest a 90 percent or higher chance Trump will win.
 
-      $!{data.helpers.partial('_president-races-legend')}
-      ul
-        for(race in races.likely_trump)
-          $!{data.helpers.partial('_president-race', { model: { race: race } })}
+  $!{data.helpers.partial('_president-races-legend', { model: 'likely-trump' })}
+  ul.races.likely-trump
+    for(race in races.likely_trump)
+      $!{data.helpers.partial('_president-race', { model: { race: race, scale: [ 0.1, 0 ] } })}
