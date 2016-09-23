@@ -1,4 +1,9 @@
 #president-vote-counts {
+  @include full-width();
+  &>* {
+    @include page_width();
+  }
+
   $x-axis-height: 3.5rem;
   $grid-height: 10rem;
   $tooltip-height: 5.5rem;
@@ -6,6 +11,7 @@
   $legend-width: 13rem;
 
   .container {
+    @include wide-width();
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: column;
