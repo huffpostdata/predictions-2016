@@ -30,7 +30,7 @@ wget http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.r
 (cd /etc/yum.repos.d && sudo wget 'http://download.opensuse.org/repositories/home:/cornell_vrdc/CentOS_CentOS-6/home:cornell_vrdc.repo')
 sudo rpm -ivh epel-release-6-8.noarch.rpm
 sudo yum install R R-devel jags4-devel curl-devel
-R --vanilla -e 'install.packages(c("rjags", "truncnorm", "coda", "httr"), repos=c("https://cloud.r-project.org/"))'
+R --vanilla -e 'install.packages(c("rjags", "truncnorm", "coda", "httr", "Matrix"), repos=c("https://cloud.r-project.org/"))'
 ```
 
 # Usage
