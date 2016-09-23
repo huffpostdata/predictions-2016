@@ -210,6 +210,17 @@
     background: $background; // cover the vertical line running down the page
     border-top: 1px dotted $border-color;
     border: .25rem solid $alt-background;
+
+
+    &::after {
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0;
+  z-index: 1;
+  border: 1px solid $color;
+}
   }
 
 	h4 {
