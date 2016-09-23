@@ -169,7 +169,7 @@ calculate_race_summary <- function(race, national) {
     diff_xibar=c(end_day$diff_xibar),
     diff_stddev=c(end_day$diff_stddev),
     undecided_stddev_boost=c(
-      CalculatedUndecidedStddevBoost(end_day$diff_xibar, end_day$undecided_xibar)
+      CalculatedUndecidedStddevBoost(today$diff_xibar, today$undecided_xibar)
     ),
     dem_win_prob=c(end_day$dem_win_prob),
     national_dem_win_prob=c(national_end_prob),
