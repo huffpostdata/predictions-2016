@@ -225,6 +225,11 @@
         color: white;
       }
     }
+
+    h5 {
+      padding: 0 .75rem;
+      margin: 0;
+    }
   }
 
   .lean-dem strong.probability, .lean-clinton strong.probability { background: $strong-dem; }
