@@ -207,6 +207,7 @@
     background: $background; // cover the vertical line running down the page
     border-top: 1px dotted $border-color;
     border: .25rem solid $alt-background;
+    position: relative;
 
     h4 {
       margin-top: .75rem;
@@ -636,6 +637,7 @@
       box-sizing: border-box;
       width: 100%;
       padding-left: 2rem;
+      padding-right: 1rem;
       top: -3rem;
       border: 0;
 
@@ -654,8 +656,19 @@
         border-right-color: transparent;
       }
 
+      &::after {
+        // border
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 2rem;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        border: 1px solid $color;
+      }
+
       h4 {
-        border-top: 2px solid $color;
         margin-top: 0;
         padding-top: 1rem;
         padding-left: 1rem;
@@ -674,13 +687,8 @@
         margin-right: 0;
       }
 
-      ol.calculations:last-child, .source {
-        border-bottom: 2px solid $color;
-        margin-bottom: 2rem;
-      }
-
       .source {
-        padding-bottom: 1rem;
+        margin-bottom: 1rem;
       }
     }
   }

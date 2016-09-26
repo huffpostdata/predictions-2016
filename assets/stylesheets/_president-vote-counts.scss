@@ -17,7 +17,11 @@
     -webkit-flex-direction: column;
     flex-direction: column;
     position: relative;
-    margin-top: $tooltip-height + $top-x-axis-height + 3rem; // for tooltip+legend
+    margin-top: $tooltip-height + $top-x-axis-height + 5rem; // for tooltip+legend
+
+    @media (max-width: 399px) {
+      margin-top: $tooltip-height + $top-x-axis-height + 2rem; // for tooltip+legend
+    }
   }
 
   ol.bars {
@@ -46,6 +50,10 @@
     &.focus {
       outline: 1px solid $color;
       position: relative; // z-index
+
+      @media (max-width: 399px) {
+        outline: none;
+      }
     }
   }
 
@@ -62,8 +70,14 @@
     color: $muted-color;
 
     .label {
-      margin-top: -.5rem; // make room for labels. TODO work better, dynamically
+      margin-top: -10.5rem; // make room for labels. TODO work better, dynamically
       padding-left: .5rem;
+      font-style: italic;
+      font-size: 1rem;
+
+      @media (max-width: 399px) {
+        margin-top: -7rem;
+      }
     }
 
     .horizontal-line {
@@ -79,7 +93,7 @@
 
   .x-axis {
     height: $x-axis-height;;
-    line-height: 1;
+    line-height: 1.5rem;
     z-index: -2;
     position: relative;
     display: -webkit-flex;
@@ -143,38 +157,80 @@
       width: 0;
       border-left: 2px dotted $color;
       bottom: 0;
-      height: $grid-height + $tooltip-height + $top-x-axis-height;
+      height: $grid-height + $tooltip-height + $top-x-axis-height - 1rem;
+
+      @media (max-width: 399px) {
+      height: $grid-height + $top-x-axis-height + .5rem;
+
+      }
     }
 
     .units {
       position: absolute;
       left: 0;
       width: 100%;
-      bottom: -$x-axis-height;
+      bottom: -$x-axis-height - 1rem;
       text-align: center;
+      font-weight:bold;
     }
 
     .clinton, .trump {
       position: absolute;
-      top: -$grid-height - $top-x-axis-height - $tooltip-height;
+      top: -$grid-height - $top-x-axis-height - $tooltip-height + 1rem;
       text-transform: uppercase;
       font-weight: bold;
+      font-size: .8rem;
     }
 
     .clinton {
       right: 50%;
       margin-right: .5rem;
       color: $strong-dem;
+      @media (max-width: 399px) {
+        display: none;
+      }
     }
 
     .trump {
       left: 50%;
       margin-left: .5rem;
       color: $strong-gop;
+      @media (max-width: 399px) {
+        display: none;
+      }
+    }
+
+  .clinton-mobile, .trump-mobile {
+      position: absolute;
+      top: -$grid-height - $top-x-axis-height - .5rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: .8rem;
+      max-width: 35%;
+    }
+
+
+  .clinton-mobile {
+      right: 50%;
+      margin-right: .5rem;
+      color: $strong-dem;
+      text-align: right;
+      @media (min-width: 400px) {
+        display: none;
+      }
+    }
+
+   .trump-mobile {
+      left: 50%;
+      margin-left: .5rem;
+      color: $strong-gop;
+      @media (min-width: 400px) {
+        display: none;
+      }
     }
   }
 
-  .tooltip {
+    .tooltip {
     position: absolute;
     bottom: $grid-height + $x-axis-height + .75rem;
     box-sizing: border-box;
@@ -186,6 +242,15 @@
     border: 1px solid $color;
     font-size: .85rem;
     text-align: center;
+    display: block;
+
+    .loading {
+      display: none;
+    }
+
+    @media (max-width: 399px) {
+      display: none;
+    }
 
     &::before {
       // arrow
@@ -207,12 +272,12 @@
     &.flush-left {
       left: 0;
       margin-left: 0;
-      &::before { display: none; }
+     // &::before { display: none; }
     }
     &.flush-right {
       right: 0;
       margin-left: 0;
-      &::before { display: none; }
+    //  &::before { display: none; }
     }
 
     .counts {
@@ -229,6 +294,7 @@
         text-align: right;
         padding-right: .5rem;
         border-right: 1px solid $border-color;
+
       }
 
       .trump {

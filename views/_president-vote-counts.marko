@@ -26,7 +26,9 @@ var vote_counts=data.model.vote_counts
       .vertical-line
       .units - Electoral votes per candidate
       .clinton - Clinton is president ←
+      .clinton-mobile - ← Clinton is president
       .trump - → Trump is president
+      .trump-mobile - Trump is → president
     .x-axis
       .all-clinton
         .clinton - 538
@@ -43,7 +45,7 @@ var vote_counts=data.model.vote_counts
       .all-trump
         .clinton - 0
         .trump - 538
-    .tooltip style="display:none"
+    .tooltip.loading
       .counts
         .clinton - Clinton <strong></strong>
         .trump - <strong></strong> Trump
