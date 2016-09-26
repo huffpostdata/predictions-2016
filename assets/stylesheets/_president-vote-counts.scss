@@ -17,10 +17,17 @@
     -webkit-flex-direction: column;
     flex-direction: column;
     position: relative;
-    margin-top: $tooltip-height + $top-x-axis-height + 5rem; // for tooltip+legend
+    margin-top: $top-x-axis-height + 6rem; // for legend
 
-    @media (max-width: 399px) {
-      margin-top: $tooltip-height + $top-x-axis-height + 2rem; // for tooltip+legend
+    @media (min-width: $min-desktop-width) {
+      margin-top: $tooltip-height + $top-x-axis-height + 5rem; // for tooltip+legend
+    }
+
+    @media (min-width: 539px + 2 * $min-margin) {
+      @include with-width(539px);
+    }
+    @media (min-width: 2 * 539px + 2 * $min-margin) {
+      @include with-width(2 * 539px);
     }
   }
 
@@ -47,12 +54,10 @@
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
 
-    &.focus {
-      outline: 1px solid $color;
-      position: relative; // z-index
-
-      @media (max-width: 399px) {
-        outline: none;
+    @media (min-width: $min-desktop-width) {
+      &.focus {
+        outline: 1px solid $color;
+        position: relative; // z-index
       }
     }
   }
@@ -70,14 +75,13 @@
     color: $muted-color;
 
     .label {
-      margin-top: -10.5rem; // make room for labels. TODO work better, dynamically
+      margin-top: -3rem - $top-x-axis-height;
+      @media (min-width: $min-desktop-width) {
+        margin-top: 0;
+      }
       padding-left: .5rem;
       font-style: italic;
       font-size: 1rem;
-
-      @media (max-width: 399px) {
-        margin-top: -7rem;
-      }
     }
 
     .horizontal-line {
@@ -157,11 +161,10 @@
       width: 0;
       border-left: 2px dotted $color;
       bottom: 0;
-      height: $grid-height + $tooltip-height + $top-x-axis-height - 1rem;
+      height: $grid-height + $top-x-axis-height - 1rem;
 
-      @media (max-width: 399px) {
-      height: $grid-height + $top-x-axis-height + .5rem;
-
+      @media (min-width: $min-desktop-width) {
+        height: $grid-height + $tooltip-height + $top-x-axis-height - 1rem;
       }
     }
 
@@ -176,62 +179,55 @@
 
     .clinton, .trump {
       position: absolute;
-      top: -$grid-height - $top-x-axis-height - $tooltip-height + 1rem;
+      box-sizing: border-box;
+      display: inline-block;
+      top: -$grid-height - $top-x-axis-height + 1rem;
+      @media (min-width: $min-desktop-width) {
+        top: -$grid-height - $top-x-axis-height - $tooltip-height + 1rem;
+      }
       text-transform: uppercase;
+      line-height: 1.25;
       font-weight: bold;
       font-size: .8rem;
+      width: 50%;
+
+      &::before {
+        display: block;
+        position: absolute;
+        font-size: 1.1rem;
+        top: 50%;
+        line-height: 1.1rem;
+        margin-top: -.55rem;
+      }
     }
 
     .clinton {
-      right: 50%;
-      margin-right: .5rem;
+      left: 0;
+      padding-right: 1.75rem;
+      text-align: right;
       color: $strong-dem;
-      @media (max-width: 399px) {
-        display: none;
+
+      &::before {
+        content: '←';
+        right: .5rem;
       }
     }
 
     .trump {
-      left: 50%;
-      margin-left: .5rem;
+      right: 0;
+      padding-left: 1.75rem;
       color: $strong-gop;
-      @media (max-width: 399px) {
-        display: none;
-      }
-    }
 
-  .clinton-mobile, .trump-mobile {
-      position: absolute;
-      top: -$grid-height - $top-x-axis-height - .5rem;
-      text-transform: uppercase;
-      font-weight: bold;
-      font-size: .8rem;
-      max-width: 35%;
-    }
-
-
-  .clinton-mobile {
-      right: 50%;
-      margin-right: .5rem;
-      color: $strong-dem;
-      text-align: right;
-      @media (min-width: 400px) {
-        display: none;
-      }
-    }
-
-   .trump-mobile {
-      left: 50%;
-      margin-left: .5rem;
-      color: $strong-gop;
-      @media (min-width: 400px) {
-        display: none;
+      &::before {
+        content: '→';
+        left: .5rem;
       }
     }
   }
 
-    .tooltip {
+  .tooltip {
     position: absolute;
+    display: none;
     bottom: $grid-height + $x-axis-height + .75rem;
     box-sizing: border-box;
     background: $background;
@@ -242,13 +238,12 @@
     border: 1px solid $color;
     font-size: .85rem;
     text-align: center;
-    display: block;
 
-    .loading {
-      display: none;
+    @media (min-width: $min-desktop-width) {
+      display: block;
     }
 
-    @media (max-width: 399px) {
+    .loading {
       display: none;
     }
 
@@ -272,12 +267,12 @@
     &.flush-left {
       left: 0;
       margin-left: 0;
-     // &::before { display: none; }
+      &::before { display: none; }
     }
     &.flush-right {
       right: 0;
       margin-left: 0;
-    //  &::before { display: none; }
+      &::before { display: none; }
     }
 
     .counts {
