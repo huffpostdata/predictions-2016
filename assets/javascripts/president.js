@@ -96,16 +96,12 @@ function handle_hover_on_vote_counts() {
     focusBar(tallestBar);
   }
 
-  tooltip.classList.remove('loading');
+  tooltip.style.display = 'block';
   focusBar(tallestBar);
   bars_el.addEventListener('mousemove', focus);
   bars_el.addEventListener('mouseleave', leave);
 }
 
-<<<<<<< HEAD
-
-
-=======
 /**
  * Create sparklines out of win probabilities.
  */
