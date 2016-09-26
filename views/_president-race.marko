@@ -32,7 +32,7 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
         ol.calculations
           li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/presidential/charts/scorecard">Electoral College Ratings</a>.
           li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>.
-          li - We averaged the winners' margins in all races with this Cook rating since 2004 to arrive at this prediction.
+          li - The average lead is ${race.final_diff_xibar.toFixed(1)} points in all races with this Cook rating since 2004.
       else
         .legend - We simulated 5,000 random populations whose voting intentions correspond to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> poll results</span> in this state. Here are <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> 200</span> of these populations and the <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
 

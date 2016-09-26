@@ -1,5 +1,15 @@
 'use strict'
 
+const CookRatingToCookName = {
+  'R-Solid': 'solidly Republican',
+  'R-Likely': 'likely Republican',
+  'R-Lean': 'leaning Republican',
+  'Toss Up': 'toss-up',
+  'D-Lean': 'leaning Democrat',
+  'D-Likely': 'likely Democrat',
+  'D-Solid': 'solidly Democrat'
+}
+
 class Split {
   constructor(cook_rating) {
     this.cook_rating = cook_rating
@@ -19,6 +29,7 @@ module.exports = class PresidentRace {
     this.state_name = hash.state_name
     this.pollster_slug = hash.pollster_slug
     this.cook_rating = hash.cook_rating
+    this.cook_rating_name = CookRatingToCookName[hash.cook_rating]
     this.n_electoral_votes = +hash.n_electoral_votes
     this.splits = Split.parse_all(hash.split_cook_ratings_by_cd)
 
