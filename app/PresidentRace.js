@@ -44,12 +44,13 @@ module.exports = class PresidentRace {
     this.final_diff_stddev = this.diff_stddev + this.undecided_stddev_boost
     this.final_diff_margin = this.final_diff_stddev * 1.96
 
+    this.zero_within_90 = Math.abs(this.final_diff_xibar) < (this.final_diff_stddev * 1.282)
+
     this.curve = curve
-    this.toss_up = this.dem_win_prob_with_adjustment_and_undecided === 0.5
     this.updated_at = curve.updated_at
 
     const p = this.dem_win_prob_with_adjustment_and_undecided
-    this.lean_html_class = p > 0.5 ? 'lean-clinton' : (p < 0.5 ? 'lean-trump' : 'toss-up')
+    this.lean_html_class = this.final_diff_xibar > 0 ? 'lean-clinton' : (this.final_diff_xibar < 0.5 ? 'lean-trump' : 'toss-up')
     this.call_html_class = p > 0.9 ? 'probably-clinton' : (p < 0.9 ? 'probably-trump' : 'no-call')
 
     this.raw_win_prob_100 = (100 * Math.max(this.dem_win_prob, 1 - this.dem_win_prob)).toFixed(1)

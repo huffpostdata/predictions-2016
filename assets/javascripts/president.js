@@ -128,7 +128,7 @@ function make_win_probabilities_histograms() {
     }
   }
   collectHistograms('likely-clinton', -0, 30);
-  collectHistograms('battlegrounds', 15, -15);
+  collectHistograms('battlegrounds', 30, -30);
   collectHistograms('likely-trump', 0, -30);
 
   function normalCdf(x) {
