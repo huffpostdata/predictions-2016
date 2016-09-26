@@ -96,7 +96,7 @@ function handle_hover_on_vote_counts() {
     focusBar(tallestBar);
   }
 
-  tooltip.style.display = 'block';
+  tooltip.classList.remove('loading');
   focusBar(tallestBar);
   bars_el.addEventListener('mousemove', focus);
   bars_el.addEventListener('mouseleave', leave);
