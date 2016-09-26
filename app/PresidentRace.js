@@ -15,11 +15,11 @@ Split.parse_all = function(comma_separated_ratings) {
 module.exports = class PresidentRace {
   constructor(hash, summary, curve) {
     this.state_code = hash.state_code
-    this.national_dem_correlation = hash.national_dem_correlation
+    this.national_dem_correlation = +hash.national_dem_correlation
     this.state_name = hash.state_name
     this.pollster_slug = hash.pollster_slug
     this.cook_rating = hash.cook_rating
-    this.n_electoral_votes = hash.n_electoral_votes
+    this.n_electoral_votes = +hash.n_electoral_votes
     this.splits = Split.parse_all(hash.split_cook_ratings_by_cd)
 
     this.dem_win_prob = summary.dem_win_prob
@@ -31,6 +31,13 @@ module.exports = class PresidentRace {
     this.undecided_margin = summary.undecided_margin
     this.undecided_margin_100 = (100 * this.undecided_margin).toFixed(1)
     this.dem_win_prob_with_adjustment_and_undecided = summary.dem_win_prob_with_adjustment_and_undecided
+
+    this.diff_xibar = 100 * (+summary.diff_xibar)
+    this.diff_stddev = 100 * (+summary.diff_stddev)
+    this.undecided_stddev_boost = 100 * (+summary.undecided_stddev_boost)
+
+    this.final_diff_xibar = this.diff_xibar
+    this.final_diff_stddev = this.diff_stddev + this.undecided_stddev_boost
 
     this.curve = curve
     this.toss_up = this.dem_win_prob_with_adjustment_and_undecided === 0.5

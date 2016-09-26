@@ -502,6 +502,23 @@
     .arrow-left {
       transform: scaleX(-1);
     }
+    .arrow-left.arrow-right {
+      &::before {
+        // Two arrows. The left is already there; add the right
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        top: 0;
+        height: 100%;
+        transform: scaleX(-1);
+        @include svg-arrow();
+        @media (max-width: 24rem) {
+          background: none;
+        }
+      }
+    }
 
     .lean-dem { color: $strong-dem; }
     .lean-gop { color: $strong-gop; }

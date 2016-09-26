@@ -96,15 +96,23 @@
   .lean-clinton .square { background-color: $strong-dem; }
   .lean-trump .square { background-color: $strong-gop; }
 
-  label.probability {
-    left: $state-code-width + $n-votes-width + $half-marker-width;
+  label.diff {
+    position: absolute;
+    left: $state-code-width + $n-votes-width;
+    right: $state-code-width + $half-marker-width;
+    height: $collapsed-height;
     @media (min-width: $page-width) {
-      left: $state-name-width + $n-votes-width + $half-marker-width;
+      left: $state-name-width + $n-votes-width;
+      right: $half-marker-width;
+    }
+
+    canvas {
+      display: block;
     }
   }
 
   .likely-clinton, .likely-trump {
-    label.probability {
+    label.diff {
       .box::before {
         display: none;
       }
