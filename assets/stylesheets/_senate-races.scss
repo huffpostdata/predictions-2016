@@ -229,6 +229,8 @@
     h5 {
       padding: 0 .75rem;
       margin: 0;
+      font-family: $header-font-family;
+      color: $muted-color;
     }
   }
 
@@ -683,8 +685,6 @@
       h5 {
         padding-left: 1rem;
         margin: .5rem 0;
-        font-family: $header-font-family;
-        color: $muted-color;
       }
 
       ol.calculations li, &>div {
