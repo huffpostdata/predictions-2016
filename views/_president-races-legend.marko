@@ -3,24 +3,19 @@
     .headings
       h5.state - State
       h5.n-votes - Electoral Votes
-      if(data.model == 'battlegrounds')
-        h5.likely-winner - Likely Winner
-      else
-        h5.likely-winner - Win Probability
+      h5.likely-winner - Likely outcomes
     .axis
       if(data.model == 'likely-clinton')
-        .percent - 90%
+        .percent - Clinton+0
         .arrow.arrow-right
-        .percent - 100%
+        .lean-dem - Clinton+30
 
       if(data.model == 'likely-trump')
-        .percent - 90%
+        .percent - Trump+0
         .arrow.arrow-right
-        .percent - 100%
+        .lean-gop - Trump+30
 
       if(data.model == 'battlegrounds')
-        .lean-dem - Clinton
-        .arrow.arrow-left
-        .toss-up - Toss-Up
-        .arrow.arrow-right
-        .lean-gop - Trump
+        .lean-dem - Clinton+15
+        .arrow.arrow-left.arrow-right
+        .lean-gop - Trump+15
