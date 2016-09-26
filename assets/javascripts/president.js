@@ -149,12 +149,16 @@ function make_win_probabilities_histograms() {
     var width = aContainer.clientWidth;
     var height = aContainer.clientHeight - parseFloat(containerStyle.paddingTop) - parseFloat(containerStyle.paddingBottom);
 
-    //var nBuckets = Math.floor((width + 2) / 5);
-    var nBuckets = width;
+    var nBuckets = Math.floor((width + 2) / 5);
+    // We want an odd number of buckets, so the mean is highest
+    if (nBuckets % 2 === 0) nBuckets -= 1;
+    //var nBuckets = width;
     var bucketWidth = Math.floor(width / nBuckets);
     var maxFraction = 0;
     var strongDem = '#4c7de0';
     var strongGop = '#e52426';
+    var mutedDem = '#afbaf9';
+    var mutedGop = '#f19192';
     var tossUp = '#999';
 
     histograms.forEach(function(histogram) {
@@ -163,8 +167,9 @@ function make_win_probabilities_histograms() {
       for (var i = 0; i < nBuckets; i++) {
         var min = histogram.min + bucketSize * i;
         var max = histogram.min + bucketSize * (i + 1);
+        var isMean = (min <= histogram.mean) === (max >= histogram.mean);
         var fraction = barFraction(min, max, histogram.mean, histogram.stddev);
-        var color = (min <= 0 && max >= -0) ? tossUp : (min > 0 ? strongDem : strongGop);
+        var color = (min <= 0 && max >= -0) ? tossUp : (min > 0 ? (isMean ? strongDem : mutedDem) : (isMean ? strongGop : mutedGop));
 
         buckets.push({
           color: color,
@@ -178,8 +183,8 @@ function make_win_probabilities_histograms() {
     // x0: left of first rect. Each bucket is 5px wide, with the rect in the
     // middle 3px. The first and last buckets are only 4px wide, so the rect is
     // flush to the edge in those cases. That's why there's no "+ 1" here.
-    //var x0 = Math.floor((width - (bucketWidth * nBuckets)) / 2);
-    var x0 = 0;
+    var x0 = Math.floor((width - (bucketWidth * nBuckets)) / 2);
+    //var x0 = 0;
 
     histograms.forEach(function(histogram) {
       var canvas = histogram.canvas;
@@ -190,8 +195,8 @@ function make_win_probabilities_histograms() {
       ctx.clearRect(0, 0, width, height);
 
       histogram.buckets.forEach(function(bucket, i) {
-        //var x = x0 + 5 * i;
-        var x = x0 + i;
+        var x = x0 + 5 * i;
+        //var x = x0 + i;
         var h = height * bucket.fraction / maxFraction;
 
         ctx.fillStyle = bucket.color;
