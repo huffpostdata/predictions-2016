@@ -2,13 +2,17 @@ CookPriors.senate <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
   prior1=c(0.4823, 0.4881, 0.4865, 0.4792, 0.4746, 0.4879, 0.4783),
   prior2=c(0.1584, 0.1205, 0.0706, 0.0619, 0.0824, 0.0824, 0.1807),
-  dem_win_prob=c(0.9877, 0.9333, 0.8095, 0.5, 1.0 - 0.8095, 1.0 - 0.9333, 1.0 - 0.9877)
+  dem_win_prob=c(0.9877, 0.9333, 0.8095, 0.5, 1.0 - 0.8095, 1.0 - 0.9333, 1.0 - 0.9877),
+  mean=c(NA, NA, NA, NA, NA, NA, NA),
+  stddev=c(NA, NA, NA, NA, NA, NA, NA)
 )
 CookPriors.president <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid', 'US'),
   prior1=c(0.4915, 0.4862, 0.4925, 0.4927, 0.4931, 0.4933, 0.4906, 0.47),
   prior2=c(0.1603, 0.0632, 0.0497, 0.0233, 0.0599, 0.0614, 0.1246, 0.05),
-  dem_win_prob=c(0.9975, 0.9490, 0.8565, 0.5, 1.0 - 0.8565, 1.0 - 0.9490, 1.0 - 0.9975, NA)
+  dem_win_prob=c(0.9975, 0.9490, 0.8565, 0.5, 1.0 - 0.8565, 1.0 - 0.9490, 1.0 - 0.9975, NA),
+  mean=c(0.2955, 0.2370, 0.1286, 0.0106, -0.0660, -0.1066, -0.2895, NA),
+  stddev=c(0.0695, 0.0542, 0.0272, 0.06475, 0.06745, 0.0584, 0.0741, NA)
 )
 
 CalculateDiffData <- function(
@@ -40,9 +44,11 @@ CalculateDiffData <- function(
   #     date: anything from startDate to endDate. When chart_slug is empty,
   #           only endDate will be present. Otherwise, we return every day.
   #     diff_xibar: Average Dem fraction minus GOP fraction, [-1.0, 1.0]
+  #     diff_stddev: stddev on the diff
   #     diff_low: 97.5% value
   #     diff_high: 2.5% value
   #     undecided_xibar: Average "Undecided" fraction
+  #     undecided_stddev: stddev on the "Undecided" fraction
   #     dem_win_prob: fraction of simulations in which Dem beat GOP on this date
   #     dem_win_prob_with_undecided: ditto, modulo an "undecided" calculation
   #   samples_string: a string of hex integers meant to be read by our JS backend
@@ -219,7 +225,7 @@ CalculateDiffData <- function(
   # choice: one of the choices in the normalized_array
   # columns_list: desired column names and what they mean. List indexes are
   #               column names in the output frame. Values are their meanings.
-  #               'mean' is the only valid meaning, for now.
+  #               Possibilities are 'diff' and 'sd'.
   build_choice_frame <- function(normalized_array, choice, columns_list) {
     xi <- normalized_array[choice,,]
 
@@ -231,8 +237,10 @@ CalculateDiffData <- function(
 
       if (name == 'mean') {
         values <- apply(xi, 'date', mean)
+      } else if (name == 'sd') {
+        values <- apply(xi, 'date', sd)
       } else {
-        stop('name must be "mean"')
+        stop('name must be "mean" or "sd"')
       }
 
       ret[[index]] = values
@@ -247,16 +255,18 @@ CalculateDiffData <- function(
     diff_array <- normalized_array[dem_who,,] - normalized_array[gop_who,,]
 
     averages <- apply(diff_array, 'date', function(x) c(
-      mean(x, na.rm=TRUE),
-      quantile(x, c(0.025, 0.975), na.rm=TRUE),
-      mean(x > 0, na.rm=TRUE)
+      mean(x),
+      sd(x),
+      quantile(x, c(0.025, 0.975)),
+      mean(x > 0)
     ))
 
-    dimnames(averages)[[1]] <- c('mean', '0.025', '0.975', 'prob')
+    dimnames(averages)[[1]] <- c('mean', 'stddev', '0.025', '0.975', 'prob')
 
     return(data.frame(
       date=as.Date(dimnames(averages)$date),
       diff_xibar=averages['mean',],
+      diff_stddev=averages['stddev',],
       diff_low=averages['0.025',],
       diff_high=averages['0.975',],
       dem_win_prob=averages['prob',]
@@ -289,9 +299,11 @@ CalculateDiffData <- function(
         state=c('CA'),
         date=c(endDate),
         diff_xibar=NA,
+        diff_stddev=NA,
         diff_low=NA,
         diff_high=NA,
         undecided_xibar=NA,
+        undecided_stddev=NA,
         dem_win_prob=c(1.0),
         dem_win_prob_with_undecided=c(1.0)
       ),
@@ -308,9 +320,11 @@ CalculateDiffData <- function(
         state=c(state_code),
         date=c(endDate),
         diff_xibar=NA,
+        diff_stddev=NA,
         diff_low=NA,
         diff_high=NA,
         undecided_xibar=NA,
+        undecided_stddev=NA,
         dem_win_prob=c(dem_win_prob),
         dem_win_prob_with_undecided=c(dem_win_prob)
       ),
@@ -454,7 +468,11 @@ CalculateDiffData <- function(
     state=rep(state_code, times=endDate - outputStartDate + 1),
     date=seq.Date(from=outputStartDate, to=endDate, by='day')
   )
-  undecided_frame <- build_choice_frame(normalized_array, 'Undecided', list(undecided_xibar='mean'))
+  undecided_frame <- build_choice_frame(
+    normalized_array,
+    'Undecided',
+    list(undecided_xibar='mean', undecided_stddev='sd')
+  )
   diff_frame <- diffSummary(normalized_array, dem_label, gop_label)
 
   out <- data.frame(frame, undecided_frame, diff_frame)
@@ -469,9 +487,11 @@ CalculateDiffData <- function(
       'state',
       'date',
       'diff_xibar',
+      'diff_stddev',
       'diff_low',
       'diff_high',
       'undecided_xibar',
+      'undecided_stddev',
       'dem_win_prob',
       'dem_win_prob_with_undecided'
     )],

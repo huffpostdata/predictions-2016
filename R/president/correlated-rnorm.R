@@ -24,5 +24,3 @@ CorrelatedRnorm <- function() {
   ret <- kCorrelationConstant %*% random
   return(drop(ret))
 }
-
-print(CorrelatedRnorm())
