@@ -207,24 +207,24 @@
     background: $background; // cover the vertical line running down the page
     border-top: 1px dotted $border-color;
     border: .25rem solid $alt-background;
-  }
 
-	h4 {
-    margin-top: .75rem;
-    padding: 0 .75rem;
-    line-height: 1.5;
-    font-family: $header-font-family;
-    font-weight: bold;
-    font-size: 1rem;
-
-    strong.probability {
-      display: inline-block;
-      margin-left: -.25rem;
+    h4 {
+      margin-top: .75rem;
+      padding: 0 .75rem;
+      line-height: 1.5;
+      font-family: $header-font-family;
       font-weight: bold;
-      padding: 0 .25rem;
-      color: white;
+      font-size: 1rem;
+
+      strong.probability {
+        display: inline-block;
+        margin-left: -.25rem;
+        font-weight: bold;
+        padding: 0 .25rem;
+        color: white;
+      }
     }
-	}
+  }
 
   .lean-dem strong.probability, .lean-clinton strong.probability { background: $strong-dem; }
   .lean-gop strong.probability, .lean-trump strong.probability { background: $strong-gop; }
@@ -538,10 +538,12 @@
 
   // Increase spacing of race details on desktop
   @media (min-width: $min-desktop-width) {
-    h4 {
-      margin-top: 2rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
+    .details {
+      h4 {
+        margin-top: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
     }
 
     .chart-container {
@@ -658,6 +660,13 @@
         padding-top: 1rem;
         padding-left: 1rem;
         padding-right: 0;
+      }
+
+      h5 {
+        padding-left: 1rem;
+        margin: .5rem 0;
+        font-family: $header-font-family;
+        color: $muted-color;
       }
 
       ol.calculations li, &>div {

@@ -119,6 +119,12 @@
     }
   }
 
+  .legend {
+    font-size: .85rem;
+    color: $color;
+    font-style: normal;
+  }
+
   .races-legend.likely-clinton, .races-legend.likely-trump {
     .toss-up {
       // In pres races, "toss-up" shows up on left and right.

@@ -18,33 +18,23 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
 
     .details
       h4
-        if(race.toss_up)
-          strong.probability - Toss-up
+        if(race.final_diff_xibar == 0)
+          strong.probability - Tie
           -  in ${race.state_name}
         else
-          strong.probability - ${race.win_prob_100}%
-          -  chance ${race.winner_name} will win
-          -  ${race.state_name}
+          strong.probability - ${Math.abs(race.final_diff_xibar).toFixed(1)}
+          -  percentage-point ${race.final_diff_leader_name} lead in ${race.state_name}
+      h5
+        strong.margin - ±${race.final_diff_margin.toFixed(1)} points
+        - , 19 times out of 20
+
       if(!race.curve.is_plottable)
         ol.calculations
           li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/presidential/charts/scorecard">Electoral College Ratings</a>.
           li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>.
-          if(!race.toss_up)
-            li - Since 2004, Cook has been right about this call in <strong>${race.win_prob_100}%</strong> of all presidential races.
-          else
-            li - We give Clinton and Trump each a 50 percent chance.
+          li - We averaged the winners' margins in all races with this Cook rating since 2004 to arrive at this prediction.
       else
-        ol.calculations
-          li - <span class="${race.winner}">${race.winner_name}</span> won against <span class="${race.loser}">${race.loser_name}</span> in <strong>${race.raw_win_prob_100}%</strong> of our simulations.
-
-          if(race.dem_win_prob != 0.5)
-            li - TK national adjustment: <strong>${race.national_adjustment_100} points</strong>
-            li - TK undecided adjustment: <strong>${race.undecided_margin_100} points</strong>
-
-            if(race.toss_up)
-              li - That left us with a toss-up.
-            else
-              li - Our adjusted probability is ${race.win_prob_100}% ${race.winner_name}.
+        .legend - We simulated 5,000 random populations whose voting intentions correspond to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> poll results</span> in this state. Here are <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> 200</span> of these populations and the <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
 
         .chart-container
           .y-axis-and-rest
@@ -74,6 +64,8 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
                       time datetime="${race.curve.updated_at.toISOString()}" - ${data.helpers.format_date(race.curve.updated_at)}
                       strong.spread - $!{race.curve.today_spread_html()}
 
-        .legend - Our algorithm simulates 5,000 random populations whose voting intentions correspond to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> poll results</span>. For illustration, we plot <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> 200</span> of these populations and show the <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
+        ol.calculations
+          li - These simulations show a margin of error of <strong>${race.diff_margin.toFixed(1)} percentage points</strong>, 19 times out of 20.
+          li - They also suggest voters are <span class="undecided">${race.undecided_margin_100}% undecided</span>. We added <strong>${race.undecided_margin_boost.toFixed(1)} points</strong> to our margin of error.
 
         .source - Poll data from <a href="//elections.huffingtonpost.com/pollster/${race.pollster_slug}">HuffPost Pollster</a>
