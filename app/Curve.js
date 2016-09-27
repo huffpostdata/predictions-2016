@@ -48,14 +48,12 @@ function simple_reduce_samples(uint16_samples, f) {
   return f.apply(null, one_per_sample)
 }
 
-function render_path_d_for_ys(ys_and_nulls, y_max) {
+function render_path_d_for_ys(ys, y_max) {
   let last_y = 0
   let last_x = 0
   let first = true
 
   function step(y, i) {
-    if (y === null) return null
-
     const x = Math.round(DateWidth * i)
 
     const dx = x - last_x
@@ -72,18 +70,18 @@ function render_path_d_for_ys(ys_and_nulls, y_max) {
     }
   }
 
-  return ys_and_nulls.map(step).filter(s => s !== null).join('')
+  return ys.map(step).join('')
 }
 
 function calculate_sample_path_d(uint16s, y_max) {
   const convert_y = ChartHeight / 2 / y_max
-  const values = uint16s.map(v => v === null ? null : Math.round(ChartHeight / 2 - convert_y * uint16_to_fraction(v)))
+  const values = uint16s.map(v => Math.round(ChartHeight / 2 - convert_y * uint16_to_fraction(v)))
   return render_path_d_for_ys(values, y_max)
 }
 
 function values_to_path_d(raw_values, y_max) {
   const convert_y = ChartHeight / 2 / y_max
-  const values = raw_values.map(v => v === null ? null : Math.round(ChartHeight / 2 - convert_y * v))
+  const values = raw_values.map(v => Math.round(ChartHeight / 2 - convert_y * v))
   return render_path_d_for_ys(values, y_max)
 }
 
