@@ -33,19 +33,10 @@ module.exports = class PresidentRace {
     this.n_electoral_votes = +hash.n_electoral_votes
     this.splits = Split.parse_all(hash.split_cook_ratings_by_cd)
 
-    this.dem_win_prob = summary.dem_win_prob
-    this.national_dem_win_prob = summary.national_dem_win_prob
-    this.national_delta = summary.national_delta
-    this.national_adjustment = summary.national_adjustment
-    this.national_adjustment_100 = (100 * this.national_adjustment).toFixed(1)
-    this.dem_win_prob_with_adjustment = summary.dem_win_prob_with_adjustment
-    this.undecided_margin = summary.undecided_margin
-    this.undecided_margin_100 = (100 * this.undecided_margin).toFixed(1)
-    this.dem_win_prob_with_adjustment_and_undecided = summary.dem_win_prob_with_adjustment_and_undecided
-
     this.diff_xibar = 100 * (+summary.diff_xibar)
     this.diff_stddev = 100 * (+summary.diff_stddev)
     this.diff_margin = this.diff_stddev * 1.96
+    this.undecided_xibar_100 = 100 * (+summary.undecided_xibar)
     this.undecided_stddev_boost = 100 * (+summary.undecided_stddev_boost)
     this.undecided_margin_boost = this.undecided_stddev_boost * 1.96
 
@@ -63,14 +54,6 @@ module.exports = class PresidentRace {
     const p = this.dem_win_prob_with_adjustment_and_undecided
     this.lean_html_class = this.final_diff_xibar > 0 ? 'lean-clinton' : (this.final_diff_xibar < 0.5 ? 'lean-trump' : 'toss-up')
     this.call_html_class = p > 0.9 ? 'probably-clinton' : (p < 0.9 ? 'probably-trump' : 'no-call')
-
-    this.raw_win_prob_100 = (100 * Math.max(this.dem_win_prob, 1 - this.dem_win_prob)).toFixed(1)
-    this.win_prob = Math.max(p, 1 - p)
-    this.win_prob_100 = (this.win_prob * 100).toFixed(1)
-    this.winner_name = p > 0.5 ? 'Clinton' : (p < 0.5 ? 'Trump' : '')
-    this.winner = this.winner_name.toLowerCase()
-    this.loser_name = p < 0.5 ? 'Clinton' : (p > 0.5 ? 'Trump' : '')
-    this.loser = this.loser_name.toLowerCase()
   }
 
   /**
