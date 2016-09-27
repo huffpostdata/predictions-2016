@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('fs')
-const csv_parse = require('csv-parse/lib/sync')
+const parseTsv = require('../generator/parseTsv')
 
 const NToTie = 269;
 const NToWin = 270;
@@ -33,10 +33,7 @@ class PresidentVoteCounts {
 }
 
 PresidentVoteCounts.load = function() {
-  const input_path = `${__dirname}/../data/sheets/output/president-vote-counts.tsv`
-  const tsv = fs.readFileSync(input_path)
-  const array = csv_parse(tsv, { delimiter: '\t', columns: true })
-
+  const array = parseTsv.fromPath('data/sheets/output/president-vote-counts.tsv')
   const counts = array.map(o => +o.n) // [ 0, 0, 0, ... ]: index is vote count
   return new PresidentVoteCounts(counts)
 }

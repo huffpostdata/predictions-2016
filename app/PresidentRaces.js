@@ -1,11 +1,11 @@
 'use strict'
 
 const fs = require('fs')
-const csv_parse = require('csv-parse/lib/sync')
 
 const moment = require('moment-timezone')
 
 const PresidentRace = require('./PresidentRace')
+const parseTsv = require('../generator/parseTsv')
 
 function countElectoralVotes(races) {
   return races
@@ -46,20 +46,14 @@ class PresidentRaces {
   }
 }
 
-function load_array_from_tsv_path(relative_path) {
-  const input_path = `${__dirname}/../data/sheets/${relative_path}`
-  const tsv = fs.readFileSync(input_path)
-  return csv_parse(tsv, { delimiter: '\t', columns: true })
-}
-
 PresidentRaces.load = function(curves) {
   const updated_at = fs.statSync(`${__dirname}/../data/sheets/output/president-summaries.tsv`).mtime
 
-  const race_hashes = load_array_from_tsv_path('input/president-races.tsv')
+  const race_hashes = parseTsv.fromPath('data/sheets/input/president-races.tsv')
   const state_code_to_race_hash = {}
   race_hashes.forEach(h => state_code_to_race_hash[h.state_code] = h)
 
-  const summaries = load_array_from_tsv_path('output/president-summaries.tsv')
+  const summaries = parseTsv.fromPath('data/sheets/output/president-summaries.tsv')
   const state_code_to_summary = {}
   summaries.forEach(h => state_code_to_summary[h.state_code] = h)
 

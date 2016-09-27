@@ -1,10 +1,10 @@
 'use strict'
 
 const fs = require('fs')
-const csv_parse = require('csv-parse/lib/sync')
 
 const Curve = require('./Curve')
 const CurvePoint = require('./CurvePoint')
+const parseTsv = require('../generator/parseTsv')
 
 const ElectionDayS = '2016-11-08'
 
@@ -46,9 +46,7 @@ function load_state_samples(senate_or_president, state_code) {
  *   senate_or_president: "senate" or "president"
  */
 function load_all_state_polls(senate_or_president) {
-  const input_path = `${__dirname}/../data/sheets/output/${senate_or_president}-polls.tsv`
-  const tsv = fs.readFileSync(input_path)
-  const array = csv_parse(tsv, { delimiter: '\t', columns: true })
+  const array = parseTsv.fromPath(`data/sheets/output/${senate_or_president}-polls.tsv`)
 
   const ret = new Map()
   array.forEach(o => {
@@ -69,8 +67,8 @@ function load_all_state_polls(senate_or_president) {
  */
 Curves.load = function(senate_or_president) {
   const input_path = `${__dirname}/../data/sheets/output/${senate_or_president}-curves.tsv`
-  const tsv = fs.readFileSync(input_path)
-  const array = csv_parse(tsv, { delimiter: '\t', columns: true })
+  const tsv = fs.readFileSync(input_path, 'utf8')
+  const array = parseTsv(tsv)
   const updated_at = fs.statSync(input_path).mtime
 
   const curve_points = array.map(hash => new CurvePoint(hash))
