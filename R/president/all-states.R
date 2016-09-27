@@ -97,89 +97,31 @@ CalculatedUndecidedStddevBoost <- function(diff_xibar, undecided_xibar) {
 calculate_race_summary <- function(race, national) {
   Today <- Sys.Date()
 
-  common_columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar', 'undecided_stddev')
+  columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar', 'undecided_stddev')
 
   curve <- race$curve
-  today <- curve[curve$date == Today, common_columns]
-  end_day <- curve[curve$date == EndDate, c('dem_win_prob', common_columns)]
+  today <- curve[curve$date == Today, columns]
+  end_day <- curve[curve$date == EndDate, columns]
 
-  if (nrow(today) == 0) {
-    # This is a stub. Ignore all our cool calculations.
-    Cook <- CookPriors.president[c('rating', 'mean', 'stddev')]
-    cook_mean <- Cook[match(race$race$cook_rating, Cook$rating), 'mean']
-    cook_stddev <- Cook[match(race$race$cook_rating, Cook$rating), 'stddev']
-
-    return(data.frame(
-      state_code=c(race$race$state_code),
-      n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
-      diff_xibar=c(cook_mean),
-      diff_stddev=c(cook_stddev),
-      undecided_stddev_boost=c(0.0),
-      dem_win_prob=c(end_day$dem_win_prob),
-      national_dem_win_prob=NA,
-      national_delta=NA,
-      national_adjustment=NA,
-      dem_win_prob_with_adjustment=NA,
-      undecided_margin=NA,
-      dem_win_prob_with_adjustment_and_undecided=c(end_day$dem_win_prob)
-    ))
-  }
-
-  # How much we move towards 0.5. For instance: if today is 0.75 (Dem) and
-  # election day is 0.65, we move 0.1 towards 0.5; national_delta <- -0.1. For
-  # 0.25 -> 0.35 (which is equivalent to 0.75 GOP -> 0.65),
-  # national_delta <- 0.1.
-  #
-  # This measures our national uncertainty stemming from the distance between
-  # today and election day.
-  national_today_prob <- national[national$date == Today, c('dem_win_prob')]
-  national_end_prob <- national[national$date == EndDate, c('dem_win_prob')]
-  national_delta <- abs(national_end_prob - 0.5) - abs(national_today_prob - 0.5)
-
-  # Adjust based on uncertainty and correlation.
-  #
-  # MS, with correlation -0.55, tends to vote _more_ Republican when national
-  # polls are _more_ Democratic. OH, with correlation 0.74, votes _more_
-  # Democratic when national polls are more Democratic.
-  #
-  # Examples:
-  #   national_delta -0.1 (meaning national leans Dem) -> move MS prob -0.055
-  #                       and move OH prob +0.074.
-  #   national_delta 0.1 (meaning national leans GOP) -> move MS prob +0.055
-  #                      and move OH prob -0.074.
-  national_correlation <- as.double(race$race$national_dem_correlation)
-  adjustment <- -(national_delta) * national_correlation # + -> lean Dem; - -> lean GOP
-
-  prob_with_adjustment <- max(0.0, min(1.0, ifelse(
-    end_day$dem_win_prob >= 0.5,
-    max(0.5, end_day$dem_win_prob + adjustment),
-    min(0.5, end_day$dem_win_prob + adjustment)
-  )))
-
-  undecided_margin <- min(0.1, abs(today$undecided_xibar / today$diff_xibar / 100))
-
-  prob_with_adjustment_and_undecided <- ifelse(
-    prob_with_adjustment >= 0.5,
-    max(0.5, prob_with_adjustment - undecided_margin),
-    min(0.5, prob_with_adjustment + undecided_margin)
+  ret <- data.frame(
+    state_code=c(race$race$state_code),
+    n_electoral_votes=c(as.integer(race$race$n_electoral_votes))
   )
 
-  return(data.frame(
-    state_code=c(race$race$state_code),
-    n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
-    diff_xibar=c(end_day$diff_xibar),
-    diff_stddev=c(end_day$diff_stddev),
-    undecided_stddev_boost=c(
-      CalculatedUndecidedStddevBoost(today$diff_xibar, today$undecided_xibar)
-    ),
-    dem_win_prob=c(end_day$dem_win_prob),
-    national_dem_win_prob=c(national_end_prob),
-    national_delta=c(national_delta),
-    national_adjustment=c(adjustment),
-    dem_win_prob_with_adjustment=c(prob_with_adjustment),
-    undecided_margin=c(undecided_margin),
-    dem_win_prob_with_adjustment_and_undecided=c(prob_with_adjustment_and_undecided)
-  ))
+  if (nrow(today) == 0) {
+    cook <- CookPriors.president[match(race$race$cook_rating, CookPriors.president$rating),]
+    ret$diff_xibar <- cook$mean
+    ret$diff_stddev <- cook$stddev
+    ret$undecided_xibar <- NA
+    ret$undecided_stddev_boost <- c(0)
+  } else {
+    ret$diff_xibar <- end_day$diff_xibar
+    ret$diff_stddev <- end_day$diff_stddev
+    ret$undecided_xibar <- today$undecided_xibar
+    ret$undecided_stddev_boost <- CalculatedUndecidedStddevBoost(today$diff_xibar, today$undecided_xibar)
+  }
+
+  return(ret)
 }
 
 calculate_race_summaries <- function(races, national) {
@@ -237,7 +179,7 @@ predict_n_dem_president_votes <- function(summaries, races) {
   )
 
   # c(0, 0, 0, 2, 0, ...)
-  summaries$n_split_votes <- nchar(gsub(',?[^,]+', ',', split_ratings_by_state))
+  n_split_votes <- nchar(gsub(',?[^,]+', ',', split_ratings_by_state))
 
   # c("D-Solid", "Toss Up", ...)
   split_cook_ratings <- unlist(strsplit(split_ratings_by_state, ',', fixed=TRUE))
@@ -250,8 +192,8 @@ predict_n_dem_president_votes <- function(summaries, races) {
   # Number of votes each probability maps to. The "split" votes are each worth
   # one.
   win_n_votes <- append(
-    summaries$n_electoral_votes - summaries$n_split_votes, # states (at-large) and DC
-    rep(1, times=length(split_cook_ratings))               # ME and NE split votes
+    summaries$n_electoral_votes - n_split_votes, # states (at-large) and DC
+    rep(1, times=length(split_cook_ratings))     # ME and NE split votes
   )
 
   # Means and stddevs -- one per race. The "split" votes are their own races, so
