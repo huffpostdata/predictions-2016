@@ -18,13 +18,34 @@ class Curves {
   }
 }
 
-function string_to_sample(string) {
-  const buf = Buffer.from(string, 'hex')
-  const n_ints = buf.length >> 1
+/**
+ * Assumes uint8 is the byte [0-9a-f] and returns 0x0-0xf.
+ */
+function dehex8(uint8) {
+  if (uint8 >= 0x61) {
+    return uint8 - 0x57
+  } else {
+    return uint8 & 0xf
+  }
+}
+
+/**
+ * Assumes uint32 is [0-9a-f]{4} and returns 0x0000-0xffff.
+ */
+function dehex32(uint32) {
+  return (dehex8((uint32 & 0xff000000) >> 24) << 12)
+    | (dehex8((uint32 & 0x00ff0000) >> 16) << 8)
+    | (dehex8((uint32 & 0x0000ff00) >> 8) << 4)
+    | dehex8(uint32 & 0xff)
+}
+
+function buf_to_sample(buf) {
+  const n_ints = buf.length >> 2
   const uint16s = new Array(n_ints)
 
   for (let i = 0; i < n_ints; i++) {
-    uint16s[i] = buf.readUInt16BE(i << 1, true)
+    const uint32 = buf.readUInt32BE(i * 4)
+    uint16s[i] = dehex32(uint32)
   }
 
   return uint16s
@@ -32,11 +53,20 @@ function string_to_sample(string) {
 
 function load_state_samples(senate_or_president, state_code) {
   const input_path = `${__dirname}/../data/sheets/output/${senate_or_president}-samples-${state_code}`
-  const one_big_string = fs.readFileSync(input_path, 'binary')
+  const buf = fs.readFileSync(input_path)
 
-  return one_big_string.split('\n')
-    .filter(s => s.length > 0) // remove empty lines
-    .map(string_to_sample)
+  const lineLength = buf.indexOf('\n'.codePointAt(0))
+  if (lineLength === 0) return []
+
+  const n = Math.floor(buf.length / lineLength)
+
+  const ret = new Array(n)
+  for (let i = 0; i < n; i++) {
+    const slice = buf.slice(i * (lineLength + 1), i * (lineLength + 1) + lineLength)
+    ret[i] = buf_to_sample(slice)
+  }
+
+  return ret
 }
 
 /**
