@@ -81,7 +81,7 @@
     "type": "h3",
     "texts": [
       {
-        "text": "1. State-By-State Probabilities"
+        "text": "1. State-By-State Averages"
       }
     ]
   },
@@ -160,11 +160,18 @@
         "text": "Download our "
       },
       {
-        "text": "link_to(`state-by-state probabilities TSV`, `president-curves-tsv`, page_context.model.races.updated_at_s)",
+        "text": "link_to(`state-by-state averages`, `president-summaries-tsv`, page_context.model.races.updated_at_s)",
         "underline": true
       },
       {
-        "text": " file."
+        "text": " and "
+      },
+      {
+        "text": "link_to(`state-by-state curves`, `president-curves-tsv`, page_context.model.races.updated_at_s)",
+        "underline": true
+      },
+      {
+        "text": " TSV files."
       }
     ]
   },
@@ -172,7 +179,7 @@
     "type": "h3",
     "texts": [
       {
-        "text": "2. Likely Seat Counts"
+        "text": "2. Likely Vote Counts"
       }
     ]
   },
@@ -180,7 +187,15 @@
     "type": "p",
     "texts": [
       {
-        "text": "Finally, we simulated a Nov. 8 election 100 million times using the state-by-state probabilities. The proportion of times Clinton won 270 or more electoral votes is the probability Clinton becomes president. The proportion of times Trump won 270 or more electoral votes is the probability Trump becomes president. TK mention a tie?"
+        "text": "Finally, we simulated a Nov. 8 election 100 million times using the state-by-state averages. TKTK correlations. TKTK all the polls are wrong."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The proportion of times Clinton won 270 or more electoral votes is the probability Clinton becomes president. The proportion of times Trump won 270 or more electoral votes is the probability Trump becomes president. TK mention a tie?"
       }
     ]
   },
@@ -191,11 +206,11 @@
         "text": "Download our "
       },
       {
-        "text": "link_to(`likely seat counts TSV`, `president-vote-counts-tsv`, page_context.model.races.updated_at_s)",
+        "text": "link_to(`likely vote counts`, `president-vote-counts-tsv`, page_context.model.races.updated_at_s)",
         "underline": true
       },
       {
-        "text": " file."
+        "text": " TSV file."
       }
     ]
   },

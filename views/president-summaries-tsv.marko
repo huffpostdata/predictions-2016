@@ -1,0 +1,3 @@
+$!{[ 'state', 'n_electoral_votes', 'diff_xibar', 'diff_stddev', 'undecided_xibar', 'undecided_stddev_boost' ].join('\t') + '\n'}
+for(race in data.model.races)
+  $!{[ race.state_code, race.n_electoral_votes, race.diff_xibar, race.diff_stddev, race.undecided_xibar, race.undecided_stddev_boost ].join('\t') + '\n'}

@@ -21,7 +21,6 @@ senate-curves-tsv:
 senate-seat-counts-tsv:
   path: senate-seat-counts-:date.tsv
   content-type: text/tab-separated-values; charset=utf-8
-  template: event-counts-tsv
   collection: senate_races_for_tsv
 
 president:
@@ -40,10 +39,14 @@ president-curves-tsv:
   template: curves-tsv
   collection: president_races_for_tsv
 
+president-summaries-tsv:
+  path: president-summaries-:date.tsv
+  content-type: text/tab-separated-values; charset=utf-8
+  collection: president_races_for_tsv
+
 president-vote-counts-tsv:
   path: president-vote-counts-:date.tsv
   content-type: text/tab-separated-values; charset=utf-8
-  template: event-counts-tsv
   collection: president_races_for_tsv
 
 sidebar:
