@@ -8,9 +8,8 @@ var races=data.model.races
 
   p - If four Republican Senate seats flip to Democrats and there are no other changes, the 2017 Senate will be split 50-50.
 
-  var all_races=races.sorted_by('flip-probability')
-  var likely_flips=all_races.filter(function(race) { return race.flip_prob >= 0.5 })
-  var unlikely_flips=all_races.filter(function(race) { return race.flip_prob < 0.5 })
+  var likely_flips=races.sorted_by('dem-win-probability').filter(function(race) { return race.flip_prob >= 0.5 })
+  var unlikely_flips=races.sorted_by('dem-win-probability').filter(function(race) { return race.flip_prob < 0.5 })
 
   h3 - States Likely To Flip
 
