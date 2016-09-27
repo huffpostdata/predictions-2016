@@ -24,16 +24,19 @@
     // we'll position with left: or right:
   }
 
-  .text {
-    position: absolute;
-    top: 0;
-    // we'll position with left: or right:
-  }
-
   .bar {
     margin-top: $image-size;
     height: 2rem;
     box-sizing: border-box;
+  }
+
+  .text {
+    margin-top: .25rem;
+
+    @media (min-width: $min-desktop-width) {
+      position: absolute; // we position with left: or right:
+      top: .25rem;
+    }
   }
 
   h3 {
@@ -55,7 +58,7 @@
       left: 0;
       background-image: asset-url('digest', 'images/clinton-head.jpg');
     }
-    .text { left: $image-size; }
+    .text { left: $image-size + .5rem; }
     strong { color: $strong-dem; }
     .bar { background-color: $strong-dem; border-right: 1px solid $background; }
   }
@@ -69,7 +72,7 @@
       right: 0;
       background-image: asset-url('digest', 'images/trump-head.jpg');
     }
-    .text { right: $image-size; }
+    .text { right: $image-size + .5rem; }
     strong { color: $strong-gop; }
     .bar { background-color: $strong-gop; border-left: 1px solid $background; }
   }
