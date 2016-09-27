@@ -17,6 +17,8 @@ output_president_summaries_path <- paste0(output_dir, '/president-summaries.tsv'
 output_president_samples_path <- paste0(output_dir, '/president-samples-STATE')
 
 NMonteCarloSimulations <- 1e7
+PollsAreAllWrongByMean <- 0.01 # positive 0.01 means a given year's "all polls" skew Dem by 1 point on average.
+PollsAreAllWrongByStddev <- 0.02
 EndDate <- as.Date('2016-11-08')
 
 if (fast) NMonteCarloSimulations <- 1e6
@@ -85,13 +87,8 @@ CalculatedUndecidedStddevBoost <- function(diff_xibar, undecided_xibar) {
   # certainty.
   #
   # * Further from election day, there are more Undecideds -> higher.
-  # * When the margin between candidates beats Undecideds -> lower.
-
-  margin = max(1e-5, abs(diff_xibar))     # avoid div by zero
-  mean <- undecided_xibar / margin        # always positive
-  stddev <- sqrt((mean - margin) ^ 2) / 4 # stddev of undecided/margin
-  clamped_stddev <- min(0.1, stddev)      # magic number: avoid 100% stddev
-  return(clamped_stddev)
+  undecided_as_stddev <- undecided_xibar / 1.96 # turn into stddev
+  return(undecided_as_stddev)
 }
 
 calculate_race_summary <- function(race, national) {
@@ -209,7 +206,9 @@ predict_n_dem_president_votes <- function(summaries, races) {
   n_races <- length(means)
 
   for (n in 1:NMonteCarloSimulations) {
-    random_numbers <- CorrelatedRnorm() * stddevs + means
+    polls_are_wrong_by <- rnorm(1, mean=PollsAreAllWrongByMean*2, sd=PollsAreAllWrongByStddev*2)[1]
+    random_numbers <- CorrelatedRnorm() * stddevs + means - polls_are_wrong_by
+
     n_dem_votes <- sum((random_numbers > 0) * win_n_votes)
     index <- n_dem_votes + 1
     n_counts[index] <- n_counts[index] + 1
