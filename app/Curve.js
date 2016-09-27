@@ -1,7 +1,7 @@
 'use strict'
 
 const ElectionDayS = '2016-11-08'
-const StartDayS = '2016-07-01'
+const StartDayS = '2016-07-01' // Expect bizarre errors if you change this
 const NDays = Math.round((new Date(ElectionDayS) - new Date(StartDayS)) / 86400000) + 1
 
 const ChartHeight = 600
@@ -9,27 +9,6 @@ const ChartWidth = 1000
 const DateWidth = ChartWidth / (NDays - 1)
 
 const UInt16Max = 0xffff
-
-/**
- * Given an Array of values per day that ends on 2016-11-08 (inclusive), make an
- * Array of the constant length that we want, so the first day is StartDayS
- * (inclusive).
- *
- * If `array` is too short, we create a new Array that starts with `null`s.
- *
- * If `array` is too long, we return only the last values.
- */
-function make_array_fill_our_date_range(array) {
-  if (array.length < NDays) {
-    const nulls = new Array(NDays - array.length)
-    nulls.fill(null)
-    return nulls.concat(array)
-  } else if (array.length > NDays) {
-    return array.slice(array.length - NDays)
-  } else {
-    return array
-  }
-}
 
 /**
  * Returns a fraction in the range [ -1.0, 1.0 ]
@@ -53,7 +32,10 @@ function render_path_d_for_ys(ys, y_max) {
   let last_x = 0
   let first = true
 
-  function step(y, i) {
+  const steps = new Array(ys.length)
+
+  for (let i = 0; i < ys.length; i++) {
+    const y = ys[i]
     const x = Math.round(DateWidth * i)
 
     const dx = x - last_x
@@ -64,13 +46,13 @@ function render_path_d_for_ys(ys, y_max) {
 
     if (first) {
       first = false
-      return `M${dx},${dy} l`
+      steps[i] = `M${dx},${dy}`
     } else {
-      return ` ${dx},${dy}`
+      steps[i] = `${dx},${dy}`
     }
   }
 
-  return ys.map(step).join('')
+  return steps.join('l')
 }
 
 function calculate_sample_path_d(uint16s, y_max) {
@@ -106,8 +88,8 @@ module.exports = class Curve {
       // Today is `updated_at_x` days from the start of this chart
       this.updated_at_x = Math.round((new Date(updated_at.toISOString().slice(0, 10)) - new Date(StartDayS)) / 86400000)
 
-      this.points = make_array_fill_our_date_range(points)
-      this.uint16_samples = uint16_samples.map(make_array_fill_our_date_range)
+      this.points = points
+      this.uint16_samples = uint16_samples
     }
   }
 
