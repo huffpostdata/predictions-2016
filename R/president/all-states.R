@@ -17,9 +17,10 @@ output_president_summaries_path <- paste0(output_dir, '/president-summaries.tsv'
 output_president_samples_path <- paste0(output_dir, '/president-samples-STATE')
 
 NMonteCarloSimulations <- 1e7
-PollsAreAllWrongByMean <- 0.01 # positive 0.01 means a given year's "all polls" skew Dem by 1 point on average.
-PollsAreAllWrongByStddev <- 0.02
+PollsAreAllWrongByMean <- 0
+PollsAreAllWrongByStddev <- 0.016854 # TODO explain how we got this
 EndDate <- as.Date('2016-11-08')
+Today <- Sys.Date()
 
 if (fast) NMonteCarloSimulations <- 1e6
 
@@ -88,12 +89,10 @@ CalculatedUndecidedStddevBoost <- function(diff_xibar, undecided_xibar) {
   #
   # * Further from election day, there are more Undecideds -> higher.
   undecided_as_stddev <- undecided_xibar / 1.96 # turn into stddev
-  return(undecided_as_stddev)
+  return(undecided_as_stddev / 4)
 }
 
 calculate_race_summary <- function(race, national) {
-  Today <- Sys.Date()
-
   columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar', 'undecided_stddev')
 
   curve <- race$curve
@@ -145,15 +144,19 @@ load_or_calculate_president_data_for_races <- function(races) {
   curves_list <- lapply(data_list, function(x) x$curve)
   curves <- do.call(rbind, curves_list)
 
-  national <- load_or_calculate_national_president_data()$curve
-  summaries <- calculate_race_summaries(data_list, national)
+  national_curve <- load_or_calculate_national_president_data()$curve
+  summaries <- calculate_race_summaries(data_list, national_curve)
+
+  today <- national_curve[national_curve$date == Today, ]
+  end_day <- national_curve[national_curve$date == EndDate, ]
 
   state_samples_strings <- lapply(data_list, function(x) x$samples_string)
 
   return(list(
     curves=curves,
     summaries=summaries,
-    state_samples_strings=state_samples_strings
+    state_samples_strings=state_samples_strings,
+    national_diff_stddev=end_day$diff_xibar + today$undecided_xibar / 1.96 / 4
   ))
 }
 
@@ -163,7 +166,7 @@ load_or_calculate_president_data_for_races <- function(races) {
 # times; two votes won 400 times; etc.
 #
 # The output vector always size 539.
-predict_n_dem_president_votes <- function(summaries, races) {
+predict_n_dem_president_votes <- function(summaries, races, national_diff_stddev) {
   cat('Running', NMonteCarloSimulations, 'president simulations...\n')
 
   # Separate out ME-01, ME-02, NE-01, NE-02, NE-03: they're their own races,
@@ -206,7 +209,7 @@ predict_n_dem_president_votes <- function(summaries, races) {
   n_races <- length(means)
 
   for (n in 1:NMonteCarloSimulations) {
-    polls_are_wrong_by <- rnorm(1, mean=PollsAreAllWrongByMean*2, sd=PollsAreAllWrongByStddev*2)[1]
+    polls_are_wrong_by <- rnorm(1, mean=0, sd=national_diff_stddev)[1]
     random_numbers <- CorrelatedRnorm() * stddevs + means - polls_are_wrong_by
 
     n_dem_votes <- sum((random_numbers > 0) * win_n_votes)
@@ -262,7 +265,7 @@ run_all_president <- function() {
   dump_president_samples(president_data$state_samples_strings)
   dump_president_summaries(president_data$summaries)
 
-  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries, races)
+  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries, races, president_data$national_diff_stddev)
   dump_president_vote_counts(n_dem_votes)
 }
 
