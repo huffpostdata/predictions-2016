@@ -1,4 +1,17 @@
 .races-legend.${data.model}
+  .key
+    .label
+      h5 - Key
+    .mean - Average outcome
+    .chance - 95% of outcomes
+
+    if(data.model == 'likely-clinton')
+      .container data-xibar="15" data-stddev="3" - <canvas></canvas>
+    if(data.model == 'likely-trump')
+      .container data-xibar="-15" data-stddev="3" - <canvas></canvas>
+    if(data.model == 'battlegrounds')
+      .container data-xibar="0" data-stddev="6" - <canvas></canvas>
+
   .inner
     .headings
       h5.state - State

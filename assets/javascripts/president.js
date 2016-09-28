@@ -112,7 +112,7 @@ function make_win_probabilities_histograms() {
 
   var histograms = []; // { canvas, container, min, max, buckets, mean, stddev }
   function collectHistograms(html_class, min, max) {
-    var canvases = mainContainer.querySelectorAll('ul.races.' + html_class + ' canvas');
+    var canvases = mainContainer.querySelectorAll('ul.races.' + html_class + ' canvas, .races-legend.' + html_class + ' canvas');
     for (var i = 0; i < canvases.length; i++) {
       var canvas = canvases[i];
       var container = canvas.parentNode;
@@ -153,7 +153,6 @@ function make_win_probabilities_histograms() {
     var nBuckets = Math.floor((width + 1) / 5);
     // We want an odd number of buckets, so the mean is highest
     if (nBuckets % 2 === 0) nBuckets -= 1;
-    //var nBuckets = width;
     var bucketWidth = Math.floor(width / nBuckets);
     var maxFraction = 0;
     var strongDem = '#4c7de0';
@@ -162,18 +161,27 @@ function make_win_probabilities_histograms() {
     var mutedGop = '#f19192';
     var tossUp = '#999';
 
+    function color(barMin, barMax, mean, stddev) {
+      if ((barMin <= 0) === (barMax >= -0)) return tossUp;
+      if (barMax >= -0) {
+        if ((barMin <= mean) === (barMax >= mean)) return strongDem;
+        return mutedDem;
+      } else {
+        if ((barMin <= mean) === (barMax >= mean)) return strongGop;
+        return mutedGop;
+      }
+    }
+
     histograms.forEach(function(histogram) {
       var bucketSize = (histogram.max - histogram.min) / nBuckets;
       var buckets = histogram.buckets = [];
       for (var i = 0; i < nBuckets; i++) {
         var min = histogram.min + bucketSize * i;
         var max = histogram.min + bucketSize * (i + 1);
-        var isMean = (min <= histogram.mean) === (max >= histogram.mean);
         var fraction = barFraction(min, max, histogram.mean, histogram.stddev);
-        var color = (min <= 0 === max >= -0) ? tossUp : (min > 0 ? (isMean ? strongDem : mutedDem) : (isMean ? strongGop : mutedGop));
 
         buckets.push({
-          color: color,
+          color: color(min, max, histogram.mean, histogram.stddev),
           fraction: fraction
         });
 
@@ -183,9 +191,8 @@ function make_win_probabilities_histograms() {
 
     // x0: left of first rect. Each bucket is 5px wide, with the rect in the
     // rightmost 4px. The first bucket is only 4px wide, so the rect is flush
-    // to the edge in that one cases. That's why there's no "+ 1" here.
-    var x0 = Math.floor((width - (bucketWidth * nBuckets)) / 2);
-    //var x0 = 0;
+    // to the edge in that one case.
+    var x0 = Math.floor((width - (bucketWidth * nBuckets - 1)) / 2);
 
     histograms.forEach(function(histogram) {
       var canvas = histogram.canvas;
