@@ -19,7 +19,7 @@
   @include full-width();
 
   &>* {
-    @include page_width();
+    @include page-width();
   }
 
   @mixin svg-arrow() {

@@ -1,7 +1,7 @@
 #president-vote-counts {
   @include full-width();
   &>* {
-    @include page_width();
+    @include page-width();
   }
 
   $x-axis-height: 3.5rem;
