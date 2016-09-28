@@ -3,7 +3,6 @@
     .label
       h5 - Key
     .mean - Average outcome
-    .chance - 95% of outcomes
 
     if(data.model == 'likely-clinton')
       .container data-xibar="15" data-stddev="3" - <canvas></canvas>
@@ -11,6 +10,8 @@
       .container data-xibar="-15" data-stddev="3" - <canvas></canvas>
     if(data.model == 'battlegrounds')
       .container data-xibar="0" data-stddev="6" - <canvas></canvas>
+
+    .chance - 95% of outcomes
 
   .inner
     .headings

@@ -11,10 +11,9 @@
 
   .races-legend {
     .key {
-      margin-left: $state-name-width + $n-votes-width;
-      margin-right: .5rem;
+      margin-right: $state-code-width + $n-votes-width + .5rem;
       margin-bottom: 2rem;
-      margin-top: 1rem;
+      margin-top: 2rem; // 1rem for text; 1rem for margin-ness
       position: relative;
       font-size: .85rem;
 
@@ -26,7 +25,7 @@
         position: absolute;
         top: 0.5rem;
         line-height: 1rem;
-        right: 80%;
+        left: 0;
       }
 
       .mean {
@@ -49,10 +48,6 @@
       }
 
       .chance {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 2.5rem;
         text-align: center;
 
         &::before {
@@ -60,10 +55,9 @@
           // margin of error is 1.96 * stddev in each direction: 19.6% from middle.
           content: '';
           display: block;
-          position: absolute;
-          left: 50% - 19.6%;
-          right: 50% - 19.6%;
-          top: -.375rem;
+          margin-left: 50% - 19.6%;
+          margin-right: 50% - 19.6%;
+          margin-top: .125rem;
           height: .25rem;
           border: 1px solid $very-muted-color;
           border-top: 0;
@@ -115,8 +109,7 @@
       }
 
       .key {
-        margin-left: $state-name-width + $n-votes-width;
-        margin-right: .5rem;
+        margin-right: $state-name-width + $n-votes-width + .5rem;
       }
     }
 
