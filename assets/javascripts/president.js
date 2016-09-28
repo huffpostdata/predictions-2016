@@ -153,10 +153,10 @@ function make_win_probabilities_histograms() {
     var width = aContainer.clientWidth;
     var height = aContainer.clientHeight - parseFloat(containerStyle.paddingTop) - parseFloat(containerStyle.paddingBottom);
 
-    var nBuckets = Math.floor((width + 1) / 5);
+    var bucketWidth = 5;
+    var nBuckets = Math.floor((width + 1) / bucketWidth);
     // We want an odd number of buckets, so the mean is highest
     if (nBuckets % 2 === 0) nBuckets -= 1;
-    var bucketWidth = Math.floor(width / nBuckets);
     var maxFraction = 0;
     var strongDem = '#4c7de0';
     var strongGop = '#e52426';
@@ -207,7 +207,6 @@ function make_win_probabilities_histograms() {
 
       histogram.buckets.forEach(function(bucket, i) {
         var x = x0 + 5 * i;
-        //var x = x0 + i;
         var h = height * bucket.fraction / maxFraction;
 
         ctx.fillStyle = bucket.color;
