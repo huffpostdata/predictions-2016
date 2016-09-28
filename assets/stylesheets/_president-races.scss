@@ -9,65 +9,139 @@
   $n-votes-square-width: 1.6rem;
   $expanded-height: 40rem; // a max, for big-desktop
 
-  .races-legend {
-    .key {
-      margin-right: $state-code-width + $n-votes-width + .5rem;
-      margin-bottom: 2rem;
-      margin-top: 2rem; // 1rem for text; 1rem for margin-ness
-      position: relative;
-      font-size: .85rem;
+  h3 {
+    border-bottom: 1px solid $color;
+    // Don't set position:relative, or the right-half popups will go behind the border
 
-      .container {
-        height: $collapsed-height;
-      }
+    &.clinton {
+      strong { color: $strong-dem; }
+      .image::before { background-image: asset-url('digest', 'images/clinton-head.jpg'); }
+    }
 
-      .label {
-        position: absolute;
-        top: 0.5rem;
-        line-height: 1rem;
-        left: 0;
-      }
+    &.trump {
+      strong { color: $strong-gop; }
+      .image::before { background-image: asset-url('digest', 'images/trump-head.jpg'); }
+    }
 
-      .mean {
-        position: absolute;
-        top: -1rem;
-        height: 1rem;
-        left: 0;
-        width: 100%;
-        text-align: center;
-
-        &::before {
-          content: '';
-          position: absolute;
-          left: 50%;
-          top: 1rem;
-          height: 2rem; // go all the way to the bottom of the <canvas> -- the bar will come above
-          margin-left: -.5px;
-          border-left: 1px solid $very-muted-color;
-        }
-      }
-
-      .chance {
-        text-align: center;
-
-        &::before {
-          // stddev is 1/10 of spread: 10%.
-          // margin of error is 1.96 * stddev in each direction: 19.6% from middle.
-          content: '';
-          display: block;
-          margin-left: 50% - 19.6%;
-          margin-right: 50% - 19.6%;
-          margin-top: .125rem;
-          height: .25rem;
-          border: 1px solid $very-muted-color;
-          border-top: 0;
-        }
-      }
-
-      canvas {
-        position: relative; // show up above .mean pointer
+    &.toss-up {
+      strong { color: $toss-up; }
+      .image::before {
+        background-image: asset-url('digest', 'images/tie.svg');
+        background-size: 80%;
+        background-repeat: no-repeat;
+        background-position: center;
       }
     }
+
+    strong {
+      display: block;
+      margin-left: 6rem;
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    span.text {
+      display: block;
+      margin-left: 6rem;
+      font-family: $header-font-family;
+      text-transform: uppercase;
+      font-size: 1rem;
+      line-height: 1.25rem;
+      max-width: 10rem;
+    }
+
+    span.image {
+      display: block;
+      position: relative;
+      height: 0;
+      width: 5rem;
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 5rem;
+        height: 5rem;
+        left: 0;
+        bottom: 0;
+        background-size: 100%;
+      }
+    }
+
+    & + p {
+      font-style: italic;
+      margin-top: .5rem;
+    }
+  }
+
+  .key {
+    margin-bottom: 2rem;
+    margin-top: 2rem; // 1rem for text; 1rem for margin-ness
+    position: relative;
+    font-size: .85rem;
+
+    .container {
+      display: inline-block;
+      height: $collapsed-height;
+      position: relative;
+    }
+
+    .label {
+      position: absolute;
+      top: .5rem;
+      line-height: 1rem;
+      left: 0;
+
+      h5 {
+        margin: 0;
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-family: $header-font-family;
+      }
+    }
+
+    .mean {
+      position: absolute;
+      top: -1rem;
+      height: 1rem;
+      left: 0;
+      width: 100%;
+      text-align: center;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 1rem;
+        height: 2rem; // go all the way to the bottom of the <canvas> -- the bar will come above
+        margin-left: -.5px;
+        border-left: 1px solid $very-muted-color;
+      }
+    }
+
+    .chance {
+      text-align: center;
+
+      &::before {
+        // stddev is 1/10 of spread: 10%.
+        // margin of error is 1.96 * stddev in each direction: 19.6% from middle.
+        content: '';
+        display: block;
+        margin-left: 50% - 19.6%;
+        margin-right: 50% - 19.6%;
+        margin-top: .125rem;
+        height: .25rem;
+        border: 1px solid $very-muted-color;
+        border-top: 0;
+      }
+    }
+
+    canvas {
+      display: inline-block;
+      position: relative; // show up above .mean pointer
+    }
+  }
+
+  .races-legend {
 
     .headings {
       display: -webkit-flex;

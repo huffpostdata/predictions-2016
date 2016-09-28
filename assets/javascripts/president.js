@@ -112,7 +112,7 @@ function make_win_probabilities_histograms() {
 
   var histograms = []; // { canvas, container, min, max, buckets, mean, stddev }
   function collectHistograms(html_class, min, max) {
-    var canvases = mainContainer.querySelectorAll('ul.races.' + html_class + ' canvas, .races-legend.' + html_class + ' canvas');
+    var canvases = mainContainer.querySelectorAll('ul.races.' + html_class + ' canvas, .key.' + html_class + ' canvas');
     for (var i = 0; i < canvases.length; i++) {
       var canvas = canvases[i];
       var container = canvas.parentNode;
@@ -145,7 +145,10 @@ function make_win_probabilities_histograms() {
   }
 
   function refresh() {
-    var aContainer = histograms[0].container; // they're all the same size
+    // Pick a sample container. Pick the _second_ one: the first is a legend.
+    // The second (and most others) are contrained by their containers.
+    var aContainer = histograms[1].container;
+
     var containerStyle = window.getComputedStyle(aContainer);
     var width = aContainer.clientWidth;
     var height = aContainer.clientHeight - parseFloat(containerStyle.paddingTop) - parseFloat(containerStyle.paddingBottom);

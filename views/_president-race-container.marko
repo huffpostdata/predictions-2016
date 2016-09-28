@@ -1,0 +1,10 @@
+var races=data.model.races
+
+if(races.length > 0)
+  $!{data.helpers.partial('_president-races-key', { model: data.model.html_class })}
+
+  .races-container
+    $!{data.helpers.partial('_president-races-legend', { model: data.model.html_class })}
+    ul.races.${data.model.html_class}
+      for(race in races)
+        $!{data.helpers.partial('_president-race', { model: { race: race, scale: data.model.scale } })}

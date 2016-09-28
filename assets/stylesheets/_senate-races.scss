@@ -582,14 +582,16 @@
 
   // On a big desktop? Show the popup on scroll.
   @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
-    @include wide-width();
-    &>* {
+    &>.races-container {
+      @include wide-width();
+    }
+
+    .races-container>* {
       width: 50%;
       margin-left: 0;
     }
-    &>.races-legend, &>ul.races { // specificity
-      margin-left: 0;
-    }
+
+    ul.races { margin-left: 0; }
 
     .races-legend {
       .axis, h5 {

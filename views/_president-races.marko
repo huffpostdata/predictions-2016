@@ -8,32 +8,23 @@ var races=data.model.races
 
   p.instruction - Click or tap a race to see our calculations
 
-  h3
+  h3.clinton
     strong - ${races.likely_clinton_n_votes}
-    -  Probable Electoral Votes For Clinton
+    span.text - Probable Electoral Votes For Clinton
+    span.image
   p - In each of these states, the polls suggest a 90 percent or higher chance Clinton will win.
+  $!{data.helpers.partial('_president-race-container', { model: { html_class: 'likely-clinton', races: races.likely_clinton, scale: [ 0.9, 1.0 ] }})}
 
-  $!{data.helpers.partial('_president-races-legend', { model: 'likely-clinton' })}
-  ul.races.likely-clinton
-    for(race in races.likely_clinton)
-      $!{data.helpers.partial('_president-race', { model: { race: race, scale: [ 0.9, 1.0 ] } })}
-
-  h3
+  h3.toss-up
     strong - ${races.battlegrounds_n_votes}
-    -  Battleground Electoral Votes
+    span.text - Battleground Electoral Votes
+    span.image
   p - These states may vote one way or the other.
+  $!{data.helpers.partial('_president-race-container', { model: { html_class: 'battlegrounds', races: races.battlegrounds, scale: [ 0.9, 0.1 ] }})}
 
-  $!{data.helpers.partial('_president-races-legend', { model: 'battlegrounds' })}
-  ul.races.battlegrounds
-    for(race in races.battlegrounds)
-      $!{data.helpers.partial('_president-race', { model: { race: race, scale: [ 0.9, 0.1 ] } })}
-
-  h3
+  h3.trump
     strong - ${races.likely_trump_n_votes}
-    -  Probable Electoral Votes For Trump
+    span.text - Probable Electoral Votes For Trump
+    span.image
   p - In each of these states, the polls suggest a 90 percent or higher chance Trump will win.
-
-  $!{data.helpers.partial('_president-races-legend', { model: 'likely-trump' })}
-  ul.races.likely-trump
-    for(race in races.likely_trump)
-      $!{data.helpers.partial('_president-race', { model: { race: race, scale: [ 0.1, 0 ] } })}
+  $!{data.helpers.partial('_president-race-container', { model: { html_class: 'likely-trump', races: races.likely_trump, scale: [ 0.1, 0 ] }})}
