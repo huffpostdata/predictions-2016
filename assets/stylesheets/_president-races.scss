@@ -79,15 +79,10 @@
     position: relative;
     font-size: .85rem;
 
-    .container {
-      display: inline-block;
-      height: $collapsed-height;
-      position: relative;
-    }
-
     .label {
-      position: absolute;
-      top: .5rem;
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 1rem;
       line-height: 1rem;
       left: 0;
 
@@ -97,6 +92,17 @@
         text-transform: uppercase;
         font-family: $header-font-family;
       }
+
+      @media (min-width: $min-desktop-width) {
+        position: absolute;
+        top: -.5rem;
+      }
+    }
+
+    .container {
+      display: inline-block;
+      height: $collapsed-height;
+      position: relative;
     }
 
     .mean {
