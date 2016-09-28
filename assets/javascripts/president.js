@@ -62,6 +62,7 @@ function handle_hover_on_vote_counts() {
   focalBar.classList.add('focus');
 
   function repositionTooltip() {
+    tooltip.className = 'tooltip';
     tooltip.style.left = focalBar.offsetLeft + 'px';
 
     if (tooltip.offsetLeft < 0) {
@@ -70,8 +71,6 @@ function handle_hover_on_vote_counts() {
     } else if (tooltip.offsetLeft + tooltip.offsetWidth > bars_el.clientWidth) {
       tooltip.style.left = '';
       tooltip.className = 'tooltip flush-right';
-    } else {
-      tooltip.className = 'tooltip';
     }
   }
 
