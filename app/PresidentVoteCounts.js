@@ -20,6 +20,7 @@ class PresidentVoteCounts {
     this.n_trump = this.n - this.n_clinton - this.n_tie
 
     this.max = Math.max.apply(null, vote_count_to_n)
+    this.max = Math.max(this.max, this.n * 0.012) // minimum space between tick and div.label
 
     this.percent_clinton = 100 * this.n_clinton / this.n
     this.percent_tie = 100 * this.n_tie / this.n

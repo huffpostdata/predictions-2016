@@ -58,12 +58,24 @@ function handle_hover_on_vote_counts() {
   }
 
   var tallestBar = findTallestBar();
-  var focalBar = bars[0];
+  var focalBar = tallestBar;
   focalBar.classList.add('focus');
 
-  function focusBar(bar) {
-    if (bar === focalBar) return;
+  function repositionTooltip() {
+    tooltip.style.left = focalBar.offsetLeft + 'px';
 
+    if (tooltip.offsetLeft < 0) {
+      tooltip.style.left = '0';
+      tooltip.className = 'tooltip flush-left';
+    } else if (tooltip.offsetLeft + tooltip.offsetWidth > bars_el.clientWidth) {
+      tooltip.style.left = '';
+      tooltip.className = 'tooltip flush-right';
+    } else {
+      tooltip.className = 'tooltip';
+    }
+  }
+
+  function focusBar(bar) {
     focalBar.classList.remove('focus');
     focalBar = bar;
     focalBar.classList.add('focus');
@@ -71,20 +83,11 @@ function handle_hover_on_vote_counts() {
     var n = +bar.getAttribute('data-n');
     var count = +bar.getAttribute('data-count');
 
-    tooltip.className = 'tooltip';
-    tooltip.style.left = bar.offsetLeft + 'px';
-    if (tooltip.offsetLeft < 0) {
-      tooltip.style.left = '0';
-      tooltip.classList.add('flush-left');
-    }
-    if (tooltip.offsetLeft + tooltip.offsetWidth > bars_el.clientWidth) {
-      tooltip.style.left = '';
-      tooltip.classList.add('flush-right');
-    }
-
     tooltipParts.nClinton.textContent = String(count);
     tooltipParts.nTrump.textContent = String(538 - count);
     tooltipParts.n.textContent = formatHumanNumber(n);
+
+    repositionTooltip();
   }
 
   function focus(ev) {
@@ -96,7 +99,6 @@ function handle_hover_on_vote_counts() {
     focusBar(tallestBar);
   }
 
-  tooltip.classList.remove('loading');
   focusBar(tallestBar);
   bars_el.addEventListener('mousemove', focus);
   bars_el.addEventListener('mouseleave', leave);

@@ -76,15 +76,28 @@
 
     .label {
       margin-top: -3rem - $top-x-axis-height;
-      @media (min-width: $min-desktop-width) {
-        margin-top: 0;
-      }
-      padding-left: .5rem;
+      margin-left: .25rem;
+      padding-left: .25rem;
       font-style: italic;
       font-size: 1rem;
+      line-height: 1.25;
+
+      @media (min-width: $min-desktop-width) {
+        position: absolute;
+        top: 3rem;
+      }
     }
 
-    .horizontal-line {
+    .horizontal-lines {
+      position: absolute;
+      bottom: 0;
+      height: $grid-height;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .line {
       position: absolute;
       left: 0;
       box-sizing: border-box;
@@ -157,7 +170,7 @@
       pointer-events: none;
       position: absolute;
       left: 50%;
-      margin-left: -2px; // TODO why not 1px?
+      margin-left: -1px;
       width: 0;
       border-left: 2px dotted $color;
       bottom: 0;
@@ -240,11 +253,7 @@
     text-align: center;
 
     @media (min-width: $min-desktop-width) {
-      display: block;
-    }
-
-    .loading {
-      display: none !important;
+      &:not(.loading) { display: block; }
     }
 
     &::before {
