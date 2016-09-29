@@ -129,10 +129,9 @@ function tie_expanded_senate_races_to_hash() {
           affix.detailsInner.style.top = midViewY - (affix.detailsInner.clientHeight * 1/2) - 1 + 'px'; // 1px for border
         }
       } else {
-        if (affix.li.classList.contains('fixed')) {
-          affix.li.classList.remove('fixed');
-          affix.detailsInner.style.top = -affix.detailsInner.clientHeight * 1/2 + 'px';
-        }
+        // Even when "fixed" isn't set, we need to set style.top
+        affix.li.classList.remove('fixed');
+        affix.detailsInner.style.top = -affix.detailsInner.clientHeight * 1/2 + 'px';
       }
     }
   }
@@ -186,7 +185,7 @@ function tie_expanded_senate_races_to_hash() {
     }
 
     var scroll_anchor = scroll_anchors[min];
-    var scroll_anchor_top = scroll_anchor.getBoundingClientRect().top;
+    var scroll_anchor_top = scroll_anchor ? scroll_anchor.getBoundingClientRect().top : null;
 
     // Uncheck everything
     var inputs = container.querySelectorAll('input.expand:checked');
@@ -203,6 +202,8 @@ function tie_expanded_senate_races_to_hash() {
       affix(li);
 
       defer_load_missing_senate_race_svgs();
+    } else {
+      affix(null);
     }
   }
 
