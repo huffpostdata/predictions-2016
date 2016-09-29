@@ -22,7 +22,7 @@ PollsAreAllWrongByStddev <- 0.016854 # TODO explain how we got this
 EndDate <- as.Date('2016-11-08')
 Today <- Sys.Date()
 
-if (fast) NMonteCarloSimulations <- 1e6
+if (fast) NMonteCarloSimulations <- 5e5
 
 load_or_calculate_president_data_for_race <- function(race) {
   if (!dir.exists('interim-results')) {
@@ -82,16 +82,6 @@ load_or_calculate_national_president_data <- function() {
   return(data)
 }
 
-CalculatedUndecidedStddevBoost <- function(diff_xibar, undecided_xibar) {
-  # Calculates what to add to our stddevs to account for the proportion of the
-  # electorate today who respond "Undecided" in the polls. Higher means less
-  # certainty.
-  #
-  # * Further from election day, there are more Undecideds -> higher.
-  undecided_as_stddev <- undecided_xibar / 1.96 # turn into stddev
-  return(undecided_as_stddev / 4)
-}
-
 calculate_race_summary <- function(race, national) {
   columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar', 'undecided_stddev')
 
@@ -108,13 +98,13 @@ calculate_race_summary <- function(race, national) {
     cook <- CookPriors.president[match(race$race$cook_rating, CookPriors.president$rating),]
     ret$diff_xibar <- cook$mean
     ret$diff_stddev <- cook$stddev
-    ret$undecided_xibar <- NA
+    ret$undecided_xibar <- c(0)
     ret$undecided_stddev_boost <- c(0)
   } else {
     ret$diff_xibar <- end_day$diff_xibar
     ret$diff_stddev <- end_day$diff_stddev
     ret$undecided_xibar <- today$undecided_xibar
-    ret$undecided_stddev_boost <- CalculatedUndecidedStddevBoost(today$diff_xibar, today$undecided_xibar)
+    ret$undecided_stddev_boost <- today$undecided_xibar / 1.96 / 3
   }
 
   return(ret)
@@ -156,7 +146,7 @@ load_or_calculate_president_data_for_races <- function(races) {
     curves=curves,
     summaries=summaries,
     state_samples_strings=state_samples_strings,
-    national_diff_stddev=end_day$diff_xibar + today$undecided_xibar / 1.96 / 4
+    national_diff_stddev=end_day$diff_stddev
   ))
 }
 
@@ -199,20 +189,27 @@ predict_n_dem_president_votes <- function(summaries, races, national_diff_stddev
   # Means and stddevs -- one per race. The "split" votes are their own races, so
   # the total number of races is 50 states + 1 DC + 2 ME + 3 NE = 56 races.
   means <- append(summaries$diff_xibar, split_cook_means)
-  stddevs <- append(
-    summaries$diff_stddev + summaries$undecided_stddev_boost,
-    split_cook_stddevs
-  )
+  stddevs <- append(summaries$diff_stddev, split_cook_stddevs)
+  undecideds <- append(summaries$undecided_xibar / 1.96 / 3, rep(0, times=length(split_cook_ratings)))
 
   # 1 -> 0 votes; 2 -> 1 vote; etc.
   n_counts <- rep(0, 539)
   n_races <- length(means)
 
   for (n in 1:NMonteCarloSimulations) {
-    polls_are_wrong_by <- rnorm(1, mean=0, sd=national_diff_stddev)[1]
-    random_numbers <- CorrelatedRnorm() * stddevs + means - polls_are_wrong_by
+    # Produce results for each state, correlated the way state results have
+    # historically been correlated.
+    state_results <- CorrelatedRnorm() * stddevs + means
 
-    n_dem_votes <- sum((random_numbers > 0) * win_n_votes)
+    # Assume that nationwide, polls are all off in the same direction
+    national_error <- rnorm(1, sd=national_diff_stddev)
+
+    # Assume that a third of undecided voters nationwide all behave the same way
+    # (e.g., in one random simulation, 20% choose Clinton, 80% choose Trump)
+    undecided_diff <- rnorm(1) * undecideds
+
+    outcomes <- state_results + national_error + undecided_diff
+    n_dem_votes <- sum((outcomes > 0) * win_n_votes)
     index <- n_dem_votes + 1
     n_counts[index] <- n_counts[index] + 1
   }
