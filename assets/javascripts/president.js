@@ -41,24 +41,29 @@ function handle_hover_on_vote_counts() {
     return bars[bars.length - 1];
   }
 
-  function findTallestBar() {
-    var max = -1;
-    var ret = null;
+  function findMedianBar() {
+    var runningTotal = 0;
+    var runningTotals = new Array(bars.length);
 
     for (var i = 0; i < bars.length; i++) {
-      var bar = bars[i];
-      var n = +bar.getAttribute('data-n');
-      if (n > max) {
-        max = n;
-        ret = bar;
+      var n = +bars[i].getAttribute('data-n');
+      runningTotal += n;
+      runningTotals[i] = runningTotal;
+    }
+
+    var median = runningTotal / 2;
+
+    for (var i = 0; i < runningTotals.length; i++) {
+      if (runningTotals[i] >= median) {
+        return bars[i];
       }
     }
 
-    return ret;
+    return bars[0];
   }
 
-  var tallestBar = findTallestBar();
-  var focalBar = tallestBar;
+  var defaultBar = findMedianBar();
+  var focalBar = defaultBar;
   focalBar.classList.add('focus');
 
   function repositionTooltip() {
@@ -95,10 +100,10 @@ function handle_hover_on_vote_counts() {
   }
 
   function leave() {
-    focusBar(tallestBar);
+    focusBar(defaultBar);
   }
 
-  focusBar(tallestBar);
+  focusBar(defaultBar);
   bars_el.addEventListener('mousemove', focus);
   bars_el.addEventListener('mouseleave', leave);
 }
