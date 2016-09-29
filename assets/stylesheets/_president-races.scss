@@ -10,21 +10,25 @@
   $expanded-height: 40rem; // a max, for big-desktop
 
   h3 {
+    margin-top: 7rem;
     border-bottom: 1px solid $color;
     // Don't set position:relative, or the right-half popups will go behind the border
 
     &.clinton {
-      strong { color: $strong-dem; }
+      @include wide-width();
+      strong { color: $strong-dem; font-family: $header-font-family; }
       .image::before { background-image: asset-url('digest', 'images/clinton-head.jpg'); }
     }
 
     &.trump {
-      strong { color: $strong-gop; }
+      @include wide-width();
+      strong { color: $strong-gop; font-family: $header-font-family; }
       .image::before { background-image: asset-url('digest', 'images/trump-head.jpg'); }
     }
 
     &.toss-up {
-      strong { color: $toss-up; }
+      @include wide-width();
+      strong { color: $toss-up; font-family: $header-font-family;}
       .image::before {
         background-image: asset-url('digest', 'images/tie.svg');
         background-size: 80%;
@@ -34,15 +38,17 @@
     }
 
     strong {
-      display: block;
+      display: inline-block;
+      vertical-align: middle;
       margin-left: 6rem;
-      font-size: 3rem;
+      font-size: 5rem;
       line-height: 1;
     }
 
     span.text {
-      display: block;
-      margin-left: 6rem;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 1rem;
       font-family: $header-font-family;
       text-transform: uppercase;
       font-size: 1rem;
@@ -68,12 +74,16 @@
     }
 
     & + p {
+      @include wide-width();
       font-style: italic;
       margin-top: .5rem;
+      color: $muted-color;
+      font-size: .85rem;
     }
   }
 
   .key {
+    @include wide-width();
     margin-bottom: 2rem;
     margin-top: 2rem; // 1rem for text; 1rem for margin-ness
     position: relative;
@@ -107,7 +117,7 @@
 
     .mean {
       position: absolute;
-      top: -1rem;
+      top: -1.5rem;
       height: 1rem;
       left: 0;
       width: 100%;
