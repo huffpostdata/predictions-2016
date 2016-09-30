@@ -7,7 +7,20 @@
   $state-name-width: 10rem;
   $n-votes-width: 5rem;
   $n-votes-square-width: 1.6rem;
-  $expanded-height: 50rem; // a max, for big-desktop
+  $expanded-height: 44rem; // a max, for big-desktop
+
+  h3, h3 + p, h3 + p + .key {
+    @include page-width();
+
+    @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
+      max-width: $wide-width;
+    }
+    @media screen and (min-width: $wide-width) and (max-width: $wide-width + 2 * $min-margin) and (min-height: $expanded-height) {
+      width: auto;
+      margin-left: $min-margin;
+      margin-right: $min-margin;
+    }
+  }
 
   h3 {
     margin-top: 7rem;
@@ -15,19 +28,16 @@
     // Don't set position:relative, or the right-half popups will go behind the border
 
     &.clinton {
-      @include wide-width();
       strong { color: $strong-dem; font-family: $header-font-family; }
       .image::before { background-image: asset-url('digest', 'images/clinton-bust.jpg'); }
     }
 
     &.trump {
-      @include wide-width();
       strong { color: $strong-gop; font-family: $header-font-family; }
       .image::before { background-image: asset-url('digest', 'images/trump-bust.jpg'); }
     }
 
     &.toss-up {
-      @include wide-width();
       strong { color: $toss-up; font-family: $header-font-family;}
       .image::before {
         background-image: asset-url('digest', 'images/tie.svg');
@@ -43,7 +53,7 @@
       font-size: 4rem;
       line-height: 1;
 
-      @media (min-width: 350px) {
+      @media (min-width: $min-desktop-width) {
         display: inline-block;
         vertical-align: middle;
         margin-left: 6rem;
@@ -62,7 +72,7 @@
       line-height: 1.25rem;
       max-width: 10rem;
 
-      @media (min-width: 350px) {
+      @media (min-width: $min-desktop-width) {
         display: inline-block;
         vertical-align: middle;
         margin-left: 1rem;
@@ -92,7 +102,6 @@
     }
 
     & + p {
-      @include wide-width();
       font-style: italic;
       margin-top: .5rem;
       color: $muted-color;
@@ -101,7 +110,6 @@
   }
 
   .key {
-    @include wide-width();
     margin-bottom: 2rem;
     margin-top: 3rem; // 1rem for text; 2rem for margin-ness
     position: relative;
