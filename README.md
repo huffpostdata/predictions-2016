@@ -52,8 +52,7 @@ distribution.
 | `state_code` | `AL`, `NY` | Two-letter, capitalized state code |
 | `date` | `2016-10-10` | Date of the prediction (past, today, or future) in YYYY-MM-DD format |
 | `diff_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?%5Cbar%7B%5Cxi%7D) -- Out of lots of simulated elections, the Dem candidate's share of the vote minus the GOP candidate's (`1.0` means everybody voted for the Democrat) |
-| `diff_low` | `0.1`, `0.7` | the spread the Dem candidate exceeds 97.5% of the time |
-| `diff_high` | `0.3`, `0.9` | the spread the Dem candidate misses 97.5% of the time |
+| `diff_stddev` | `0.01`, `0.07` | The standard deviation of `diff_xibar` |
 | `undecided_xibar` | `0.2`, `0.8` | ![equation](http://latex.codecogs.com/gif.latex?%5Cbar%7B%5Cxi%7D) -- Out of lots of simulated elections, the mean fraction of votes for the Undecided candidate (that is, assuming elections are like polls and "Undecided" is a choice) |
 | `dem_win_prob` | `0.4` | Out of lots of simulated elections, the fraction times the Dem candidate beats the GOP candidate (we don't model ties) |
 | `dem_win_prob_counting_undecided` | `0.45` | Like `dem_win_prob`, but nudged closer towards `0.5`, depending on how large `undecided_xibar` is |

@@ -45,10 +45,7 @@ CalculateDiffData <- function(
   #           only endDate will be present. Otherwise, we return every day.
   #     diff_xibar: Average Dem fraction minus GOP fraction, [-1.0, 1.0]
   #     diff_stddev: stddev on the diff
-  #     diff_low: 97.5% value
-  #     diff_high: 2.5% value
   #     undecided_xibar: Average "Undecided" fraction
-  #     undecided_stddev: stddev on the "Undecided" fraction
   #     dem_win_prob: fraction of simulations in which Dem beat GOP on this date
   #     dem_win_prob_with_undecided: ditto, modulo an "undecided" calculation
   #   samples_string: a string of hex integers meant to be read by our JS backend
@@ -257,18 +254,15 @@ CalculateDiffData <- function(
     averages <- apply(diff_array, 'date', function(x) c(
       mean(x),
       sd(x),
-      quantile(x, c(0.025, 0.975)),
       mean(x > 0)
     ))
 
-    dimnames(averages)[[1]] <- c('mean', 'stddev', '0.025', '0.975', 'prob')
+    dimnames(averages)[[1]] <- c('mean', 'stddev', 'prob')
 
     return(data.frame(
       date=as.Date(dimnames(averages)$date),
       diff_xibar=averages['mean',],
       diff_stddev=averages['stddev',],
-      diff_low=averages['0.025',],
-      diff_high=averages['0.975',],
       dem_win_prob=averages['prob',]
     ))
   }
@@ -300,10 +294,7 @@ CalculateDiffData <- function(
         date=c(endDate),
         diff_xibar=NA,
         diff_stddev=NA,
-        diff_low=NA,
-        diff_high=NA,
         undecided_xibar=NA,
-        undecided_stddev=NA,
         dem_win_prob=c(1.0),
         dem_win_prob_with_undecided=c(1.0)
       ),
@@ -321,10 +312,7 @@ CalculateDiffData <- function(
         date=c(endDate),
         diff_xibar=NA,
         diff_stddev=NA,
-        diff_low=NA,
-        diff_high=NA,
         undecided_xibar=NA,
-        undecided_stddev=NA,
         dem_win_prob=c(dem_win_prob),
         dem_win_prob_with_undecided=c(dem_win_prob)
       ),
@@ -488,10 +476,7 @@ CalculateDiffData <- function(
       'date',
       'diff_xibar',
       'diff_stddev',
-      'diff_low',
-      'diff_high',
       'undecided_xibar',
-      'undecided_stddev',
       'dem_win_prob',
       'dem_win_prob_with_undecided'
     )],

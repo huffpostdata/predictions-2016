@@ -1,5 +1,7 @@
 library('parallel')
 
+options(error=traceback, warn=2, showWarnCalls=TRUE)
+
 source('../common/calculate-diff-data.R')
 
 args <- commandArgs(TRUE)
