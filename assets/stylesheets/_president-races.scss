@@ -38,22 +38,40 @@
     }
 
     strong {
-      display: inline-block;
-      vertical-align: middle;
+      display: block;
       margin-left: 6rem;
-      font-size: 5rem;
+      font-size: 4rem;
       line-height: 1;
+
+      @media (min-width: 350px) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 6rem;
+        font-size: 5rem;
+        line-height: 1;
+
+      }
     }
 
     span.text {
-      display: inline-block;
-      vertical-align: middle;
-      margin-left: 1rem;
+      display: block;
+      margin-left: 6rem;
       font-family: $header-font-family;
       text-transform: uppercase;
       font-size: 1rem;
       line-height: 1.25rem;
       max-width: 10rem;
+
+      @media (min-width: 350px) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1rem;
+        font-family: $header-font-family;
+        text-transform: uppercase;
+        font-size: 1rem;
+        line-height: 1.25rem;
+        max-width: 10rem;
+      }
     }
 
     span.image {
