@@ -17,13 +17,13 @@
     &.clinton {
       @include wide-width();
       strong { color: $strong-dem; font-family: $header-font-family; }
-      .image::before { background-image: asset-url('digest', 'images/clinton-head.jpg'); }
+      .image::before { background-image: asset-url('digest', 'images/clinton-bust.jpg'); }
     }
 
     &.trump {
       @include wide-width();
       strong { color: $strong-gop; font-family: $header-font-family; }
-      .image::before { background-image: asset-url('digest', 'images/trump-head.jpg'); }
+      .image::before { background-image: asset-url('digest', 'images/trump-bust.jpg'); }
     }
 
     &.toss-up {
