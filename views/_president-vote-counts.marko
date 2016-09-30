@@ -5,13 +5,13 @@ var vote_counts=data.model.vote_counts
     a.href="#possible-vote-counts" - Possible Electoral Vote Counts
 
   p
-    - When you vote, you don't elect the president: you tell your state's electoral-college <em>electors</em> how to vote. In all states except Maine and Nebraska, as well as in the District of Columbia, electors vote with the state's popular opinion. If 51 percent of voters in California vote for Clinton, all 55 of California's electors will vote for Clinton and none will vote for Trump.
+    - When you vote, you don't elect the president: you tell your state's electoral-college <em>electors</em> how to vote. In most states, all electors vote with the state's popular opinion. If 51 percent of voters in California choose Clinton, all 55 of California's electors will vote for Clinton — and none will vote for Trump.
 
   p
     - (Historically, a few so-called <a href="https://en.wikipedia.org/wiki/Faithless_elector">faithless electors</a> have voted against popular opinion. They never changed the outcome of an election, so we don't model them.)
 
   p
-    - We simulated a Nov. 8 election ${Math.round(vote_counts.n / 1e6)} million times using our <a href="#state-by-state-probabilities">state-by-state probabilities</a>. In <strong>${vote_counts.n_clinton_millions.toFixed(1)} million</strong> simulations, Hillary Clinton ended up with at least 270 electoral votes. Therefore, we say Clinton has a <strong>${vote_counts.percent_clinton.toFixed(1)} percent</strong> chance of becoming president.
+    - We simulated a Nov. 8 election ${Math.round(vote_counts.n / 1e6)} million times using our <a href="#state-by-state-averages">state-by-state averages</a>. In <strong>${vote_counts.n_clinton_millions.toFixed(1)} million</strong> simulations, Hillary Clinton ended up with at least 270 electoral votes. Therefore, we say Clinton has a <strong>${vote_counts.percent_clinton.toFixed(1)} percent</strong> chance of becoming president.
 
   .container
     .y-axis
