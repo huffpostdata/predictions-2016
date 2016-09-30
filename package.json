@@ -11,7 +11,7 @@
   "repository": "https://git.huffpo.net/huffpostdata/predictions-2016.git",
   "license": "MIT",
   "dependencies": {
-    "airbrake": "^1.1.0",
+    "airbrake": "^1.2.0",
     "aws-sdk": "^2.3.5",
     "csv-parse": "^1.0.4",
     "glob": "^7.0.5",
