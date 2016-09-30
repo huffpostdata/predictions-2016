@@ -532,9 +532,28 @@
       }
     }
 
-    .lean-dem { color: $strong-dem; }
-    .lean-gop { color: $strong-gop; }
-    .toss-up, .percent { color: $toss-up; }
+    .lean-dem { 
+      color: $strong-dem;       
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      } 
+    }
+    .lean-gop { 
+      color: $strong-gop; 
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      } 
+    }
+    .toss-up, .percent { 
+      color: $toss-up; 
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      } 
+
+    }
 
     // There's no way to _really_ center "toss-up". But we can fake it by
     // placing it in the middle with a background.
