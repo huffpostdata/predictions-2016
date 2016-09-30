@@ -39,6 +39,8 @@ module.exports = class PresidentRace {
     this.undecided_xibar_100 = 100 * (+summary.undecided_xibar)
     this.undecided_stddev_boost = 100 * (+summary.undecided_stddev_boost)
     this.undecided_margin_boost = this.undecided_stddev_boost * 1.96
+    this.clinton_win_prob = +summary.clinton_win_prob
+    this.leader_win_prob_100 = 100 * Math.max(this.clinton_win_prob, 1.0 - this.clinton_win_prob)
 
     this.final_diff_xibar = this.diff_xibar
     this.final_diff_leader = this.final_diff_xibar > 0 ? 'clinton' : 'trump'

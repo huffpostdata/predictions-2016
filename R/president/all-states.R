@@ -83,7 +83,7 @@ load_or_calculate_national_president_data <- function() {
 }
 
 calculate_race_summary <- function(race, national) {
-  columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar', 'undecided_stddev')
+  columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar')
 
   curve <- race$curve
   today <- curve[curve$date == Today, columns]
@@ -106,6 +106,13 @@ calculate_race_summary <- function(race, national) {
     ret$undecided_xibar <- today$undecided_xibar
     ret$undecided_stddev_boost <- today$undecided_xibar / 1.96 / 3
   }
+
+  # Generate a number devoid of (super-important) national adjustments
+  ret$clinton_win_prob <- pnorm(
+    0,
+    mean=-ret$diff_xibar,
+    sd=ret$diff_stddev + ret$undecided_stddev_boost
+  )
 
   return(ret)
 }
