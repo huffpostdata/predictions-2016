@@ -29,15 +29,15 @@ class PresidentRaces {
     this.all = all.slice()
 
     this.likely_clinton = this.all
-      .filter(x => x.diff_xibar > 0 && !x.zero_within_90)
+      .filter(x => x.clinton_win_prob >= 0.9)
       .sort((a, b) => compareRaces(a, b, false))
 
     this.likely_trump = this.all
-      .filter(x => x.diff_xibar < 0 && !x.zero_within_90)
+      .filter(x => x.clinton_win_prob <= 0.1)
       .sort((a, b) => compareRaces(a, b, true))
 
     this.battlegrounds = this.all
-      .filter(x => x.zero_within_90)
+      .filter(x => x.clinton_win_prob > 0.1 && x.clinton_win_prob < 0.9)
       .sort((a, b) => compareRaces(a, b, true))
 
     this.likely_clinton_n_votes = countElectoralVotes(this.likely_clinton)

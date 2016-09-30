@@ -85,7 +85,7 @@
   .key {
     @include wide-width();
     margin-bottom: 2rem;
-    margin-top: 2rem; // 1rem for text; 1rem for margin-ness
+    margin-top: 3rem; // 1rem for text; 2rem for margin-ness
     position: relative;
     font-size: .85rem;
 

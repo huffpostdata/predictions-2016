@@ -49,8 +49,6 @@ module.exports = class PresidentRace {
     this.final_diff_stddev = this.diff_stddev + this.undecided_stddev_boost
     this.final_diff_margin = this.final_diff_stddev * 1.96
 
-    this.zero_within_90 = Math.abs(this.final_diff_xibar) < (this.final_diff_stddev * 1.282)
-
     this.curve = curve
     this.updated_at = curve.updated_at
 

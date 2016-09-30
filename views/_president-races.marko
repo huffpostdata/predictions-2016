@@ -1,8 +1,8 @@
 var races=data.model.races
 
 #president-races
-  h2.with-toc-link#state-by-state-probabilities
-    a href="#state-by-state-probabilities" - State-By-State Probabilities
+  h2.with-toc-link#state-by-state-averages
+    a href="#state-by-state-averages" - State-By-State Averages
 
   p - In each state, we average recent polls and follow the trends to election day to find the most likely outcomes.
 
@@ -10,7 +10,7 @@ var races=data.model.races
     strong - ${races.likely_clinton_n_votes}
     span.text - Probable Electoral Votes For Clinton
     span.image
-  p - In each of these states, the polls suggest a 90 percent or higher chance Clinton will win.
+  p - Polls suggest a 90 percent or higher chance Clinton will win in these states.
   $!{data.helpers.partial('_president-race-container', { model: { html_class: 'likely-clinton', races: races.likely_clinton, scale: [ 0.9, 1.0 ] }})}
 
   h3.toss-up
@@ -24,5 +24,5 @@ var races=data.model.races
     strong - ${races.likely_trump_n_votes}
     span.text - Probable Electoral Votes For Trump
     span.image
-  p - In each of these states, the polls suggest a 90 percent or higher chance Trump will win.
+  p - Polls suggest a 90 percent or higher chance Trump will win in these states.
   $!{data.helpers.partial('_president-race-container', { model: { html_class: 'likely-trump', races: races.likely_trump, scale: [ 0.1, 0 ] }})}
