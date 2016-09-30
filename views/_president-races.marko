@@ -4,7 +4,7 @@ var races=data.model.races
   h2.with-toc-link#state-by-state-averages
     a href="#state-by-state-averages" - State-By-State Averages
 
-  p - In each state, we average recent polls and follow the trends to election day to find the most likely outcomes.
+  p - In each state, we average recent polls and follow the trends to Election Day to find the most likely outcomes.
 
   h3.clinton
     strong - ${races.likely_clinton_n_votes}
@@ -17,7 +17,7 @@ var races=data.model.races
     strong - ${races.battlegrounds_n_votes}
     span.text - Battleground Electoral Votes
     span.image
-  p - These states may vote one way or the other.
+  p - Both candidates have a decent chance of winning in these states.
   $!{data.helpers.partial('_president-race-container', { model: { html_class: 'battlegrounds', races: races.battlegrounds, scale: [ 0.9, 0.1 ] }})}
 
   h3.trump

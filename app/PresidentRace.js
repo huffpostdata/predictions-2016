@@ -46,6 +46,7 @@ module.exports = class PresidentRace {
     this.final_diff_xibar = this.diff_xibar
     this.final_diff_leader = this.final_diff_xibar > 0 ? 'clinton' : 'trump'
     this.final_diff_leader_name = this.final_diff_xibar > 0 ? 'Clinton' : 'Trump'
+    this.final_diff_party_adjective = this.final_diff_xibar > 0 ? 'Democratic' : 'Republican'
     this.final_diff_stddev = this.diff_stddev + this.undecided_stddev_boost
     this.final_diff_margin = this.final_diff_stddev * 1.96
 

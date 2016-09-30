@@ -2,9 +2,9 @@ function formatHumanNumber(n) {
   if (n < 1000) {
     return String(n);
   } else if (n < 1000000) {
-    return (n / 1000).toFixed(1) + ' thousand';
+    return Math.floor(n / 1000) + ',' + (n % 1000);
   } else {
-    return (n / 1000000).toFixed(1) + ' million';
+    return Math.floor(n / 1000000) + ',' + Math.floor((n % 1000000) / 1000) + ',' + (n % 1000);
   }
 }
 

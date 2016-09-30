@@ -32,7 +32,7 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
         if(!race.curve.is_plottable)
           ol.calculations
             li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/presidential/charts/scorecard">Electoral College Ratings</a>.
-            li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>. The average lead is ${Math.abs(race.final_diff_xibar).toFixed(1)} points in all races with this Cook rating since 2004.
+            li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>. ${race.final_diff_party_adjective} candidates have won by an average of ${Math.abs(race.final_diff_xibar).toFixed(1)} points in all races with this Cook rating since 2004.
             li - Ignoring national trends, the probability ${race.final_diff_leader_name} wins ${race.state_name} is <strong>${race.leader_win_prob_100.toFixed(1)}%</strong>.
             if(race.splits.length > 0)
               li - ${race.splits.length == 2 ? 'Two' : 'Three'} electoral votes in this state are allocated at the district level. We use Cook Ratings for those: $!{race.splits_phrase_html()}.
@@ -69,7 +69,7 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
 
           ol.calculations
             li - These simulations show a margin of error of <strong>${race.diff_margin.toFixed(1)} percentage points</strong>, 19 times out of 20.
-            li - They also suggest voters are <span class="undecided">${race.undecided_xibar_100.toFixed(1)}% undecided</span>. We added <strong>${race.undecided_margin_boost.toFixed(1)} points</strong> to our state-level and nation-level margins of error.
+            li - They also suggest voters are <span class="undecided">${race.undecided_xibar_100.toFixed(1)}% undecided</span>. We added <strong>${race.undecided_margin_boost.toFixed(1)} points</strong> to our state-level and national margins of error.
             li - Ignoring national trends, ${race.final_diff_leader_name} has a <strong>${race.leader_win_prob_100.toFixed(1)}%</strong> chance of winning here.
             if(race.splits.length > 0)
               li - ${race.splits.length == 2 ? 'Two' : 'Three'} electoral votes in this state are allocated at the district level. We use Cook Ratings for those: $!{race.splits_phrase_html()}.
