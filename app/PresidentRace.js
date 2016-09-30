@@ -13,6 +13,7 @@ const CookRatingToCookName = {
 class Split {
   constructor(cook_rating) {
     this.cook_rating = cook_rating
+    this.cook_rating_name = CookRatingToCookName[cook_rating]
   }
 }
 Split.parse_all = function(comma_separated_ratings) {
@@ -69,5 +70,17 @@ module.exports = class PresidentRace {
     const x = this.dem_win_prob_with_adjustment_and_undecided
 
     return (x - min) / (max - min)
+  }
+
+  /**
+   * Returns something like
+   * "<strong>solidly Democrat</strong>, <strong>toss-up</strong> and <strong>toss-up</strong>."
+   */
+  splits_phrase_html() {
+    switch (this.splits.length) {
+      case 2: return `<strong>${this.splits[0].cook_rating_name}</strong> and <strong>${this.splits[1].cook_rating_name}</strong>`
+      case 3: return `<strong>${this.splits[0].cook_rating_name}</strong>, <strong>${this.splits[1].cook_rating_name}</strong> and <strong>${this.splits[2].cook_rating_name}</strong>`
+      default: throw new Error(`Wrong number of splits in ${this.state_name}: ${this.splits.length}`)
+    }
   }
 }
