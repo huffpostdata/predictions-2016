@@ -55,8 +55,11 @@
       left: 0;
       bottom: 0;
       color: $strong-dem;
-      font-size: .8rem;
       text-transform: uppercase;
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      }
     }
 
     .gop {
@@ -64,8 +67,11 @@
       right: 0;
       bottom: 0;
       color: $strong-gop;
-      font-size: .8rem;
       text-transform: uppercase;
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      }
     }
   }
 
@@ -94,7 +100,11 @@
     }
 
     .n {
-      font-size: .85rem;
+
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      }
+      font-size: .65rem;
       text-align: center;
       color: $background;
       margin-top: 3px;
