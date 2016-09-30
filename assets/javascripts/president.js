@@ -16,7 +16,8 @@ function handle_hover_on_vote_counts() {
   var tooltipParts = {
     nClinton: tooltip.querySelector('.clinton strong'),
     nTrump: tooltip.querySelector('.trump strong'),
-    n: tooltip.querySelector('p strong')
+    n: tooltip.querySelector('p strong'),
+    timeOrTimes: tooltip.querySelector('p span')
   };
 
   function findBarAtX(x) {
@@ -68,7 +69,7 @@ function handle_hover_on_vote_counts() {
 
   function repositionTooltip() {
     tooltip.className = 'tooltip';
-    tooltip.style.left = focalBar.offsetLeft + 'px';
+    tooltip.style.left = focalBar.offsetLeft + focalBar.clientWidth / 2 + 'px';
 
     if (tooltip.offsetLeft < 0) {
       tooltip.style.left = '0';
@@ -90,6 +91,7 @@ function handle_hover_on_vote_counts() {
     tooltipParts.nClinton.textContent = String(count);
     tooltipParts.nTrump.textContent = String(538 - count);
     tooltipParts.n.textContent = formatHumanNumber(n);
+    tooltipParts.timeOrTimes.textContent = (n === 1 ? 'time' : 'times');
 
     repositionTooltip();
   }
