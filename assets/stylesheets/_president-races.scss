@@ -164,7 +164,7 @@
       text-align: center;
 
       &::before {
-        // stddev is 1/10 of spread: 10%.
+        // stddev is 1/10 of spread: 10% (spread is 40: _president-races-key.marko).
         // margin of error is 1.96 * stddev in each direction: 19.6% from middle.
         content: '';
         display: block;

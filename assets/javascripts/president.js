@@ -135,9 +135,9 @@ function make_win_probabilities_histograms() {
       });
     }
   }
-  collectHistograms('likely-clinton', -0, 30);
-  collectHistograms('battlegrounds', 30, -30);
-  collectHistograms('likely-trump', 0, -30);
+  collectHistograms('likely-clinton', -0, 40);
+  collectHistograms('battlegrounds', 20, -20);
+  collectHistograms('likely-trump', 0, -40);
 
   function normalCdf(x) {
     // http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2579686
