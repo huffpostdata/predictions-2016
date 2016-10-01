@@ -26,7 +26,6 @@ Split.parse_all = function(comma_separated_ratings) {
 module.exports = class PresidentRace {
   constructor(hash, summary, curve) {
     this.state_code = hash.state_code
-    this.national_dem_correlation = +hash.national_dem_correlation
     this.state_name = hash.state_name
     this.pollster_slug = hash.pollster_slug
     this.cook_rating = hash.cook_rating
