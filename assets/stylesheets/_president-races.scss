@@ -9,19 +9,6 @@
   $n-votes-square-width: 1.6rem;
   $expanded-height: 44rem; // a max, for big-desktop
 
-  h3, h3 + p, h3 + p + .key {
-    @include page-width();
-
-    @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
-      max-width: $wide-width;
-    }
-    @media screen and (min-width: $wide-width) and (max-width: $wide-width + 2 * $min-margin) and (min-height: $expanded-height) {
-      width: auto;
-      margin-left: $min-margin;
-      margin-right: $min-margin;
-    }
-  }
-
   h3 {
     margin-top: 7rem;
     border-bottom: 1px solid $color;
@@ -99,13 +86,6 @@
         bottom: 0;
         background-size: 100%;
       }
-    }
-
-    & + p {
-      font-style: italic;
-      margin-top: .5rem;
-      color: $muted-color;
-      font-size: .85rem;
     }
   }
 

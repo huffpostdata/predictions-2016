@@ -11,22 +11,23 @@ var races=data.model.races
   var likely_flips=races.sorted_by('dem-win-probability').filter(function(race) { return race.flip_prob >= 0.5 })
   var unlikely_flips=races.sorted_by('dem-win-probability').filter(function(race) { return race.flip_prob < 0.5 })
 
-  h3 - States Likely To Flip
+  h3.likely-to-flip - States Likely To Flip
 
   p.flip-subhed - Our algorithm suggests these states have at least a 50 percent chance of flipping. 
   p.instruction - Click or tap a race to see our calculations
 
-  $!{data.helpers.partial('_senate-races-legend')}
-  ul.races
-    for(race in likely_flips | status-var=loop)
-      $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}
-
+  .races-container
+    $!{data.helpers.partial('_senate-races-legend')}
+    ul.races
+      for(race in likely_flips | status-var=loop)
+        $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}
 
   h3 - States Less Likely To Flip
 
   p - Our algorithm suggests these states have less than a 50 percent chance of flipping.
 
-  $!{data.helpers.partial('_senate-races-legend')}
-  ul.races
-    for(race in unlikely_flips | status-var=loop)
-      $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}
+  .races-container
+    $!{data.helpers.partial('_senate-races-legend')}
+    ul.races
+      for(race in unlikely_flips | status-var=loop)
+        $!{data.helpers.partial('_senate-race', { model: { race: race, show_help_label: loop.getIndex() === 0 } })}

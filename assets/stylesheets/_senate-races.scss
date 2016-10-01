@@ -12,6 +12,23 @@
 
   h3 + p {
     margin-top: 0;
+    font-style: italic;
+    margin-top: .5rem;
+    color: $muted-color;
+    font-size: .85rem;
+  }
+
+  h3, h3 + p, h3 + p + .key {
+    @include page-width();
+
+    @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
+      max-width: $wide-width;
+    }
+    @media screen and (min-width: $wide-width) and (max-width: $wide-width + 2 * $min-margin) and (min-height: $expanded-height) {
+      width: auto;
+      margin-left: $min-margin;
+      margin-right: $min-margin;
+    }
   }
 
   a.scroll-anchor { display: none; } // only for big-desktop view
@@ -612,6 +629,10 @@
     .races-container>* {
       width: 50%;
       margin-left: 0;
+    }
+
+    h3.likely-to-flip {
+      margin-top: 12rem;
     }
 
     ul.races { margin-left: 0; }
