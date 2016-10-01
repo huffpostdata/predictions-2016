@@ -27,7 +27,8 @@ echo >&2 'Running ./update-polls.js president...'
 ./update-polls.js president >$TEMP_OUTDIR/president-polls.tsv
 
 # Run model
-rm -rf R/interim-results
+rm -rf R/senate/interim-results
+rm -rf R/president/interim-results
 echo >&2 "Running Rscript --vanilla ./all-states.R \"$1\" (for senate)..."
 (cd R/senate && OUTPUT_DIR=../../$TEMP_OUTDIR Rscript --vanilla ./all-states.R "$1")
 echo >&2 "Running Rscript --vanilla ./all-states.R \"$1\" (for president)..."
