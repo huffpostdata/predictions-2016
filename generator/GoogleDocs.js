@@ -139,9 +139,9 @@ class GoogleDoc {
       }
     }
 
-    function prerender_li(text) {
+    function prerender_li(li) {
       add_html('<li>')
-      prerender_text(text)
+      li.texts.forEach(prerender_text)
       add_html('</li>')
     }
 
@@ -176,7 +176,7 @@ class GoogleDoc {
       case 'ol':
       case 'ul':
         add_html(`<${block.type}>`)
-        block.texts.forEach(prerender_li)
+        block.blocks.forEach(prerender_li)
         add_html(`</${block.type}>`)
         break
       default:
