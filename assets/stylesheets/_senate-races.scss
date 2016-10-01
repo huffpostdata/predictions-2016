@@ -429,7 +429,7 @@
         height: 1rem;
       }
 
-      svg.legend-thread path { fill: none; stroke: $toss-up; stroke-width: 1px; }
+      svg.legend-thread path { fill: none; stroke: $muted-color; stroke-width: 1px; }
       svg.legend-average path { fill: none; stroke: $color; stroke-width: 5px; }
       svg.legend-poll circle { fill: $toss-up; stroke: $color; stroke-width: 2px; }
       svg.legend-poll { vertical-align: -2px; width: 1rem; }
