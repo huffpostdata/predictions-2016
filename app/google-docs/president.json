@@ -64,7 +64,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Date-published: Monday, Sept. TK, 2016 3:03 P.M. EDT",
+        "text": "Date-published: Monday, Oct. 3, 2016 10:13 A.M. EDT",
         "underline": true
       }
     ]
@@ -89,7 +89,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "We estimate the probability of a win in each state using publicly available polls in the "
+        "text": "We estimate the likely outcome in each state using publicly available polls in the "
       },
       {
         "text": "HuffPost Pollster",
@@ -111,7 +111,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "When there were fewer than five available polls in 2016 or fewer than two polls since July 2016, we used "
+        "text": "When we find fewer than five polls in 2016 or fewer than two polls since July 2016, we use "
       },
       {
         "text": "Cook Political Report",
@@ -126,7 +126,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "We run the simulations out to Election Day, Nov. 8. Since we don’t have polling data for the future, the model assumes voter intentions generally continue along their current trajectories. The lack of poll data means that the outcomes of the races get less certain as time goes on, which moves the probability closer to 50 percent."
+        "text": "We run the simulations out to Election Day, Nov. 8. Since we don’t have polling data for the future, the model assumes voter intentions generally continue along their current trajectories. Projections will become more certain as more polls are published."
       }
     ]
   },
@@ -134,22 +134,14 @@
     "type": "p",
     "texts": [
       {
-        "text": "TK paragraph about adding/removing certainty based on national results."
-      }
-    ]
-  },
-  {
-    "type": "p",
-    "texts": [
-      {
-        "text": "The model also estimates what proportion of voters is undecided according to the polls as of today. We penalize the leader’s win probability based on this formula: "
+        "text": "The model also estimates what proportion of voters in each state is currently undecided, according to the polls. We assume one-third of undecided voters won’t vote; one-third will gravitate nationally toward either candidate; and the remaining one-third will add to this state’s margin of error by the formula: "
       },
       {
-        "text": "percent undecided ÷ (leader’s poll average − runner-up’s poll average) × 100 percent",
+        "text": "percent undecided ÷ 3",
         "italic": true
       },
       {
-        "text": ". The smaller the margin between candidates, the greater the chance that undecided voters will affect the outcome. We subtract that number from the overall probability of a candidate winning."
+        "text": "."
       }
     ]
   },
@@ -157,7 +149,15 @@
     "type": "p",
     "texts": [
       {
-        "text": "Download our "
+        "text": "To compare our model with others, we output the probability each candidate will win in each state."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Download our TSV files for "
       },
       {
         "text": "link_to(`state-by-state averages`, `president-summaries-tsv`, page_context.model.races.updated_at_s)",
@@ -171,7 +171,7 @@
         "underline": true
       },
       {
-        "text": " TSV files."
+        "text": "."
       }
     ]
   },
@@ -187,7 +187,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Finally, we simulated a Nov. 8 election 100 million times using the state-by-state averages. TKTK correlations. TKTK all the polls are wrong."
+        "text": "Finally, we simulate a Nov. 8 election 10 million times using the state-by-state averages."
       }
     ]
   },
@@ -195,7 +195,36 @@
     "type": "p",
     "texts": [
       {
-        "text": "The proportion of times Clinton won 270 or more electoral votes is the probability Clinton becomes president. The proportion of times Trump won 270 or more electoral votes is the probability Trump becomes president. TK mention a tie?"
+        "text": "In each simulation, we generate a result for each state based on:"
+      }
+    ]
+  },
+  {
+    "type": "ul",
+    "blocks": [
+      {
+        "type": "li",
+        "texts": [
+          {
+            "text": "Our state-by-state averages"
+          }
+        ]
+      },
+      {
+        "type": "li",
+        "texts": [
+          {
+            "text": "The uncertainty in our average of national polls"
+          }
+        ]
+      },
+      {
+        "type": "li",
+        "texts": [
+          {
+            "text": "The way one-third of undecided voters may vote"
+          }
+        ]
       }
     ]
   },
@@ -203,14 +232,46 @@
     "type": "p",
     "texts": [
       {
-        "text": "Download our "
+        "text": "We calculate the expected correlations among the state-by-state averages by finding the correlations of the Democratic vote shares in each state from 1932 to 2012. Our simulated vote results are correlated in the same way, and they also agree with each state’s polls."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Each year, the aggregate of polls tends to miss the mark by a few percentage points. We simulate this using the uncertainty in our average of national polls."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "We also assume one-third of undecided voters nationwide may gravitate toward one candidate or the other."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The proportion of times Clinton wins 270 or more electoral votes is the probability she becomes president. The proportion of times Trump wins 270 or more electoral votes is the probability he becomes president."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Download our TSV file for "
       },
       {
         "text": "link_to(`likely vote counts`, `president-vote-counts-tsv`, page_context.model.races.updated_at_s)",
         "underline": true
       },
       {
-        "text": " TSV file."
+        "text": "."
       }
     ]
   },
@@ -218,14 +279,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Find out more about "
-      },
-      {
-        "text": "our methodology",
-        "href": "http://www.huffingtonpost.com/entry/forecasting-the-senate-elections_us_57d6cf5de4b03d2d459b792e?bi1g37zs01wp6tj4i"
-      },
-      {
-        "text": "."
+        "text": "Find out more about our methodology."
       }
     ]
   }
