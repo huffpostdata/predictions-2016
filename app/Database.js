@@ -76,5 +76,12 @@ module.exports = class Database {
       races: this.president.races.all,
       vote_counts: this.president.vote_counts
     }]
+
+    this.sidebar = {
+      senate_races: this.senate.races.sorted_by('flip-probability').slice(0, 5).sort((a, b) => a.state_name.localeCompare(b.state_name)), 
+      senate_seat_counts: this.senate.seat_counts,
+      president_races: this.president.races.battlegrounds.slice(0).sort((a, b) => b.n_electoral_votes - a.n_electoral_votes).slice(0, 5).sort((a, b) => b.diff_xibar - a.diff_xibar),
+      president_vote_counts: this.president.vote_counts
+    }
   }
 }

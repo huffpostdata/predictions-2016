@@ -2,6 +2,7 @@
 @import '_proxima-nova-condensed-extra-bold.scss';
 
 $body-font-family: "NotoNashkArabic", "Helvetica Neue", "Helvetica", Roboto, Arial, sans-serif;
+$state-width: 7rem;
 
 html {
   margin: 0;
@@ -71,6 +72,170 @@ footer {
   margin: 1rem 0 0;
   font-style: italic;
   color: $muted-color;
+}
+
+.president-summary {
+  display: -webkit-flex;
+  display: flex;
+  &>* { -webkit-flex: 0 0 auto; flex: 0 0 auto; }
+
+  margin-top: 1rem;
+  font-family: $body-font-family;
+
+  h4, strong {
+    position: absolute;
+    display: block;
+  }
+
+  $image-size: 4rem;
+  $bar-height: 2rem;
+
+  &>* {
+    // position text absolutely, so it doesn't affect layout
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      background-size: 100%;
+      bottom: $bar-height;
+      height: $image-size;
+      width: $image-size;
+    }
+  }
+
+  .bar {
+    margin-top: $image-size;
+    height: $bar-height;
+    outline: 1px solid $background;
+  }
+
+  h4 {
+    position: absolute;
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-family: $header-font-family;
+    top: .5rem;
+    line-height: 1;
+  }
+
+  strong {
+    position: absolute;
+    top: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: $header-font-family;
+    line-height: 1;
+  }
+
+  .clinton {
+    .bar { background: $strong-dem; }
+    strong { color: $strong-dem; }
+    h4, strong { left: $image-size + .5rem; }
+    &::before { left: 0; bottom: $bar-height; background-image: asset-url('digest', 'images/clinton-bust.jpg'); }
+  }
+
+  .trump {
+    .bar { background: $strong-gop; }
+    strong { color: $strong-gop; }
+    h4, strong { right: $image-size + .5rem; }
+    &::before { background-image: asset-url('digest', 'images/trump-bust.jpg'); }
+  }
+
+  .tie {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+  }
+}
+
+.president-races {
+  $state-height: 2rem;
+  $n-votes-square-width: 2rem;
+
+  th {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: .6rem;
+    line-height: 1.25;
+    padding: .5rem 0;
+    color: $muted-color;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-top: .5rem; // the <th> has the other .5rem
+    width: 100%;
+  }
+
+  td {
+    white-space: nowrap;
+  }
+
+  .state-name {
+    width: $state-width;
+    font-family: $header-font-family;
+    font-weight: bold;
+  }
+
+  .n-votes {
+    vertical-align: middle;
+    text-align: center;
+
+    .square-container {
+      display: inline-block;
+      width: $n-votes-square-width;
+      height: $n-votes-square-width;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 0;
+      line-height: $n-votes-square-width;
+    }
+
+    .square {
+      display: inline-block;
+      vertical-align: middle;
+      height: 0;
+    }
+
+    .n {
+      display: inline-block;
+      color: $muted-color;
+      font-size: .85rem;
+      line-height: 1.5rem;
+      padding-left: .25rem;
+      vertical-align: middle;
+    }
+  }
+
+  td {
+    // No horizontal padding. As for vertical: that's built in, with the .n-votes .square.
+    padding: 0;
+  }
+
+  tr.lean-clinton {
+    .square { background-color: $strong-dem; }
+    .lead { color: $strong-dem; }
+  }
+
+  tr.lean-trump {
+    .square { background-color: $strong-gop; }
+    .lead { color: $strong-gop; }
+  }
+
+  td.lead {
+    text-align: center;
+    font-weight: bold;
+    font-size: .85rem;
+    line-height: 1.5rem;
+  }
+
+  .lead {
+    border-left: 1px solid $very-very-muted-color;
+  }
+}
+
+h2.senate {
+  margin-top: 2rem;
 }
 
 .senate-summary {
@@ -177,8 +342,6 @@ footer {
 }
 
 .senate-races {
-  $state-width: 8rem;
-
   ul {
     margin: 0;
     padding: 0;
@@ -216,6 +379,7 @@ footer {
       font-weight: bold;
       line-height: .8rem;
     }
+
   }
 
   .state-name {

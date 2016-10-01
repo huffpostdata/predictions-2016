@@ -51,7 +51,7 @@ president-vote-counts-tsv:
 
 sidebar:
   path: sidebar
-  model: senate
+  model: sidebar
 
 sidebar-test:
   path: sidebar-test
