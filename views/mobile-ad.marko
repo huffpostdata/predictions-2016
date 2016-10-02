@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+html lang="en"
+  head
+    meta charset="utf-8"
+    title - Predictions 2016
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link rel="stylesheet" href="${data.path_to_asset('scss', 'stylesheets/mobile-ad.css')}"
+  body
+    h1
+      span.color-dem - Election
+      span.color-gop - 2016
+      -  Forecast
+
+    .two-columns
+      #president
+        h2 - President
+        p - Chance of winning
+
+        .president-summary
+          var vote_counts=data.model.president_vote_counts
+          .clinton style="width: ${vote_counts.percent_clinton}%"
+            h3 - Clinton
+            strong - ${vote_counts.percent_clinton.toFixed(1)}%
+            .bar
+          .tie
+          .trump style="width: ${vote_counts.percent_trump}%"
+            h3 - Trump
+            strong - ${vote_counts.percent_trump.toFixed(1)}%
+            .bar
+
+      #senate
+        h2 - Senate
+        p - Chance each party<br>controls Senate
+
+        var seat_counts=data.model.senate_seat_counts
+        table.senate-summary
+          thead
+            tr
+              th.dem - Dem
+              th.tie - 50/50<br>Split
+              th.gop - GOP
+          tbody
+            tr
+              td.dem
+                strong.${seat_counts.prob_dem == seat_counts.max_prob ? 'dem-ahead' : ''} - ${seat_counts.prob_dem_percent.toFixed(0)}%
+              td.tie
+                strong.${seat_counts.prob_tie == seat_counts.max_prob ? 'tie-ahead' : ''} - ${seat_counts.prob_tie_percent.toFixed(0)}%
+              td.gop
+                strong.${seat_counts.prob_gop == seat_counts.max_prob ? 'gop-ahead' : ''} - ${seat_counts.prob_gop_percent.toFixed(0)}%
+
+    a href="${data.path_to('president')}" target="_blank" - See full calculations »
+
+    script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
+    script
+      ---
+      document.getElementById('president').addEventListener('click', function() {
+        window.top.location.href = 'president';
+      });
+      document.getElementById('senate').addEventListener('click', function() {
+        window.top.location.href = 'senate';
+      });
+      ---

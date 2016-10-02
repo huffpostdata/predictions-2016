@@ -68,6 +68,7 @@ class SenateSeatCounts {
     this.prob_dem_percent = 100 * this.prob_dem
     this.prob_gop_percent = 100 * this.prob_gop
     this.prob_tie_percent = 100 * this.prob_tie
+    this.max_prob = Math.max(this.prob_dem, this.prob_tie, this.prob_gop)
 
     this.summary_chart_data = [
       {
