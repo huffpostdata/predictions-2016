@@ -196,8 +196,8 @@ predict_n_dem_president_votes <- function(summaries, races, national_diff_stddev
   # Means and stddevs -- one per race. The "split" votes are their own races, so
   # the total number of races is 50 states + 1 DC + 2 ME + 3 NE = 56 races.
   means <- append(summaries$diff_xibar, split_cook_means)
-  stddevs <- append(summaries$diff_stddev, split_cook_stddevs)
-  undecideds <- append(summaries$undecided_xibar / 1.96 / 3, rep(0, times=length(split_cook_ratings)))
+  stddevs <- append(summaries$diff_stddev + summaries$undecided_stddev_boost, split_cook_stddevs)
+  undecideds <- append(summaries$undecided_stddev_boost, rep(0, times=length(split_cook_ratings)))
 
   # 1 -> 0 votes; 2 -> 1 vote; etc.
   n_counts <- rep(0, 539)
