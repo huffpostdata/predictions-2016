@@ -17,10 +17,16 @@ var vote_counts=data.model.vote_counts
     .y-axis
       .label - Frequency of electoral<br>vote scenario
       .horizontal-lines
-        .line style="bottom: ${vote_counts.point_five_percent}%"  - 0.5%
         .line style="bottom: ${vote_counts.one_percent}%" - 1%
-        .line style="bottom: ${vote_counts.one_percent + vote_counts.point_five_percent}%"
-        .line style="bottom: ${vote_counts.one_percent * 2}%"
+        .line style="bottom: ${vote_counts.one_percent * 2}%" - 2%
+        .line style="bottom: ${vote_counts.one_percent * 3}%"
+        .line style="bottom: ${vote_counts.one_percent * 4}%"
+        .line style="bottom: ${vote_counts.one_percent * 5}%"
+        .line style="bottom: ${vote_counts.one_percent * 6}%"
+        .line style="bottom: ${vote_counts.one_percent * 7}%"
+        .line style="bottom: ${vote_counts.one_percent * 8}%"
+        .line style="bottom: ${vote_counts.one_percent * 9}%"
+        .line style="bottom: ${vote_counts.one_percent * 10}%"
     ol.bars
       li.bar.bar-clinton data-count="${538 - loop.getIndex()}" data-n="${n}" style="height: ${100 * n / vote_counts.max}%" for(n in vote_counts.vote_count_to_n.slice(270).reverse() | status-var=loop)
       li.bar.bar-tie data-count="269" data-n="${vote_counts.n_tie}" style="height: ${100 * vote_counts.n_tie / vote_counts.max}%"
