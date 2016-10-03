@@ -92,5 +92,6 @@ module.exports = class Database {
     }
 
     this.tiny_mobile_ad = fs.readFileSync(`${__dirname}/../tiny-mobile-ad/output/${this.president.vote_counts.percent_clinton.toFixed(0)}.png`)
+    this.tiny_mobile_ad_landscape = fs.readFileSync(`${__dirname}/../tiny-mobile-ad/output/${this.president.vote_counts.percent_clinton.toFixed(0)}-landscape.png`)
   }
 }

@@ -28,50 +28,53 @@ function Clinton(i) {
   this.imagePosition = 'left'
 }
 
-function generate(ahead, behind) {
-  var canvas = new Canvas(200, 200)
+function generate(aspectRatio, ahead, behind) {
+  var landscape = (aspectRatio === 'landscape')
+  var left = landscape ? 100 : 0
+
+  var canvas = new Canvas(landscape ? 400 : 200, 200)
   var ctx = canvas.getContext('2d')
 
   ctx.fillStyle = 'white'
-  ctx.fillRect(0, 0, 200, 200)
+  ctx.fillRect(0, 0, landscape ? 400 : 200, 200)
 
-  ctx.drawImage(ahead.image, ahead.imagePosition === 'left' ? 0 : 80, 10, 120, 120)
+  ctx.drawImage(ahead.image, left + (ahead.imagePosition === 'left' ? 0 : 80), 10, 120, 120)
 
   ctx.font = '20px Proxima Nova Cn Th Extrabold'
   ctx.fillStyle = 'black'
   if (ahead.imagePosition === 'left') {
     ctx.textAlign = 'right'
-    ctx.fillText('chance of', 190, 100)
-    ctx.fillText('winning', 190, 118)
+    ctx.fillText('chance of', left + 190, 100)
+    ctx.fillText('winning', left + 190, 118)
   } else {
     ctx.textAlign = 'left'
-    ctx.fillText('chance of', 10, 100)
-    ctx.fillText('winning', 10, 118)
+    ctx.fillText('chance of', left + 10, 100)
+    ctx.fillText('winning', left + 10, 118)
   }
 
   ctx.textAlign = 'center'
 
   ctx.fillStyle = ahead.color
-  ctx.fillRect(0, 130, 200, 38)
+  ctx.fillRect(left, 130, 200, 38)
   ctx.font = '32px Proxima Nova Cn Th Extrabold'
   ctx.fillStyle = 'white'
-  ctx.fillText(`${ahead.name}: ${ahead.percent}`, 100, 160)
+  ctx.fillText(`${ahead.name}: ${ahead.percent}`, left + 100, 160)
 
   ctx.font = '24px Proxima Nova Cn Th Extrabold'
   ctx.fillStyle = behind.color
-  ctx.fillText(`${behind.name}: ${behind.percent}`, 100, 192)
+  ctx.fillText(`${behind.name}: ${behind.percent}`, left + 100, 192)
 
   return canvas.toBuffer()
 }
 
-function generateAll() {
+function generateAll(aspectRatio) {
   const all = [];
 
   for (let i = 0; i <= 100; i++) {
     if (i < 50) {
-      all.push(generate(new Trump(100 - i), new Clinton(i)))
+      all.push(generate(aspectRatio, new Trump(100 - i), new Clinton(i)))
     } else {
-      all.push(generate(new Clinton(i), new Trump(100 - i)))
+      all.push(generate(aspectRatio, new Clinton(i), new Trump(100 - i)))
     }
   }
 
@@ -81,8 +84,11 @@ function generateAll() {
 function generateIfAllImagesLoaded() {
   generateIfAllImagesLoaded.nRemaining -= 1
   if (generateIfAllImagesLoaded.nRemaining === 0) {
-    generateAll().map((png, i) => {
+    generateAll('square').map((png, i) => {
       fs.writeFileSync(`${__dirname}/output/${i}.png`, png)
+    })
+    generateAll('landscape').map((png, i) => {
+      fs.writeFileSync(`${__dirname}/output/${i}-landscape.png`, png)
     })
   }
 }

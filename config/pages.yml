@@ -66,3 +66,7 @@ mobile-ad-test:
 tiny-mobile-ad.png:
   model: tiny_mobile_ad
   content-type: image/png
+
+tiny-mobile-ad-landscape.png:
+  model: tiny_mobile_ad_landscape
+  content-type: image/png
