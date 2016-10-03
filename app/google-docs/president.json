@@ -64,7 +64,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Date-published: Monday, Oct. 3, 2016 10:13 A.M. EDT",
+        "text": "Date-published: Monday, Oct. 3, 2016 12:56 P.M. EDT",
         "underline": true
       }
     ]
@@ -279,7 +279,14 @@
     "type": "p",
     "texts": [
       {
-        "text": "Find out more about our methodology."
+        "text": "Find out more about "
+      },
+      {
+        "text": "our methodology",
+        "href": "http://www.huffingtonpost.com/entry/forecast-2016-president_us_57ee8eede4b0c2407cdd9155"
+      },
+      {
+        "text": "."
       }
     ]
   }
