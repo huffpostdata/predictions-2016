@@ -68,6 +68,7 @@ module.exports = class Database {
       races: PresidentRaces.load(president_curves)
     })
     this.president.metadata.date_updated = format_date_full(this.president.races.updated_at)
+    this.president.metadata.suggested_tweet = `HuffPost presidential forecast: Clinton has ${this.president.vote_counts.percent_clinton.toFixed(1)}% chance of winning.`
 
     this.president_races = this.president.races.all
 
