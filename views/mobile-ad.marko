@@ -54,10 +54,14 @@ html lang="en"
     script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
     script
       ---
-      document.getElementById('president').addEventListener('click', function() {
+      document.body.addEventListener('click', function(ev) {
         window.top.location.href = 'president';
+        ev.preventDefault();
+        ev.stopPropagation();
       });
-      document.getElementById('senate').addEventListener('click', function() {
+      document.getElementById('senate').addEventListener('click', function(ev) {
         window.top.location.href = 'senate';
+        ev.preventDefault();
+        ev.stopPropagation();
       });
       ---
