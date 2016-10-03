@@ -119,6 +119,9 @@
     top: 0;
     height: $collapsed-height;
     opacity: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
   }
 
   // "expand/collapse" down-arrow, over the input.expand
