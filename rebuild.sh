@@ -47,7 +47,7 @@ cp -a $TIMESTAMPED_OUTDIR $OUTDIR
 
 # Build the website
 echo >&2 'Building and uploading the website...'
-npm install
+npm install --production
 ./generator/upload.js
 
 popd >/dev/null
