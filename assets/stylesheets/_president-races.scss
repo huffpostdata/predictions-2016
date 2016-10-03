@@ -9,6 +9,102 @@
   $n-votes-square-width: 1.6rem;
   $expanded-height: 44rem; // a max, for big-desktop
 
+  .totals {
+    margin-top: 2rem;
+
+    h4 {
+      font-family: $body-font-family;
+      font-weight: normal;
+      text-align: center;
+      color: $muted-color;
+      font-style: italic;
+    }
+
+    a, strong, span {
+      display: block;
+      color: $color;
+    }
+
+    .inner {
+      font-family: $header-font-family;
+      text-transform: uppercase;
+      line-height: 1.25;
+      display: -webkit-flex;
+      display: flex;
+      position: relative;
+
+      &>* {
+        -webkit-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        text-align: center;
+      }
+    }
+
+    strong {
+      font-size: 3rem;
+    }
+
+    .clinton {
+      strong { color: $strong-dem; }
+    }
+
+    .battlegrounds {
+      strong { color: $toss-up; }
+    }
+
+    .trump {
+      strong { color: $strong-gop; }
+    }
+
+    @media (min-width: $min-desktop-width) {
+      .clinton, .trump {
+        &::before {
+          // Face
+          content: '';
+          position: absolute;
+          top: 50%;
+          margin-top: -1.5rem;
+          background-size: 100%;
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+
+      .clinton {
+        margin-left: 1.5rem;
+        padding-left: 2rem;
+        border: 1px solid $muted-color;
+        border-right: 0;
+        text-align: left;
+
+        &::before {
+          left: 0;
+          background-image: asset-url('digest', 'images/clinton-head.jpg');
+        }
+      }
+
+      .trump {
+        margin-right: 1.5rem;
+        padding-right: 2rem;
+        border: 1px solid $muted-color;
+        border-left: 0;
+        text-align: right;
+
+        &::before {
+          right: 0;
+          background-image: asset-url('digest', 'images/trump-head.jpg');
+        }
+      }
+
+      .battlegrounds {
+        border-top: 1px solid $muted-color;
+        border-bottom: 1px solid $muted-color;
+      }
+    }
+  }
+
   h3 {
     margin-top: 7rem;
     border-bottom: 1px solid $color;
