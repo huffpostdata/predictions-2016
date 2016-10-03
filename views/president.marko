@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+var meta=data.model.metadata
+
+html lang="en"
+  head
+    meta charset="utf-8"
+    title - ${data.model.metadata.title}
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link rel="stylesheet" href="${data.path_to_asset('scss', 'stylesheets/index.css')}"
+    $!{data.render_template('_social-meta', data)}
+  body.senate
+    $!{data.render_template('_nav', data)}
+
+    $!{data.render_template('_header', data)}
+
+    article
+      $!{data.render_template('_president-summary', data)}
+
+      $!{data.render_template('_president-vote-counts', data)}
+
+      $!{data.render_template('_president-races', data)}
+
+      h2.with-toc-link#methodology
+        a href="#methodology" - Methodology
+
+      $!{data.model.render(data)}
+
+      $!{data.render_template('_recirc', data)}
+
+      .comments
+        .fb-comments data-width="100%"
+
+    $!{data.render_template('_footer', data)}
+
+    script src="${data.path_to_asset('digest', 'javascripts/social.js')}"
+    script src="${data.path_to_asset('digest', 'javascripts/stats.js')}"
+    script src="${data.path_to_asset('digest', 'javascripts/senate.js')}"
+    script src="${data.path_to_asset('digest', 'javascripts/president.js')}"

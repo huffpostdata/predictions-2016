@@ -1,0 +1,322 @@
+#president-vote-counts {
+  @include full-width();
+  &>* {
+    @include page-width();
+  }
+
+  $x-axis-height: 3.5rem;
+  $grid-height: 10rem;
+  $tooltip-height: 5.5rem;
+  $top-x-axis-height: 3rem;
+  $legend-width: 13rem;
+
+  .container {
+    @include wide-width();
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    position: relative;
+    margin-top: $top-x-axis-height + 6rem; // for legend
+
+    @media (min-width: $min-desktop-width) {
+      margin-top: $tooltip-height + $top-x-axis-height + 5rem; // for tooltip+legend
+    }
+
+    @media (min-width: 539px + 2 * $min-margin) {
+      @include with-width(539px);
+    }
+    @media (min-width: 2 * 539px + 2 * $min-margin) {
+      @include with-width(2 * 539px);
+    }
+  }
+
+  ol.bars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+    height: $grid-height;
+    border-bottom: 2px solid $color;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+
+    li.bar-clinton { background: $strong-dem; }
+    li.bar-trump { background: $strong-gop; }
+    li.bar-tie { background: $toss-up; }
+  }
+
+  li.bar {
+    display: block;
+    width: 1px;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+
+    @media (min-width: $min-desktop-width) {
+      &.focus {
+        outline: 1px solid $color;
+        position: relative; // z-index
+      }
+    }
+  }
+
+  .y-axis {
+    position: absolute;
+    line-height: 1.2;
+    font-size: .85rem;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    height: $grid-height;
+    color: $muted-color;
+
+    .label {
+      margin-top: -3rem - $top-x-axis-height;
+      margin-left: .25rem;
+      padding-left: .25rem;
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.25;
+
+      @media (min-width: $min-desktop-width) {
+        position: absolute;
+        top: 3rem;
+      }
+    }
+
+    .horizontal-lines {
+      position: absolute;
+      bottom: 0;
+      height: $grid-height;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .line {
+      position: absolute;
+      left: 0;
+      box-sizing: border-box;
+      padding-left: .5rem;
+      width: 100%;
+      // bottom: set in HTML
+      border-bottom: 1px solid $border-color;
+    }
+  }
+
+  .x-axis {
+    height: $x-axis-height;;
+    line-height: 1.5rem;
+    z-index: -2;
+    position: relative;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+
+    &>* {
+      width: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+
+      position: relative;
+      text-align: center;
+
+      &::before {
+        display: block;
+        content: '';
+        position: absolute;
+        top: -$grid-height;
+        height: $grid-height;
+        left: 50%;
+        width: 0;
+        border-left: 1px solid $border-color;
+      }
+    }
+
+    .clinton, .trump {
+      position: absolute;
+      left: -1rem;
+      width: 2rem;
+    }
+
+    .clinton {
+      color: $strong-dem;
+      top: 0;
+    }
+    .trump {
+      color: $strong-gop;
+      top: 1.5rem;
+    }
+
+    &>.all-clinton {
+      .clinton, .trump { left: 0; }
+      text-align: left;
+    }
+
+    &>.all-trump {
+      .clinton, .trump { left: auto; right: 0; }
+      text-align: right;
+    }
+  }
+
+  .labels {
+    position: relative;
+    height: 0;
+
+    .vertical-line {
+      pointer-events: none;
+      position: absolute;
+      left: 50%;
+      margin-left: -1px;
+      width: 0;
+      border-left: 2px dotted $color;
+      bottom: 0;
+      height: $grid-height + $top-x-axis-height - 1rem;
+
+      @media (min-width: $min-desktop-width) {
+        height: $grid-height + $tooltip-height + $top-x-axis-height - 1rem;
+      }
+    }
+
+    .units {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      bottom: -$x-axis-height - 1rem;
+      text-align: center;
+      font-weight:bold;
+    }
+
+    .clinton, .trump {
+      position: absolute;
+      box-sizing: border-box;
+      display: inline-block;
+      top: -$grid-height - $top-x-axis-height + 1rem;
+      @media (min-width: $min-desktop-width) {
+        top: -$grid-height - $top-x-axis-height - $tooltip-height + 1rem;
+      }
+      text-transform: uppercase;
+      line-height: 1.25;
+      font-weight: bold;
+      font-size: .8rem;
+      width: 50%;
+
+      &::before {
+        display: block;
+        position: absolute;
+        font-size: 1.1rem;
+        top: 50%;
+        line-height: 1.1rem;
+        margin-top: -.55rem;
+      }
+    }
+
+    .clinton {
+      left: 0;
+      padding-right: 1.75rem;
+      text-align: right;
+      color: $strong-dem;
+
+      &::before {
+        content: '←';
+        right: .5rem;
+      }
+    }
+
+    .trump {
+      right: 0;
+      padding-left: 1.75rem;
+      color: $strong-gop;
+
+      &::before {
+        content: '→';
+        left: .5rem;
+      }
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    display: none;
+    bottom: $grid-height + $x-axis-height + .75rem;
+    box-sizing: border-box;
+    background: $background;
+    height: $tooltip-height - .5rem;
+    padding: .5rem;
+    width: $legend-width;
+    margin-left: -($legend-width / 2); // so JS can just set "left"
+    border: 1px solid $color;
+    font-size: .85rem;
+    text-align: center;
+
+    @media (min-width: $min-desktop-width) {
+      &:not(.loading) { display: block; }
+    }
+
+    &::before {
+      // arrow
+      content: '';
+      position: absolute;
+      bottom: -.5rem;
+      background: $background;
+      left: 50%;
+      box-sizing: border-box;
+      margin-left: -.5rem;
+      width: 1rem;
+      height: 1rem;
+      transform: scaleY(.75) rotate(-45deg);
+      border: 1px solid transparent;
+      border-bottom-color: $color;
+      border-left-color: $color;
+    }
+
+    &.flush-left {
+      left: 0;
+      margin-left: 0;
+      &::before { display: none; }
+    }
+    &.flush-right {
+      right: 0;
+      margin-left: 0;
+      &::before { display: none; }
+    }
+
+    .counts {
+      display: -webkit-flex;
+      display: flex;
+      padding-bottom: .5rem;
+
+      &>* {
+        box-sizing: border-box;
+        width: 50%;
+      }
+
+      .clinton {
+        text-align: right;
+        padding-right: .5rem;
+        border-right: 1px solid $border-color;
+
+      }
+
+      .trump {
+        text-align: left;
+        padding-left: .5rem;
+      }
+
+      .clinton strong { color: $strong-dem; }
+      .trump strong { color: $strong-gop; }
+    }
+
+    p {
+      position: relative; // appear above white "arrow" box
+      margin: 0;
+      line-height: 1.2;
+      color: $muted-color;
+    }
+  }
+}

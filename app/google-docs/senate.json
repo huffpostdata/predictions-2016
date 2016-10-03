@@ -111,7 +111,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "When there were fewer than five available polls in 2016 or fewer than two polls since July 2016, we used "
+        "text": "When there are fewer than five available polls in 2016 or fewer than two polls since July 2016, we use "
       },
       {
         "text": "Cook Political Report",
@@ -126,7 +126,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "We run the simulations out to Election Day, Nov. 8. Since we don’t have polling data for the future, the model assumes voter intentions generally continue along their current trajectories. The lack of poll data means that the outcomes of the races get less certain as time goes on, which moves the probability closer to 50 percent."
+        "text": "We run the simulations out to Election Day, Nov. 8. Since we don’t have polling data for the future, the model assumes voter intentions generally continue along their current trajectories. Projections will become more certain as more polls are published."
       }
     ]
   },
@@ -172,7 +172,7 @@
     "type": "p",
     "texts": [
       {
-        "text": "Finally, we simulated a Nov. 8 election 100 million times using the state-by-state probabilities. The proportion of times Democrats ended up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count landed at 50-50."
+        "text": "Finally, we simulate a Nov. 8 election 100 million times using the state-by-state probabilities. The proportion of times Democrats end up with at least 51 seats is the probability of the Democrats gaining control of the Senate. The probability of a tie is the proportion of times the seat count lands at 50-50."
       }
     ]
   },

@@ -1,8 +1,9 @@
 library('parallel')
 
-options(error=traceback, warn=1, showWarnCalls=TRUE)
+options(error=traceback, warn=2, showWarnCalls=TRUE)
 
 source('../common/calculate-diff-data.R')
+source('./correlated-rnorm.R')
 
 args <- commandArgs(TRUE)
 fast <- !is.na(args[1]) && args[1] == 'fast'
@@ -15,10 +16,13 @@ output_president_vote_counts_path <- paste0(output_dir, '/president-vote-counts.
 output_president_summaries_path <- paste0(output_dir, '/president-summaries.tsv')
 output_president_samples_path <- paste0(output_dir, '/president-samples-STATE')
 
-NMonteCarloSimulations <- 1e8
+NMonteCarloSimulations <- 1e7
+PollsAreAllWrongByMean <- 0
+PollsAreAllWrongByStddev <- 0.016854 # TODO explain how we got this
 EndDate <- as.Date('2016-11-08')
+Today <- Sys.Date()
 
-if (fast) NMonteCarloSimulations <- 1e6
+if (fast) NMonteCarloSimulations <- 5e5
 
 load_or_calculate_president_data_for_race <- function(race) {
   if (!dir.exists('interim-results')) {
@@ -79,77 +83,38 @@ load_or_calculate_national_president_data <- function() {
 }
 
 calculate_race_summary <- function(race, national) {
-  Today <- Sys.Date()
+  columns <- c('diff_xibar', 'diff_stddev', 'undecided_xibar')
 
   curve <- race$curve
-  today <- curve[curve$date == Today, c('diff_xibar', 'undecided_xibar')]
-  end_prob <- curve[curve$date == EndDate, c('dem_win_prob')]
+  today <- curve[curve$date == Today, columns]
+  end_day <- curve[curve$date == EndDate, columns]
 
-  if (nrow(today) == 0) {
-    # This is a stub. Ignore all our cool calculations.
-    return(data.frame(
-      state_code=c(race$race$state_code),
-      n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
-      dem_win_prob=c(end_prob),
-      national_dem_win_prob=NA,
-      national_delta=NA,
-      national_adjustment=NA,
-      dem_win_prob_with_adjustment=NA,
-      undecided_margin=NA,
-      dem_win_prob_with_adjustment_and_undecided=c(end_prob)
-    ))
-  }
-
-  # How much we move towards 0.5. For instance: if today is 0.75 (Dem) and
-  # election day is 0.65, we move 0.1 towards 0.5; national_delta <- -0.1. For
-  # 0.25 -> 0.35 (which is equivalent to 0.75 GOP -> 0.65),
-  # national_delta <- 0.1.
-  #
-  # This measures our national uncertainty stemming from the distance between
-  # today and election day.
-  national_today_prob <- national[national$date == Today, c('dem_win_prob')]
-  national_end_prob <- national[national$date == EndDate, c('dem_win_prob')]
-  national_delta <- abs(national_end_prob - 0.5) - abs(national_today_prob - 0.5)
-
-  # Adjust based on uncertainty and correlation.
-  #
-  # MS, with correlation -0.55, tends to vote _more_ Republican when national
-  # polls are _more_ Democratic. OH, with correlation 0.74, votes _more_
-  # Democratic when national polls are more Democratic.
-  #
-  # Examples:
-  #   national_delta -0.1 (meaning national leans Dem) -> move MS prob -0.055
-  #                       and move OH prob +0.074.
-  #   national_delta 0.1 (meaning national leans GOP) -> move MS prob +0.055
-  #                      and move OH prob -0.074.
-  national_correlation <- as.double(race$race$national_dem_correlation)
-  adjustment <- -(national_delta) * national_correlation # + -> lean Dem; - -> lean GOP
-
-  prob_with_adjustment <- max(0.0, min(1.0, ifelse(
-    end_prob >= 0.5,
-    max(0.5, end_prob + adjustment),
-    min(0.5, end_prob + adjustment)
-  )))
-
-  undecided_margin <- min(0.1, abs(today$undecided_xibar / today$diff_xibar / 100))
-
-  prob_with_adjustment_and_undecided <- ifelse(
-    prob_with_adjustment >= 0.5,
-    max(0.5, prob_with_adjustment - undecided_margin),
-    min(0.5, prob_with_adjustment + undecided_margin)
+  ret <- data.frame(
+    state_code=c(race$race$state_code),
+    n_electoral_votes=c(as.integer(race$race$n_electoral_votes))
   )
 
-  return(data.frame(
-    state_code=c(race$race$state_code),
-    n_electoral_votes=c(as.integer(race$race$n_electoral_votes)),
-    dem_win_prob=c(end_prob),
-    national_dem_win_prob=c(national_end_prob),
-    national_delta=c(national_delta),
-    national_adjustment=c(adjustment),
-    dem_win_prob_with_adjustment=c(prob_with_adjustment),
-    undecided_margin=c(undecided_margin),
-    dem_win_prob_with_adjustment_and_undecided=c(prob_with_adjustment_and_undecided)
-  ))
+  if (nrow(today) == 0) {
+    cook <- CookPriors.president[match(race$race$cook_rating, CookPriors.president$rating),]
+    ret$diff_xibar <- cook$mean
+    ret$diff_stddev <- cook$stddev
+    ret$undecided_xibar <- c(0)
+    ret$undecided_stddev_boost <- c(0)
+  } else {
+    ret$diff_xibar <- end_day$diff_xibar
+    ret$diff_stddev <- end_day$diff_stddev
+    ret$undecided_xibar <- today$undecided_xibar
+    ret$undecided_stddev_boost <- today$undecided_xibar / 1.96 / 3
+  }
+
+  # Generate a number devoid of (super-important) national adjustments
+  ret$clinton_win_prob <- pnorm(
+    0,
+    mean=-ret$diff_xibar,
+    sd=ret$diff_stddev + ret$undecided_stddev_boost
+  )
+
+  return(ret)
 }
 
 calculate_race_summaries <- function(races, national) {
@@ -176,15 +141,19 @@ load_or_calculate_president_data_for_races <- function(races) {
   curves_list <- lapply(data_list, function(x) x$curve)
   curves <- do.call(rbind, curves_list)
 
-  national <- load_or_calculate_national_president_data()$curve
-  summaries <- calculate_race_summaries(data_list, national)
+  national_curve <- load_or_calculate_national_president_data()$curve
+  summaries <- calculate_race_summaries(data_list, national_curve)
+
+  today <- national_curve[national_curve$date == Today, ]
+  end_day <- national_curve[national_curve$date == EndDate, ]
 
   state_samples_strings <- lapply(data_list, function(x) x$samples_string)
 
   return(list(
     curves=curves,
     summaries=summaries,
-    state_samples_strings=state_samples_strings
+    state_samples_strings=state_samples_strings,
+    national_diff_stddev=end_day$diff_stddev
   ))
 }
 
@@ -194,7 +163,7 @@ load_or_calculate_president_data_for_races <- function(races) {
 # times; two votes won 400 times; etc.
 #
 # The output vector always size 539.
-predict_n_dem_president_votes <- function(summaries, races) {
+predict_n_dem_president_votes <- function(summaries, races, national_diff_stddev) {
   cat('Running', NMonteCarloSimulations, 'president simulations...\n')
 
   # Separate out ME-01, ME-02, NE-01, NE-02, NE-03: they're their own races,
@@ -207,37 +176,48 @@ predict_n_dem_president_votes <- function(summaries, races) {
   )
 
   # c(0, 0, 0, 2, 0, ...)
-  summaries$n_split_votes <- nchar(gsub(',?[^,]+', ',', split_ratings_by_state))
+  n_split_votes <- nchar(gsub(',?[^,]+', ',', split_ratings_by_state))
 
   # c("D-Solid", "Toss Up", ...)
   split_cook_ratings <- unlist(strsplit(split_ratings_by_state, ',', fixed=TRUE))
 
   # c(0.25, 0.75, 0.99, ...) -- win probabilities, each for one vote
-  Cook <- CookPriors.president[c('rating', 'dem_win_prob')]
-  split_cook_dem_win_probs <- Cook$dem_win_prob[match(split_cook_ratings, Cook$rating)]
-
-  # Probabilities -- one per race. The "split" votes are their own races, so
-  # the total number of races is 50 states + 1 DC + 2 ME + 3 NE = 56 races.
-  win_prob <- append(
-    summaries$dem_win_prob_with_adjustment_and_undecided, # states (at-large) and DC
-    split_cook_dem_win_probs                              # ME and NE split votes
-  )
+  Cook <- CookPriors.president[c('rating', 'mean', 'stddev')]
+  split_cook_means <- Cook$mean[match(split_cook_ratings, Cook$rating)]
+  split_cook_stddevs <- Cook$stddev[match(split_cook_ratings, Cook$rating)]
 
   # Number of votes each probability maps to. The "split" votes are each worth
   # one.
   win_n_votes <- append(
-    summaries$n_electoral_votes - summaries$n_split_votes, # states (at-large) and DC
-    rep(1, times=length(split_cook_dem_win_probs))         # ME and NE split votes
+    summaries$n_electoral_votes - n_split_votes, # states (at-large) and DC
+    rep(1, times=length(split_cook_ratings))     # ME and NE split votes
   )
+
+  # Means and stddevs -- one per race. The "split" votes are their own races, so
+  # the total number of races is 50 states + 1 DC + 2 ME + 3 NE = 56 races.
+  means <- append(summaries$diff_xibar, split_cook_means)
+  stddevs <- append(summaries$diff_stddev + summaries$undecided_stddev_boost, split_cook_stddevs)
+  undecideds <- append(summaries$undecided_stddev_boost, rep(0, times=length(split_cook_ratings)))
 
   # 1 -> 0 votes; 2 -> 1 vote; etc.
   n_counts <- rep(0, 539)
-  n_races <- length(win_prob)
+  n_races <- length(means)
 
   for (n in 1:NMonteCarloSimulations) {
-    random_numbers <- runif(n=n_races)
-    n_votes <- sum((win_prob > random_numbers) * win_n_votes)
-    index <- n_votes + 1
+    # Produce results for each state, correlated the way state results have
+    # historically been correlated.
+    state_results <- CorrelatedRnorm() * stddevs + means
+
+    # Assume that nationwide, polls are all off in the same direction
+    national_error <- rnorm(1, sd=national_diff_stddev)
+
+    # Assume that a third of undecided voters nationwide all behave the same way
+    # (e.g., in one random simulation, 20% choose Clinton, 80% choose Trump)
+    undecided_diff <- rnorm(1) * undecideds
+
+    outcomes <- state_results + national_error + undecided_diff
+    n_dem_votes <- sum((outcomes > 0) * win_n_votes)
+    index <- n_dem_votes + 1
     n_counts[index] <- n_counts[index] + 1
   }
 
@@ -289,7 +269,7 @@ run_all_president <- function() {
   dump_president_samples(president_data$state_samples_strings)
   dump_president_summaries(president_data$summaries)
 
-  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries, races)
+  n_dem_votes <- predict_n_dem_president_votes(president_data$summaries, races, president_data$national_diff_stddev)
   dump_president_vote_counts(n_dem_votes)
 }
 

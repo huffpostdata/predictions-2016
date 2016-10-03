@@ -63,6 +63,9 @@ module.exports = class PageCompiler {
       const path = this.key_to_path(key)
 
       if (object.collection) {
+        if (!this.database.hasOwnProperty(object.collection)) {
+          throw new Error(`${key} requires database property "${object.collection}" which does not exist. Add it.`)
+        }
         for (const model of this.database[object.collection]) {
           const out_path = path.replace(/:(\w+)/, (_, name) => model[name])
           out[out_path] = this.render(key, object, { model: model })

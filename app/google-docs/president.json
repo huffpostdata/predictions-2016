@@ -1,0 +1,286 @@
+[
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Hed: 2016 President Forecast",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Dek: And the winner may be...",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Author: By ",
+        "underline": true
+      },
+      {
+        "text": "Natalie Jackson",
+        "href": "http://www.huffingtonpost.com/author/natalie-jackson"
+      },
+      {
+        "text": " and ",
+        "underline": true
+      },
+      {
+        "text": "Adam Hooper",
+        "href": "http://www.huffingtonpost.com/author/adamhooper"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Author: Additional design by ",
+        "underline": true
+      },
+      {
+        "text": "Alissa Scheller",
+        "href": "http://www.huffingtonpost.com/author/alissa-scheller"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Twitter-author: @HuffPostData",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Date-published: Monday, Oct. 3, 2016 10:13 A.M. EDT",
+        "underline": true
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "We calculate the probable outcome in each state, and then we use those probabilities to determine the likely electoral vote count on election night."
+      }
+    ]
+  },
+  {
+    "type": "h3",
+    "texts": [
+      {
+        "text": "1. State-By-State Averages"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "We estimate the likely outcome in each state using publicly available polls in the "
+      },
+      {
+        "text": "HuffPost Pollster",
+        "href": "http://elections.huffingtonpost.com/pollster#2016-senate-races"
+      },
+      {
+        "text": " database. We use Pollster’s "
+      },
+      {
+        "text": "Bayesian Kalman filter model",
+        "href": "http://eppsac.utdallas.edu/files/jackman/CAJP%2040-4%20Jackman.pdf"
+      },
+      {
+        "text": " to simulate 100,000 populations whose voting intentions correspond to the poll results. (We sample 5,000 of those simulations in our calculations, for speed.)"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "When we find fewer than five polls in 2016 or fewer than two polls since July 2016, we use "
+      },
+      {
+        "text": "Cook Political Report",
+        "href": "http://cookpolitical.com/senate/charts/race-ratings"
+      },
+      {
+        "text": " ratings to estimate where the race stands."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "We run the simulations out to Election Day, Nov. 8. Since we don’t have polling data for the future, the model assumes voter intentions generally continue along their current trajectories. Projections will become more certain as more polls are published."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The model also estimates what proportion of voters in each state is currently undecided, according to the polls. We assume one-third of undecided voters won’t vote; one-third will gravitate nationally toward either candidate; and the remaining one-third will add to this state’s margin of error by the formula: "
+      },
+      {
+        "text": "percent undecided ÷ 3",
+        "italic": true
+      },
+      {
+        "text": "."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "To compare our model with others, we output the probability each candidate will win in each state."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Download our TSV files for "
+      },
+      {
+        "text": "link_to(`state-by-state averages`, `president-summaries-tsv`, page_context.model.races.updated_at_s)",
+        "underline": true
+      },
+      {
+        "text": " and "
+      },
+      {
+        "text": "link_to(`state-by-state curves`, `president-curves-tsv`, page_context.model.races.updated_at_s)",
+        "underline": true
+      },
+      {
+        "text": "."
+      }
+    ]
+  },
+  {
+    "type": "h3",
+    "texts": [
+      {
+        "text": "2. Likely Vote Counts"
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Finally, we simulate a Nov. 8 election 10 million times using the state-by-state averages."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "In each simulation, we generate a result for each state based on:"
+      }
+    ]
+  },
+  {
+    "type": "ul",
+    "blocks": [
+      {
+        "type": "li",
+        "texts": [
+          {
+            "text": "Our state-by-state averages"
+          }
+        ]
+      },
+      {
+        "type": "li",
+        "texts": [
+          {
+            "text": "The uncertainty in our average of national polls"
+          }
+        ]
+      },
+      {
+        "type": "li",
+        "texts": [
+          {
+            "text": "The way one-third of undecided voters may vote"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "We calculate the expected correlations among the state-by-state averages by finding the correlations of the Democratic vote shares in each state from 1932 to 2012. Our simulated vote results are correlated in the same way, and they also agree with each state’s polls."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Each year, the aggregate of polls tends to miss the mark by a few percentage points. We simulate this using the uncertainty in our average of national polls."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "We also assume one-third of undecided voters nationwide may gravitate toward one candidate or the other."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "The proportion of times Clinton wins 270 or more electoral votes is the probability she becomes president. The proportion of times Trump wins 270 or more electoral votes is the probability he becomes president."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Download our TSV file for "
+      },
+      {
+        "text": "link_to(`likely vote counts`, `president-vote-counts-tsv`, page_context.model.races.updated_at_s)",
+        "underline": true
+      },
+      {
+        "text": "."
+      }
+    ]
+  },
+  {
+    "type": "p",
+    "texts": [
+      {
+        "text": "Find out more about our methodology."
+      }
+    ]
+  }
+]

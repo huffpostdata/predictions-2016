@@ -1,9 +1,10 @@
-#senate-races {
+#senate-races, #president-races {
   $marker-width: 1rem;
   $half-marker-width: $marker-width / 2;
   $state-code-width: 3rem;
   $state-name-width: 10rem;
   $collapsed-height: 2rem;
+  $expanded-height: 44rem; // a max, for big-desktop
 
   h3 {
     margin-top: 2rem;
@@ -11,12 +12,35 @@
 
   h3 + p {
     margin-top: 0;
+    font-style: italic;
+    margin-top: .5rem;
+    color: $muted-color;
+    font-size: .85rem;
   }
+
+  h3, h3 + p, h3 + p + .key {
+    @include page-width();
+
+    @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
+      max-width: $wide-width;
+    }
+    @media screen and (min-width: $wide-width) and (max-width: $wide-width + 2 * $min-margin) and (min-height: $expanded-height) {
+      width: auto;
+      margin-left: $min-margin;
+      margin-right: $min-margin;
+    }
+  }
+
+  a.scroll-anchor { display: none; } // only for big-desktop view
 
   @include full-width();
 
   &>* {
-    @include page_width();
+    @include page-width();
+  }
+
+  .races-container {
+    margin: 0 auto; // nix margin on mobile
   }
 
   @mixin svg-arrow() {
@@ -40,16 +64,13 @@
     font-weight: bold;
   }
 
-  &>ul, &>.races-legend {
+  ul.races, .races-legend {
     margin: 0 auto; // nix margins on mobile
-  }
-
-  &>ul {
     padding: 0;
     list-style: none;
   }
 
-  &>ul>li {
+  li[data-state-code] {
     position: relative; // absolutely-positioned stuff inside
     border-top: 1px solid $border-color;
     &:last-child {
@@ -98,6 +119,9 @@
     top: 0;
     height: $collapsed-height;
     opacity: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
   }
 
   // "expand/collapse" down-arrow, over the input.expand
@@ -187,8 +211,8 @@
     right: $marker-width;
   }
 
-  .incumbent-dem .marker { background: $strong-dem; }
-  .incumbent-gop .marker { background: $strong-gop; }
+  .incumbent-dem .marker, .lean-clinton .marker { background: $strong-dem; }
+  .incumbent-gop .marker, .lean-trump .marker { background: $strong-gop; }
 
   .content-to-expand {
     max-height: $collapsed-height;
@@ -207,24 +231,35 @@
     background: $background; // cover the vertical line running down the page
     border-top: 1px dotted $border-color;
     border: .25rem solid $alt-background;
+    position: relative;
+
+    h4 {
+      margin-top: .75rem;
+      padding: 0 .75rem;
+      line-height: 1.5;
+      font-family: $header-font-family;
+      font-weight: bold;
+      font-size: 1rem;
+
+      strong.probability {
+        display: inline-block;
+        margin-left: -.25rem;
+        font-weight: bold;
+        padding: 0 .25rem;
+        color: white;
+      }
+    }
+
+    h5 {
+      padding: 0 .75rem;
+      margin: 0;
+      font-family: $header-font-family;
+      color: $muted-color;
+    }
   }
 
-	h4 {
-    margin-top: .75rem;
-    padding: 0 .75rem;
-    line-height: 1.5;
-
-    strong.probability {
-      display: inline-block;
-      margin-left: -.25rem;
-      font-weight: bold;
-      padding: 0 .25rem;
-      color: white;
-    }
-	}
-
-  .lean-dem strong.probability { background: $strong-dem; }
-  .lean-gop strong.probability { background: $strong-gop; }
+  .lean-dem strong.probability, .lean-clinton strong.probability { background: $strong-dem; }
+  .lean-gop strong.probability, .lean-trump strong.probability { background: $strong-gop; }
   .toss-up strong.probability { background: $toss-up; }
 
   .chart-container {
@@ -240,7 +275,6 @@
       display: flex;
       -webkit-justify-content: center;
       justify-content: center;
-      padding: .5rem 0;
     }
 
     .rest {
@@ -415,7 +449,7 @@
         height: 1rem;
       }
 
-      svg.legend-thread path { fill: none; stroke: $toss-up; stroke-width: 1px; }
+      svg.legend-thread path { fill: none; stroke: $muted-color; stroke-width: 1px; }
       svg.legend-average path { fill: none; stroke: $color; stroke-width: 5px; }
       svg.legend-poll circle { fill: $toss-up; stroke: $color; stroke-width: 2px; }
       svg.legend-poll { vertical-align: -2px; width: 1rem; }
@@ -427,8 +461,9 @@
     margin: 0;
     padding: 0;
     list-style: none;
+    font-size: .85rem;
 
-    span.dem, span.gop, span.undecided {
+    span.dem, span.gop, span.undecided, span.clinton, span.trump {
       font-weight: bold;
     }
 
@@ -437,8 +472,8 @@
       margin: .75rem;
     }
 
-    span.dem { color: $strong-dem; }
-    span.gop { color: $strong-gop; }
+    span.dem, span.clinton { color: $strong-dem; }
+    span.gop, span.trump { color: $strong-gop; }
     span.undecided { color: $toss-up; }
   }
 
@@ -499,10 +534,46 @@
     .arrow-left {
       transform: scaleX(-1);
     }
+    .arrow-left.arrow-right {
+      &::before {
+        // Two arrows. The left is already there; add the right
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        top: 0;
+        height: 100%;
+        transform: scaleX(-1);
+        @include svg-arrow();
+        @media (max-width: 24rem) {
+          background: none;
+        }
+      }
+    }
 
-    .lean-dem { color: $strong-dem; }
-    .lean-gop { color: $strong-gop; }
-    .toss-up { color: $toss-up; }
+    .lean-dem { 
+      color: $strong-dem;       
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      } 
+    }
+    .lean-gop { 
+      color: $strong-gop; 
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      } 
+    }
+    .toss-up, .percent { 
+      color: $toss-up; 
+      font-size: .65rem;
+      @media (min-width: 400px) {
+        font-size: .85rem;
+      } 
+
+    }
 
     // There's no way to _really_ center "toss-up". But we can fake it by
     // placing it in the middle with a background.
@@ -518,10 +589,12 @@
 
   // Increase spacing of race details on desktop
   @media (min-width: $min-desktop-width) {
-    h4 {
-      margin-top: 2rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
+    .details {
+      h4 {
+        margin-top: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
     }
 
     .chart-container {
@@ -537,7 +610,7 @@
     }
   }
 
-  @media(min-width: 30rem) { // eyeing it
+  @media(min-width: $page-width) {
     label.state-code { display: none; }
     label.state-name { display: inline-block; }
     label.probability {
@@ -546,6 +619,151 @@
     .races-legend {
       .axis, h5 {
         margin-left: $state-name-width;
+      }
+    }
+  }
+
+  // On a big desktop? Show the popup on scroll.
+  @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
+    &>.races-container {
+      @include wide-width();
+    }
+
+    .races-container>* {
+      width: 50%;
+      margin-left: 0;
+    }
+
+    h3.likely-to-flip {
+      margin-top: 12rem;
+    }
+
+    ul.races { margin-left: 0; }
+
+    .races-legend {
+      .axis, h5 {
+        margin-left: $state-name-width + .5rem;
+        margin-right: .5rem;
+      }
+    }
+
+    h3 {
+      border: 0 !important;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 50%;
+        border-bottom: 1px solid $color;
+      }
+    }
+
+    li[data-state-code], div.content-to-expand { // "div" for specificity
+      height: $collapsed-height + 1rem;
+    }
+    .content-to-expand>label {
+      height: $collapsed-height + 1rem; // box-sizing: border-box
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+
+    label.state-name {
+      padding-left: .5rem;
+    }
+
+    label.probability {
+      left: $state-name-width + .5rem + $half-marker-width;
+      right: .5rem + $half-marker-width;
+    }
+
+    p.instruction { display: none; }
+    input[data-state-code], .content-to-expand::before { display: none; }
+
+    .content-to-expand {
+      height: $collapsed-height;
+      overflow: visible;
+    }
+
+    a.scroll-anchor {
+      display: block;
+      position: absolute;
+      top: 0;
+      height: 3rem;
+    }
+
+    input.expand:not(:checked) + .content-to-expand .details {
+      display: none;
+    }
+
+    input.expand:checked + .content-to-expand {
+      margin-bottom: 0;
+    }
+
+    .details {
+      // a correct-width <div> pointing to the top of the list item
+      position: absolute;
+      top: 0;
+      left: 100%;
+      height: 3rem;
+      box-sizing: border-box;
+      width: 100%;
+      border-top: 1px solid transparent;
+      border-left: 2rem solid transparent;
+      border-right: 1rem solid transparent;
+      border-bottom: 0;
+    }
+
+    input.expand:not(:checked) + .content-to-expand .details {
+      display: block; // always show, so JS can compute width
+      visibility: hidden;
+    }
+
+    .details-inner {
+      position: absolute;
+      box-sizing: border-box;
+      border: 1px solid black;
+      background: $background;
+    }
+
+    li.fixed .details-inner {
+      position: fixed;
+      // width, top set in JS
+    }
+
+    .details-inner {
+      &::before {
+        // triangle pointing to current scroll position
+        content: '';
+        position: absolute;
+        box-sizing: border-box;
+        left: -1rem;
+        top: 50%;
+        margin-top: -.375rem;
+        width: .75rem;
+        height: .75rem;
+        transform: scaleY(.5) rotate(-45deg);
+        border: .375rem solid $color;
+        border-bottom-color: transparent;
+        border-right-color: transparent;
+      }
+
+      h4 {
+        margin: 0;
+        padding: 1rem 1rem 0;
+      }
+
+      h5 {
+        margin: .5rem 0;
+        padding: 0 1rem;
+      }
+
+      ol.calculations li, &>div {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+
+      .source {
+        margin-bottom: 1rem;
       }
     }
   }

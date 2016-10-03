@@ -1,7 +1,0 @@
-$!{[ 'state', 'date', 'diff_xibar', 'diff_low', 'diff_high', 'undecided_xibar', 'dem_win_prob', 'dem_win_prob_with_undecided' ].join('\t') + '\n'}
-for(race in data.model.races)
-  if(race.curve.is_plottable)
-    for(p in race.curve.points)
-      $!{[ p.state_code, p.date_s, p.diff_xibar, p.diff_low, p.diff_high, p.undecided_xibar, p.dem_win_prob, p.dem_win_prob_with_undecided ].join('\t') + '\n'}
-  else
-    $!{[ race.state_code, '2016-11-08', '', '', '', '', race.dem_win_prob, race.dem_win_prob_with_undecided ].join('\t') + '\n'}

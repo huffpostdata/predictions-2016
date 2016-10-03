@@ -1,0 +1,411 @@
+#president-races {
+  // Remember: _senate-races.scss has a lot of the styles we use here
+  $marker-width: 1rem;
+  $half-marker-width: $marker-width / 2;
+  $collapsed-height: 2rem;
+  $state-code-width: 3rem;
+  $state-name-width: 10rem;
+  $n-votes-width: 5rem;
+  $n-votes-square-width: 1.6rem;
+  $expanded-height: 44rem; // a max, for big-desktop
+
+  .totals {
+    margin-top: 2rem;
+
+    h4 {
+      font-family: $body-font-family;
+      font-weight: normal;
+      text-align: center;
+      color: $muted-color;
+      font-style: italic;
+    }
+
+    a, strong, span {
+      display: block;
+      color: $color;
+    }
+
+    .inner {
+      font-family: $header-font-family;
+      text-transform: uppercase;
+      line-height: 1.25;
+      display: -webkit-flex;
+      display: flex;
+      position: relative;
+
+      &>* {
+        -webkit-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        text-align: center;
+      }
+    }
+
+    strong {
+      font-size: 3rem;
+    }
+
+    .clinton {
+      strong { color: $strong-dem; }
+    }
+
+    .battlegrounds {
+      strong { color: $toss-up; }
+    }
+
+    .trump {
+      strong { color: $strong-gop; }
+    }
+
+    @media (min-width: $min-desktop-width) {
+      .clinton, .trump {
+        &::before {
+          // Face
+          content: '';
+          position: absolute;
+          top: 50%;
+          margin-top: -1.5rem;
+          background-size: 100%;
+          width: 3rem;
+          height: 3rem;
+        }
+      }
+
+      .clinton {
+        margin-left: 1.5rem;
+        padding-left: 2rem;
+        border: 1px solid $muted-color;
+        border-right: 0;
+        text-align: left;
+
+        &::before {
+          left: 0;
+          background-image: asset-url('digest', 'images/clinton-head.jpg');
+        }
+      }
+
+      .trump {
+        margin-right: 1.5rem;
+        padding-right: 2rem;
+        border: 1px solid $muted-color;
+        border-left: 0;
+        text-align: right;
+
+        &::before {
+          right: 0;
+          background-image: asset-url('digest', 'images/trump-head.jpg');
+        }
+      }
+
+      .battlegrounds {
+        border-top: 1px solid $muted-color;
+        border-bottom: 1px solid $muted-color;
+      }
+    }
+  }
+
+  h3 {
+    margin-top: 7rem;
+    border-bottom: 1px solid $color;
+    // Don't set position:relative, or the right-half popups will go behind the border
+
+    &.clinton {
+      strong { color: $strong-dem; font-family: $header-font-family; }
+      .image::before { background-image: asset-url('digest', 'images/clinton-bust.jpg'); }
+    }
+
+    &.trump {
+      strong { color: $strong-gop; font-family: $header-font-family; }
+      .image::before { background-image: asset-url('digest', 'images/trump-bust.jpg'); }
+    }
+
+    &.toss-up {
+      strong { color: $toss-up; font-family: $header-font-family;}
+      .image::before {
+        background-image: asset-url('digest', 'images/tie.svg');
+        background-size: 80%;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    strong {
+      display: block;
+      margin-left: 6rem;
+      font-size: 4rem;
+      line-height: 1;
+
+      @media (min-width: $min-desktop-width) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 6rem;
+        font-size: 5rem;
+        line-height: 1;
+
+      }
+    }
+
+    span.text {
+      display: block;
+      margin-left: 6rem;
+      font-family: $header-font-family;
+      text-transform: uppercase;
+      font-size: 1rem;
+      line-height: 1.25rem;
+      max-width: 10rem;
+
+      @media (min-width: $min-desktop-width) {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1rem;
+        font-family: $header-font-family;
+        text-transform: uppercase;
+        font-size: 1rem;
+        line-height: 1.25rem;
+        max-width: 10rem;
+      }
+    }
+
+    span.image {
+      display: block;
+      position: relative;
+      height: 0;
+      width: 5rem;
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 5rem;
+        height: 5rem;
+        left: 0;
+        bottom: 0;
+        background-size: 100%;
+      }
+    }
+  }
+
+  .key {
+    margin-bottom: 2rem;
+    margin-top: 3rem; // 1rem for text; 2rem for margin-ness
+    position: relative;
+    font-size: .85rem;
+
+    .label {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 1rem;
+      line-height: 1rem;
+      left: 0;
+
+      h5 {
+        margin: 0;
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-family: $header-font-family;
+      }
+
+      @media (min-width: $min-desktop-width) {
+        position: absolute;
+        top: -.5rem;
+      }
+    }
+
+    .container {
+      display: inline-block;
+      height: $collapsed-height;
+      position: relative;
+    }
+
+    .mean {
+      position: absolute;
+      top: -1.5rem;
+      height: 1rem;
+      left: 0;
+      width: 100%;
+      text-align: center;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 1rem;
+        height: 2rem; // go all the way to the bottom of the <canvas> -- the bar will come above
+        margin-left: -.5px;
+        border-left: 1px solid $very-muted-color;
+      }
+    }
+
+    .chance {
+      text-align: center;
+
+      &::before {
+        // stddev is 1/10 of spread: 10% (spread is 40: _president-races-key.marko).
+        // margin of error is 1.96 * stddev in each direction: 19.6% from middle.
+        content: '';
+        display: block;
+        margin-left: 50% - 19.6%;
+        margin-right: 50% - 19.6%;
+        margin-top: .125rem;
+        height: .25rem;
+        border: 1px solid $very-muted-color;
+        border-top: 0;
+      }
+    }
+
+    canvas {
+      display: inline-block;
+      position: relative; // show up above .mean pointer
+    }
+  }
+
+  .races-legend {
+
+    .headings {
+      display: -webkit-flex;
+      display: flex;
+    }
+
+    h5 {
+      margin: 0;
+      text-align: center;
+      font-size: .85rem;
+    }
+
+    h5.state {
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: $state-code-width;
+    }
+
+    h5.n-votes {
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: $n-votes-width;
+    }
+
+    h5.likely-winner {
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      text-align: center;
+      margin-right: $state-code-width;
+    }
+
+    @media screen and (min-width: $wide-width) and (min-height: $expanded-height) {
+      h5.state {
+        width: $state-name-width;
+      }
+
+      h5.likely-winner {
+        margin-right: 0;
+      }
+
+      .key {
+        margin-right: $state-name-width + $n-votes-width + .5rem;
+      }
+    }
+
+    .axis {
+      margin-left: $state-code-width + $n-votes-width;
+      @media (min-width: $page-width) {
+        margin-left: $state-name-width + $n-votes-width;
+      }
+    }
+  }
+
+  label.n-votes {
+    display: inline-block;
+    width: $n-votes-width;
+    height: $collapsed-height;
+    vertical-align: middle;
+    text-align: center;
+
+    .square-container {
+      display: inline-block;
+      width: $n-votes-square-width;
+      height: $n-votes-square-width;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 0;
+      line-height: $n-votes-square-width;
+    }
+
+    .square {
+      display: inline-block;
+      vertical-align: middle;
+      height: 0;
+    }
+
+    .n {
+      display: inline-block;
+      color: $muted-color;
+      font-size: .85rem;
+      line-height: 1.5rem;
+      padding-left: .25rem;
+      vertical-align: middle;
+    }
+  }
+
+  .toss-up .marker { background-color: $toss-up; }
+  .toss-up .square { background-color: $toss-up; }
+  .lean-clinton .square { background-color: $strong-dem; }
+  .lean-trump .square { background-color: $strong-gop; }
+
+  label.diff {
+    position: absolute;
+    left: $state-code-width + $n-votes-width;
+    right: $state-code-width + $half-marker-width;
+    height: $collapsed-height;
+    @media (min-width: $page-width) {
+      left: $state-name-width + $n-votes-width;
+      right: $half-marker-width;
+    }
+
+    canvas {
+      display: block;
+      height: $collapsed-height;
+    }
+  }
+
+  .likely-clinton, .likely-trump {
+    label.diff {
+      .box::before {
+        display: none;
+      }
+    }
+  }
+
+  .legend {
+    font-size: .85rem;
+    color: $color;
+    font-style: normal;
+  }
+
+  .races-legend.likely-clinton, .races-legend.likely-trump {
+    .toss-up {
+      // In pres races, "toss-up" shows up on left and right.
+      position: relative; // not absolute;
+      left: auto;
+      width: auto;
+      margin-left: 0;
+      background: none;
+    }
+  }
+
+  .content-to-expand {
+    max-height: 3rem;
+
+    &::before {
+      top: .5rem + $collapsed-height / 4;
+    }
+
+    &>label {
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+    }
+  }
+
+  input.expand {
+    height: 3rem;
+  }
+}

@@ -1,0 +1,77 @@
+var race=data.model.race
+
+li.${race.lean_html_class} data-state-code="${race.state_code}"
+  a.scroll-anchor href="#expand-states:${race.state_code}"
+  input.expand#state-race-expand-${race.state_code} data-state-code="${race.state_code}" type="checkbox" value="${race.state_code}"
+
+  .content-to-expand
+    label.state-code for="state-race-expand-${race.state_code}" - ${race.state_code}
+    label.state-name for="state-race-expand-${race.state_code}" - ${race.state_name}
+
+    label.n-votes for="state-race-expand-${race.state_code}"
+      span.square-container
+        span.square style="width: ${Math.sqrt(+race.n_electoral_votes) * 13.4}%; height: ${Math.sqrt(+race.n_electoral_votes) * 13.4}%"
+      span.n - ${+race.n_electoral_votes}
+
+    label.diff for="state-race-expand-${race.state_code}" data-xibar="${race.final_diff_xibar}" data-stddev="${race.final_diff_stddev}"
+      canvas
+
+    .details
+      .details-inner
+        h4
+          if(race.final_diff_xibar == 0)
+            strong.probability - Tie
+            -  in ${race.state_name}
+          else
+            strong.probability - ${Math.abs(race.final_diff_xibar).toFixed(1)}
+            -  percentage-point ${race.final_diff_leader_name} lead in ${race.state_name}
+        h5
+          strong.margin - ±${race.final_diff_margin.toFixed(1)} points
+          - , 19 times out of 20
+
+        if(!race.curve.is_plottable)
+          ol.calculations
+            li - Since we haven't collected enough polls for this state, we rely on Cook Political Report's <a href="http://cookpolitical.com/presidential/charts/scorecard">Electoral College Ratings</a>.
+            li - The Cook rating for the ${race.state_name} presidential race is: <strong class="cook-rating">${race.cook_rating_name}</strong>. ${race.final_diff_party_adjective} candidates have won by an average of ${Math.abs(race.final_diff_xibar).toFixed(1)} points in all races with this Cook rating since 2004.
+            li - Ignoring national trends, the probability ${race.final_diff_leader_name} wins ${race.state_name} is <strong>${race.leader_win_prob_100.toFixed(1)}%</strong>.
+            if(race.splits.length > 0)
+              li - ${race.splits.length == 2 ? 'Two' : 'Three'} electoral votes in this state are allocated at the district level. We use Cook Ratings for those: $!{race.splits_phrase_html()}.
+        else
+          .legend - We simulated 5,000 random populations whose voting intentions correspond to <span class="legend-def"><svg class="legend-image legend-poll" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15"/></svg> poll results</span> in this state. Here are <span class="legend-def"><svg class="legend-image legend-thread" viewBox="0 0 100 50"><path d="M0,40 l 2,3 2,-3 2,-5 2,-5 2,0 2,-1 2,-3 2,20 2,-7 2,-3 2,-7 2,1 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,14 2,-3 2,10 2,-2 2,4 2,-5 2,-7 2,1 2,-3 2,-4 2,1 2,0 2,1 2,-3 2,1 2,-3 2,-3 2,0 2,2 2,-5 2,8 2,-3 2,1 2,-2"/></svg> 200</span> of these populations and the <span class="legend-def"><svg class="legend-image legend-average" viewBox="0 0 100 50"><path d="M0,10 l 10,1 10,2 10,5 10,10 10,-2 10,-4 10,0 10,1 10,1 10,1"/></svg> average</span>.
+
+          .chart-container
+            .y-axis-and-rest
+              .y-axis
+                .label - Percentage<br>Point Lead
+                .values
+                  .max-dem - D+${race.curve.y_max * 100}
+                  .mid-dem - D+${race.curve.y_max * 50}
+                  .zero - 0
+                  .mid-gop - R+${race.curve.y_max * 50}
+                  .max-gop - R+${race.curve.y_max * 100}
+              .rest
+                .x-axis
+                  .start-date - July 1
+                  .arrow
+                  .end-date - Nov. 8
+                  .label-election-day - Election Day
+                .plot
+                  .placeholder data-url="${data.path_to('president-race-svg', race.state_code)}" - Loading…
+
+                <!-- always show ".today", for sizing; but leave it empty after election day. -->
+                .today
+                  if(race.curve.updated_at_x != race.curve.x_max)
+                    .today-inner style="right: ${100 * (1 - race.curve.updated_at_x / (race.curve.NDays - 1))}%"
+                      .label - Latest Average
+                      .date-and-spread
+                        time datetime="${race.curve.updated_at.toISOString()}" - ${data.helpers.format_date(race.curve.updated_at)}
+                        strong.spread - $!{race.curve.today_spread_html()}
+
+          ol.calculations
+            li - These simulations show a margin of error of <strong>${race.diff_margin.toFixed(1)} percentage points</strong>, 19 times out of 20.
+            li - They also suggest voters are <span class="undecided">${race.undecided_xibar_100.toFixed(1)}% undecided</span>. We added <strong>${race.undecided_margin_boost.toFixed(1)} points</strong> to our state-level and national margins of error.
+            li - Ignoring national trends, ${race.final_diff_leader_name} has a <strong>${race.leader_win_prob_100.toFixed(1)}%</strong> chance of winning here.
+            if(race.splits.length > 0)
+              li - ${race.splits.length == 2 ? 'Two' : 'Three'} electoral votes in this state are allocated at the district level. We use Cook Political Report <a href="http://cookpolitical.com/presidential/charts/scorecard">ratings</a> for those: $!{race.splits_phrase_html()}.
+
+          .source - Poll data from <a href="//elections.huffingtonpost.com/pollster/${race.pollster_slug}">HuffPost Pollster</a>

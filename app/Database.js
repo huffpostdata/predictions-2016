@@ -6,7 +6,9 @@ const read_config = require('../generator/read_config')
 const GoogleDocs = require('../generator/GoogleDocs')
 const GoogleSheets = require('../generator/GoogleSheets')
 
-const SenateCurves = require('./SenateCurves')
+const Curves = require('./Curves')
+const PresidentRaces = require('./PresidentRaces')
+const PresidentVoteCounts = require('./PresidentVoteCounts')
 const SenateRace = require('./SenateRace')
 const SenateRaces = require('./SenateRaces')
 const SenateSeat = require('./SenateSeat')
@@ -44,7 +46,7 @@ module.exports = class Database {
     const senate_seats = new SenateSeats(google_sheets.slug_to_objects('senate-before-election', SenateSeat))
 
     this.senate = Object.assign(google_docs.load('senate'), {
-      races: SenateRaces.load(google_sheets.slug_to_array('senate-races'), senate_seats, SenateCurves.load()),
+      races: SenateRaces.load(google_sheets.slug_to_array('senate-races'), senate_seats, Curves.load('senate')),
       seat_counts: SenateSeatCounts.load(senate_seats),
       senate_seats: senate_seats
     })
@@ -58,5 +60,33 @@ module.exports = class Database {
       races: this.senate_races,
       seat_counts: this.senate.seat_counts.all
     }]
+
+    const president_curves = Curves.load('president')
+
+    this.president = Object.assign(google_docs.load('president'), {
+      vote_counts: PresidentVoteCounts.load(),
+      races: PresidentRaces.load(president_curves)
+    })
+    this.president.metadata.date_updated = format_date_full(this.president.races.updated_at)
+
+    this.president_races = this.president.races.all
+
+    this.president_races_for_tsv = [{
+      date: this.president.races.updated_at_s,
+      races: this.president.races.all,
+      vote_counts: this.president.vote_counts
+    }]
+
+    this.sidebar = {
+      senate_races: this.senate.races.sorted_by('flip-probability').slice(0, 5).sort((a, b) => a.state_name.localeCompare(b.state_name)), 
+      senate_seat_counts: this.senate.seat_counts,
+      president_races: this.president.races.battlegrounds.slice(0).sort((a, b) => b.n_electoral_votes - a.n_electoral_votes).slice(0, 5).sort((a, b) => b.diff_xibar - a.diff_xibar),
+      president_vote_counts: this.president.vote_counts
+    }
+
+    this.mobile_ad = {
+      senate_seat_counts: this.senate.seat_counts,
+      president_vote_counts: this.president.vote_counts
+    }
   }
 }

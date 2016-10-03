@@ -1,0 +1,21 @@
+.races-legend.${data.model}
+  .inner
+    .headings
+      h5.state - State
+      h5.n-votes - Electoral Votes
+      h5.likely-winner - Likely outcomes
+    .axis
+      if(data.model == 'likely-clinton')
+        .percent - Clinton+0
+        .arrow.arrow-right
+        .lean-dem - Clinton+40
+
+      if(data.model == 'likely-trump')
+        .percent - Trump+0
+        .arrow.arrow-right
+        .lean-gop - Trump+40
+
+      if(data.model == 'battlegrounds')
+        .lean-dem - Clinton+20
+        .arrow.arrow-left.arrow-right
+        .lean-gop - Trump+20

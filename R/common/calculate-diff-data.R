@@ -2,16 +2,25 @@ CookPriors.senate <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid'),
   prior1=c(0.4823, 0.4881, 0.4865, 0.4792, 0.4746, 0.4879, 0.4783),
   prior2=c(0.1584, 0.1205, 0.0706, 0.0619, 0.0824, 0.0824, 0.1807),
-  dem_win_prob=c(0.9877, 0.9333, 0.8095, 0.5, 1.0 - 0.8095, 1.0 - 0.9333, 1.0 - 0.9877)
+  dem_win_prob=c(0.9877, 0.9333, 0.8095, 0.5, 1.0 - 0.8095, 1.0 - 0.9333, 1.0 - 0.9877),
+  mean=c(NA, NA, NA, NA, NA, NA, NA),
+  stddev=c(NA, NA, NA, NA, NA, NA, NA)
 )
 CookPriors.president <- data.frame(
   rating=c('D-Solid', 'D-Likely', 'D-Lean', 'Toss Up', 'R-Lean', 'R-Likely', 'R-Solid', 'US'),
   prior1=c(0.4915, 0.4862, 0.4925, 0.4927, 0.4931, 0.4933, 0.4906, 0.47),
   prior2=c(0.1603, 0.0632, 0.0497, 0.0233, 0.0599, 0.0614, 0.1246, 0.05),
-  dem_win_prob=c(0.9975, 0.9490, 0.8565, 0.5, 1.0 - 0.8565, 1.0 - 0.9490, 1.0 - 0.9975, NA)
+  dem_win_prob=c(0.9975, 0.9490, 0.8565, 0.5, 1.0 - 0.8565, 1.0 - 0.9490, 1.0 - 0.9975, NA),
+  mean=c(0.2955, 0.2370, 0.1286, 0.0106, -0.0660, -0.1066, -0.2895, NA),
+  stddev=c(0.0695, 0.0542, 0.0272, 0.06475, 0.06745, 0.0584, 0.0741, NA)
 )
 
-CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_rating, dem_label, gop_label, fast, filter_polls=NULL) {
+CalculateDiffData <- function(
+    state_code, senate_or_president, chart_slug, cook_rating,
+    dem_label, gop_label, fast,
+    filter_polls=NULL,
+    today=NULL, startDate=NULL, endDate=NULL, outputStartDate=NULL
+) {
   # Uses an MCMC model to calculate a list(curve, samples_string)
   #
   # Args:
@@ -22,17 +31,20 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   #   dem_label: Democrat's label on the chart (e.g., "Clinton")
   #   gop_label: Republican's label on the chart (e.g., "Trump")
   #   fast: if true, don't run the MCMC model long enough (useful for debugging)
-  #   include_poll: NA, or function that takes a data.frame of polls and outputs TRUE for rows that should be included
+  #   include_poll: NULL, or function that takes a data.frame of polls and outputs TRUE for rows that should be included
+  #   today: date after which we don't know anything (default Sys.Date())
+  #   startDate: date our simulation begins (default Jan. 1)
+  #   endDate: date our simulation ends (default election day)
+  #   outputStartDate: first date we return in our data.frame (default Jul. 1)
   #
   # Returns:
   #   a list(curve, samples_string).
   #   curve: a data.frame with:
   #     state: state_code, repeated.
-  #     date: anything from 2016-07-01 to 2016-11-08. When chart_slug is empty,
-  #           only 2016-11-08 will be present. Otherwise, each date will be.
+  #     date: anything from startDate to endDate. When chart_slug is empty,
+  #           only endDate will be present. Otherwise, we return every day.
   #     diff_xibar: Average Dem fraction minus GOP fraction, [-1.0, 1.0]
-  #     diff_low: 97.5% value
-  #     diff_high: 2.5% value
+  #     diff_stddev: stddev on the diff
   #     undecided_xibar: Average "Undecided" fraction
   #     dem_win_prob: fraction of simulations in which Dem beat GOP on this date
   #     dem_win_prob_with_undecided: ditto, modulo an "undecided" calculation
@@ -56,11 +68,12 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
     )
   )
 
-  StartDate <- as.Date('2016-01-01')       # ignore polls before this day
-  EndDate <- as.Date('2016-11-08')         # run the model until this day -- election day!
-  NDates <- as.integer(EndDate - StartDate + 1)
-  Today <- Sys.Date()
-  OutputStartDate <- as.Date('2016-07-01') # don't return data before this day
+  if (is.null(startDate)) {       startDate <- as.Date('2016-01-01') }
+  if (is.null(endDate)) {         endDate <- as.Date('2016-11-08') }
+  if (is.null(today)) {           today <- Sys.Date() }
+  if (is.null(outputStartDate)) { outputStartDate <- as.Date('2016-07-01') }
+
+  nDates <- as.integer(endDate - startDate + 1)
 
   MinNPollsForModel <- 5
   MinNPollsForOutput <- 2
@@ -95,13 +108,13 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
       y=rep(responses$y, responses$n_days),
       j=rep(responses$j, responses$n_days),
       prec=rep(responses$prec / responses$n_days, responses$n_days),
-      date=rep(responses$start_date - StartDate, responses$n_days) + sequence(responses$n_days)
+      date=rep(responses$start_date - startDate, responses$n_days) + sequence(responses$n_days)
     )
 
       forJags <- as.list(pollList)
       forJags$NOBS <- nrow(pollList)
       forJags$NHOUSES <- length(thePollsters)
-      forJags$NPERIODS <- NDates
+      forJags$NPERIODS <- nDates
 
       ## prior for house effects
       forJags$d0 <- rep(0,forJags$NHOUSES)
@@ -113,10 +126,10 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   }
 
   makeInits <- function(forJags, cookPrior1, cookPrior2) {
-      sigma <- runif(n=1,0,.003)
-      xi <- rep(NA,NDates)
+      sigma <- runif(n=1, 0, 0.003)
+      xi <- rep(NA, nDates)
       xi[1] <- rnorm(n=1, cookPrior1,cookPrior2)
-      for (i in 2:NDates) {
+      for (i in 2:nDates) {
           xi[i] <- rnorm(n=1,xi[i-1],sd=sigma)
       }
       xi.bad <- xi < .01
@@ -145,7 +158,10 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
       iter_date_chain <- as.array(mcmc_list)
 
       # Filter out the dates we don't care about
-      iter_date_chain <- iter_date_chain[,(OutputStartDate - StartDate + 1):NDates,]
+      iter_date_chain <- iter_date_chain[,(outputStartDate - startDate + 1):nDates, ]
+
+      # Clamp: caller expects [0, 1] but the JAGS model doesn't guarantee it
+      iter_date_chain <- pmin(pmax(iter_date_chain, 0.0), 1.0)
 
       # Transpose so chain and iter are together
       ret <- aperm(iter_date_chain, c(1, 3, 2))
@@ -154,7 +170,7 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
       dim(ret) <- c(dim(ret)[1] * dim(ret)[2], dim(ret)[3])
 
       # Set the dims: we're going by date
-      dateSeq <- as.character(seq.Date(from=OutputStartDate, to=EndDate, by='day'))
+      dateSeq <- as.character(seq.Date(from=outputStartDate, to=endDate, by='day'))
 
       dimnames(ret) <- list(iteration=NULL, date=dateSeq)
 
@@ -206,7 +222,7 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   # choice: one of the choices in the normalized_array
   # columns_list: desired column names and what they mean. List indexes are
   #               column names in the output frame. Values are their meanings.
-  #               'mean' is the only valid meaning, for now.
+  #               Possibilities are 'diff' and 'sd'.
   build_choice_frame <- function(normalized_array, choice, columns_list) {
     xi <- normalized_array[choice,,]
 
@@ -218,8 +234,10 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
 
       if (name == 'mean') {
         values <- apply(xi, 'date', mean)
+      } else if (name == 'sd') {
+        values <- apply(xi, 'date', sd)
       } else {
-        stop('name must be "mean"')
+        stop('name must be "mean" or "sd"')
       }
 
       ret[[index]] = values
@@ -234,18 +252,17 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
     diff_array <- normalized_array[dem_who,,] - normalized_array[gop_who,,]
 
     averages <- apply(diff_array, 'date', function(x) c(
-      mean(x, na.rm=TRUE),
-      quantile(x, c(0.025, 0.975), na.rm=TRUE),
-      mean(x > 0, na.rm=TRUE)
+      mean(x),
+      sd(x),
+      mean(x > 0)
     ))
 
-    dimnames(averages)[[1]] <- c('mean', '0.025', '0.975', 'prob')
+    dimnames(averages)[[1]] <- c('mean', 'stddev', 'prob')
 
     return(data.frame(
       date=as.Date(dimnames(averages)$date),
       diff_xibar=averages['mean',],
-      diff_low=averages['0.025',],
-      diff_high=averages['0.975',],
+      diff_stddev=averages['stddev',],
       dem_win_prob=averages['prob',]
     ))
   }
@@ -255,7 +272,7 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   # shifts.
   center_probability_with_undecided <- function(dem_win_prob, diff_xibar, undecided_xibar) {
     # for days after today, undecided_xibar should use today's value
-    today <- as.integer(Today - OutputStartDate + 1)
+    today <- as.integer(today - outputStartDate + 1)
     undecided_xibar[today:length(undecided_xibar)] <- undecided_xibar[today]
 
     shift_proportion <- undecided_xibar / pmax(0.0001, abs(diff_xibar)) # avoid div by 0
@@ -274,10 +291,9 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
     return(list(
       curve=data.frame(
         state=c('CA'),
-        date=c(EndDate),
+        date=c(endDate),
         diff_xibar=NA,
-        diff_low=NA,
-        diff_high=NA,
+        diff_stddev=NA,
         undecided_xibar=NA,
         dem_win_prob=c(1.0),
         dem_win_prob_with_undecided=c(1.0)
@@ -293,10 +309,9 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
     return(list(
       curve=data.frame(
         state=c(state_code),
-        date=c(EndDate),
+        date=c(endDate),
         diff_xibar=NA,
-        diff_low=NA,
-        diff_high=NA,
+        diff_stddev=NA,
         undecided_xibar=NA,
         dem_win_prob=c(dem_win_prob),
         dem_win_prob_with_undecided=c(dem_win_prob)
@@ -312,7 +327,7 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   # the fraction democrats are beating republicans: the floats [-1.0,1.0]
   # normalized to the range [0,0xffff].
   #
-  # The last uint16 is for EndDate; JavaScript can determine the other dates
+  # The last uint16 is for endDate; JavaScript can determine the other dates
   # by working backwards.
   calculate_diff_curve_samples_string <- function(normalized_array, dem_label, gop_label) {
     diff_array <- normalized_array[dem_label,,] - normalized_array[gop_label,,]
@@ -353,14 +368,14 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   }
 
   # Nix out-of-range polls
-  data <- data[data$start_date >= StartDate & data$end_date <= EndDate,]
+  data <- data[data$start_date >= startDate & data$end_date <= endDate,]
 
   if (nrow(data) < MinNPollsForModel) {
     # Not enough polls: the model will be garbage
     return(stub_diff_curve(state_code, cook_rating))
   }
 
-  if (sum(data$end_date >= OutputStartDate) < MinNPollsForOutput) {
+  if (sum(data$end_date >= outputStartDate) < MinNPollsForOutput) {
     # Not enough polls on the chart: the chart will be garbage (the model
     # will be imprecise, too)
     return(stub_diff_curve(state_code, cook_rating))
@@ -438,10 +453,14 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
   normalized_array <- build_normalized_array(candidate_xis)
 
   frame <- data.frame(
-    state=rep(state_code, times=EndDate - OutputStartDate + 1),
-    date=seq.Date(from=OutputStartDate, to=EndDate, by='day')
+    state=rep(state_code, times=endDate - outputStartDate + 1),
+    date=seq.Date(from=outputStartDate, to=endDate, by='day')
   )
-  undecided_frame <- build_choice_frame(normalized_array, 'Undecided', list(undecided_xibar='mean'))
+  undecided_frame <- build_choice_frame(
+    normalized_array,
+    'Undecided',
+    list(undecided_xibar='mean', undecided_stddev='sd')
+  )
   diff_frame <- diffSummary(normalized_array, dem_label, gop_label)
 
   out <- data.frame(frame, undecided_frame, diff_frame)
@@ -456,8 +475,7 @@ CalculateDiffData <- function(state_code, senate_or_president, chart_slug, cook_
       'state',
       'date',
       'diff_xibar',
-      'diff_low',
-      'diff_high',
+      'diff_stddev',
       'undecided_xibar',
       'dem_win_prob',
       'dem_win_prob_with_undecided'

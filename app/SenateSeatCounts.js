@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('fs')
-const csv_parse = require('csv-parse/lib/sync')
+const parseTsv = require('../generator/parseTsv')
 
 const ThisYearSeatClass = 3
 
@@ -68,6 +68,7 @@ class SenateSeatCounts {
     this.prob_dem_percent = 100 * this.prob_dem
     this.prob_gop_percent = 100 * this.prob_gop
     this.prob_tie_percent = 100 * this.prob_tie
+    this.max_prob = Math.max(this.prob_dem, this.prob_tie, this.prob_gop)
 
     this.summary_chart_data = [
       {
@@ -102,9 +103,7 @@ class SenateSeatCounts {
 }
 
 SenateSeatCounts.load = function(senate_seats) {
-  const input_path = `${__dirname}/../data/sheets/output/senate-seat-counts.tsv`
-  const tsv = fs.readFileSync(input_path)
-  const array = csv_parse(tsv, { delimiter: '\t', columns: true })
+  const array = parseTsv.fromPath('data/sheets/output/senate-seat-counts.tsv')
   const dem_counts = array.map(h => +h.n) // 0 => 0, 1 => ....
   const dem_count_probs = array.map(h => +h.p) // 0 => 0.0000, 1 => ....
 

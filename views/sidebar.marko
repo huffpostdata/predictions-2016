@@ -11,14 +11,50 @@ html lang="en"
       span.color-dem - Election
       span.color-gop - 2016
 
-    h2 - Senate Forecast
+    h2.president - Presidential Forecast
+    p - Percent of simulations where each candidate becomes president
 
+    .president-summary
+      var vote_counts=data.model.president_vote_counts
+      .clinton style="width: ${vote_counts.percent_clinton}%"
+        h4 - Clinton
+        strong - ${vote_counts.percent_clinton.toFixed(1)}%
+        .bar
+      .tie
+      .trump style="width: ${vote_counts.percent_trump}%"
+        h4 - Trump
+        strong - ${vote_counts.percent_trump.toFixed(1)}%
+        .bar
+
+    a href="${data.path_to('president')}" target="_blank" - How we calculate this »
+
+    .president-races
+      h3 - Battleground States
+
+      table
+        thead
+          tr
+            th
+            th.n-votes - Electoral<br>Votes
+            th.lead - Percentage<br>Point Lead
+        tbody
+          tr.${race.lean_html_class} for(race in data.model.president_races)
+            td.state-name - ${race.state_name}
+            td.n-votes
+              span.square-container
+                <!-- assume TX (38 votes) may appear (2% chance as of Sept. 30). Assume CA (55)  will not. -->
+                span.square style="width: ${Math.sqrt(+race.n_electoral_votes) * 16.2}%; height: ${Math.sqrt(+race.n_electoral_votes) * 16.2}%"
+              span.n - ${+race.n_electoral_votes}
+            td.lead - +${Math.abs(race.final_diff_xibar).toFixed(1)} ${race.final_diff_leader_name}
+
+    a href="${data.path_to('president')}" target="_blank" - See all states »
+
+    h2.senate - Senate Forecast
     p - Percent of simulations where each party gains control of Senate
-
     a href="${data.path_to('senate')}" target="_blank" - How we calculate this »
 
     .senate-summary
-      var seat_counts=data.model.seat_counts
+      var seat_counts=data.model.senate_seat_counts
       .prob-dem style="width: ${100 * seat_counts.prob_dem}%"
         .name - Dem
         .icon
@@ -44,7 +80,7 @@ html lang="en"
           .lean-gop - GOP<br>Chance
 
       ul.senate-races
-        li.${race.lean_html_class} for(race in data.model.races.sorted_by('flip-probability').slice(0, 5).sort(function(a, b) { return a.state_name.localeCompare(b.state_name); }))
+        li.${race.lean_html_class} for(race in data.model.senate_races)
           .state-name - ${race.state_name}
           .prob-dem - ${Math.round(100 * race.dem_win_prob_with_undecided)}%
           .bar

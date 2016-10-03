@@ -12,7 +12,7 @@ model{
     xi.raw[p] ~ dnorm(xi.raw[p-1],tau)
   }
   tau <- pow(sigma,-2)
-  sigma ~ dunif(0,.003) ##changed
+  sigma ~ dunif(0, 0.003) ##changed
 
   ## priors on house effects
   delta.raw ~ dmnorm(d0,D0)

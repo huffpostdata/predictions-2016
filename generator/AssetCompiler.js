@@ -77,6 +77,10 @@ module.exports = class AssetCompiler {
     return asset.path
   }
 
+  full_asset_path(type, key) {
+    return `${this.config.base_path}/${this.asset_path(type, key)}`
+  }
+
   data(type, key) {
     const asset = this.get_asset(type, key)
     return asset.data
@@ -141,6 +145,9 @@ module.exports = class AssetCompiler {
                 default:
                   throw new Error(`Don't know how to encode a ${asset.content_type} as a CSS URL. Write code here?`)
               }
+            },
+            'asset-url($type, $key)': (type, key) => {
+              return new sass.types.String(`url(${this.full_asset_path(type.getValue(), key.getValue())})`)
             }
           }
         }).css

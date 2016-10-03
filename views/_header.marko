@@ -1,9 +1,14 @@
 var meta=data.model.metadata
 
-header.senate
-  h2.forecast-label - Forecast
-  h1 - Senate
-  h2.president-header - Presidential forecast coming soon
+header.forecast
+  h2 - Forecast
+
+  if(meta.slug == 'senate')
+    a.president href="${data.path_to('president')}" - President
+    h1.senate - Senate
+  else
+    h1.president - President
+    a.senate href="${data.path_to('senate')}" - Senate
 
   p.byline - $!{meta.author_html}
   <p class="date date-published">Published <time>${meta.date_published}</time></p>

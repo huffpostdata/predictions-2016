@@ -1,52 +1,52 @@
-state_code	national_dem_correlation	state_name	state_abbreviation	pollster_slug	cook_rating	n_electoral_votes	split_cook_ratings_by_cd
-AL	-0.244653324	Alabama	Ala.	2016-alabama-president-trump-vs-clinton	R-Solid	9	
-AK	0.247870729	Alaska	Alaska	2016-alaska-president-trump-vs-clinton	R-Solid	3	
-AZ	0.152466489	Arizona	Ariz.	2016-arizona-president-trump-vs-clinton	R-Lean	11	
-AR	-0.333665226	Arkansas	Ark.	2016-arkansas-president-trump-vs-clinton	R-Solid	6	
-CA	0.14515663	California	Calif.	2016-california-presidential-general-election-trump-vs-clinton	D-Solid	55	
-CO	0.51263468	Colorado	Colo.	2016-colorado-president-trump-vs-clinton	D-Likely	9	
-CT	0.547637552	Connecticut	Conn.	2016-connecticut-president-trump-vs-clinton	D-Solid	7	
-DE	0.246571296	Delaware	Del.	2016-delaware-president-trump-vs-clinton	D-Solid	3	
-DC	0.343043534	Dist. of Columbia	D.C.		D-Solid	3	
-FL	-0.581966931	Florida	Fla.	2016-florida-presidential-general-election-trump-vs-clinton	Toss Up	29	
-GA	-0.386494137	Georgia	Ga.	2016-georgia-president-trump-vs-clinton	R-Lean	16	
-HI	0.077443706	Hawaii	Hawaii	2016-hawaii-president-trump-vs-clinton	D-Solid	4	
-ID	0.173568011	Idaho	Idaho	2016-idaho-president-trump-vs-clinton	R-Solid	4	
-IL	0.718326354	Illinois	Ill.	2016-illinois-president-trump-vs-clinton	D-Solid	20	
-IN	0.589855087	Indiana	Ind.	2016-indiana-president-trump-vs-clinton	R-Likely	11	
-IA	0.101691601	Iowa	Iowa	2016-iowa-president-trump-vs-clinton	Toss Up	6	
-KS	0.312746869	Kansas	Kans.	2016-kansas-president-trump-vs-clinton	R-Solid	6	
-KY	0.211816931	Kentucky	Ky.	2016-kentucky-president-trump-vs-clinton	R-Solid	8	
-LA	-0.467572528	Louisiana	La.	2016-louisiana-president-trump-vs-clinton	R-Solid	8	
-ME	-0.029253895	Maine	Maine	2016-maine-president-trump-vs-clinton	D-Solid	4	D-Solid,Toss Up
-MD	0.33644485	Maryland	Md.	2016-maryland-president-trump-vs-clinton	D-Solid	10	
-MA	0.403308934	Massachusetts	Mass.	2016-massachusetts-president-trump-vs-clinton	D-Solid	11	
-MI	0.558589278	Michigan	Mich.	2016-michigan-president-trump-vs-clinton	D-Lean	16	
-MN	0.415050131	Minnesota	Minn.	2016-minnesota-president-trump-vs-clinton	D-Likely	10	
-MS	-0.550264796	Mississippi	Miss.	2016-mississippi-president-trump-vs-clinton	R-Solid	6	
-MO	0.38376488	Missouri	Mo.	2016-missouri-president-trump-vs-clinton	R-Likely	10	
-MT	0.239613592	Montana	Mont.	2016-montana-president-trump-vs-clinton	R-Solid	3	
-NE	0.223261251	Nebraska	Nebr.	2016-nebraska-president-trump-vs-clinton	R-Solid	5	R-Solid,Toss Up,R-Solid
-NV	0.180878577	Nevada	Nev.	2016-nevada-president-trump-vs-clinton	Toss Up	6	
-NH	0.079476814	New Hampshire	N.H.	2016-new-hampshire-president-trump-vs-clinton	D-Lean	4	
-NJ	0.682533752	New Jersey	N.J.	2016-new-jersey-president-trump-vs-clinton	D-Solid	14	
-NM	0.44503172	New Mexico	N.M.	2016-new-mexico-president-trump-vs-clinton	D-Solid	5	
-NY	0.487193249	New York	N.Y.	2016-new-york-president-trump-vs-clinton	D-Solid	29	
-NC	-0.270236426	North Carolina	N.C.	2016-north-carolina-president-trump-vs-clinton	Toss Up	15	
-ND	-0.078167543	North Dakota	N.D.	2016-north-dakota-president-trump-vs-clinton	R-Solid	3	
-OH	0.73570332	Ohio	Ohio	2016-ohio-president-trump-vs-clinton	Toss Up	18	
-OK	0.104669858	Oklahoma	Okla.	2016-oklahoma-president-trump-vs-clinton	R-Solid	7	
-OR	0.086661164	Oregon	Ore.	2016-oregon-president-trump-vs-clinton	D-Solid	7	
-PA	0.497404433	Pennsylvania	Pa.	2016-pennsylvania-president-trump-vs-clinton	D-Lean	20	
-RI	0.318697426	Rhode Island	R.I.	2016-rhode-island-president-trump-vs-clinton	D-Solid	4	
-SC	-0.552305102	South Carolina	S.C.	2016-south-carolina-president-trump-vs-clinton	R-Solid	9	
-SD	0.011122938	South Dakota	S.D.	2016-south-dakota-president-trump-vs-clinton	R-Solid	3	
-TN	-0.298177733	Tennessee	Tenn.	2016-tennessee-president-trump-vs-clinton	R-Solid	11	
-TX	-0.156431049	Texas	Tex.	2016-texas-president-trump-vs-clinton	R-Solid	38	
-UT	0.342516753	Utah	Utah	2016-utah-president-trump-vs-clinton	R-Likely	6	
-VT	-0.010687314	Vermont	Vt.	2016-vermont-president-trump-vs-clinton	D-Solid	3	
-VA	-0.397361917	Virginia	Va.	2016-virginia-president-trump-vs-clinton	D-Likely	13	
-WA	0.27242909	Washington	Wash.	2016-washington-president-trump-vs-clinton	D-Solid	12	
-WV	0.408556493	West Virginia	W.Va.	2016-west-virginia-president-trump-vs-clinton	R-Solid	5	
-WI	0.508409487	Wisconsin	Wis.	2016-wisconsin-president-trump-vs-clinton	D-Lean	10	
-WY	0.325882246	Wyoming	Wyo.	2016-wyoming-president-trump-vs-clinton	R-Solid	3	
+state_code	state_name	state_abbreviation	pollster_slug	n_electoral_votes	cook_rating	split_cook_ratings_by_cd
+AL	Alabama	Ala.	2016-alabama-president-trump-vs-clinton	9	R-Solid	
+AK	Alaska	Alaska	2016-alaska-president-trump-vs-clinton	3	R-Solid	
+AZ	Arizona	Ariz.	2016-arizona-president-trump-vs-clinton	11	R-Lean	
+AR	Arkansas	Ark.	2016-arkansas-president-trump-vs-clinton	6	R-Solid	
+CA	California	Calif.	2016-california-presidential-general-election-trump-vs-clinton	55	D-Solid	
+CO	Colorado	Colo.	2016-colorado-president-trump-vs-clinton	9	D-Lean	
+CT	Connecticut	Conn.	2016-connecticut-president-trump-vs-clinton	7	D-Solid	
+DE	Delaware	Del.	2016-delaware-president-trump-vs-clinton	3	D-Solid	
+DC	Dist. of Columbia	D.C.		3	D-Solid	
+FL	Florida	Fla.	2016-florida-presidential-general-election-trump-vs-clinton	29	Toss Up	
+GA	Georgia	Ga.	2016-georgia-president-trump-vs-clinton	16	R-Lean	
+HI	Hawaii	Hawaii	2016-hawaii-president-trump-vs-clinton	4	D-Solid	
+ID	Idaho	Idaho	2016-idaho-president-trump-vs-clinton	4	R-Solid	
+IL	Illinois	Ill.	2016-illinois-president-trump-vs-clinton	20	D-Solid	
+IN	Indiana	Ind.	2016-indiana-president-trump-vs-clinton	11	R-Likely	
+IA	Iowa	Iowa	2016-iowa-president-trump-vs-clinton	6	R-Lean	
+KS	Kansas	Kans.	2016-kansas-president-trump-vs-clinton	6	R-Solid	
+KY	Kentucky	Ky.	2016-kentucky-president-trump-vs-clinton	8	R-Solid	
+LA	Louisiana	La.	2016-louisiana-president-trump-vs-clinton	8	R-Solid	
+ME	Maine	Maine	2016-maine-president-trump-vs-clinton	4	D-Likely	D-Solid,R-Lean
+MD	Maryland	Md.	2016-maryland-president-trump-vs-clinton	10	D-Solid	
+MA	Massachusetts	Mass.	2016-massachusetts-president-trump-vs-clinton	11	D-Solid	
+MI	Michigan	Mich.	2016-michigan-president-trump-vs-clinton	16	D-Lean	
+MN	Minnesota	Minn.	2016-minnesota-president-trump-vs-clinton	10	D-Likely	
+MS	Mississippi	Miss.	2016-mississippi-president-trump-vs-clinton	6	R-Solid	
+MO	Missouri	Mo.	2016-missouri-president-trump-vs-clinton	10	R-Likely	
+MT	Montana	Mont.	2016-montana-president-trump-vs-clinton	3	R-Solid	
+NE	Nebraska	Nebr.	2016-nebraska-president-trump-vs-clinton	5	R-Solid	R-Solid,Toss Up,R-Solid
+NV	Nevada	Nev.	2016-nevada-president-trump-vs-clinton	6	Toss Up	
+NH	New Hampshire	N.H.	2016-new-hampshire-president-trump-vs-clinton	4	D-Lean	
+NJ	New Jersey	N.J.	2016-new-jersey-president-trump-vs-clinton	14	D-Solid	
+NM	New Mexico	N.M.	2016-new-mexico-president-trump-vs-clinton	5	D-Solid	
+NY	New York	N.Y.	2016-new-york-president-trump-vs-clinton	29	D-Solid	
+NC	North Carolina	N.C.	2016-north-carolina-president-trump-vs-clinton	15	Toss Up	
+ND	North Dakota	N.D.	2016-north-dakota-president-trump-vs-clinton	3	R-Solid	
+OH	Ohio	Ohio	2016-ohio-president-trump-vs-clinton	18	Toss Up	
+OK	Oklahoma	Okla.	2016-oklahoma-president-trump-vs-clinton	7	R-Solid	
+OR	Oregon	Ore.	2016-oregon-president-trump-vs-clinton	7	D-Solid	
+PA	Pennsylvania	Pa.	2016-pennsylvania-president-trump-vs-clinton	20	D-Lean	
+RI	Rhode Island	R.I.	2016-rhode-island-president-trump-vs-clinton	4	D-Solid	
+SC	South Carolina	S.C.	2016-south-carolina-president-trump-vs-clinton	9	R-Solid	
+SD	South Dakota	S.D.	2016-south-dakota-president-trump-vs-clinton	3	R-Solid	
+TN	Tennessee	Tenn.	2016-tennessee-president-trump-vs-clinton	11	R-Solid	
+TX	Texas	Tex.	2016-texas-president-trump-vs-clinton	38	R-Solid	
+UT	Utah	Utah	2016-utah-president-trump-vs-clinton	6	R-Likely	
+VT	Vermont	Vt.	2016-vermont-president-trump-vs-clinton	3	D-Solid	
+VA	Virginia	Va.	2016-virginia-president-trump-vs-clinton	13	D-Likely	
+WA	Washington	Wash.	2016-washington-president-trump-vs-clinton	12	D-Solid	
+WV	West Virginia	W.Va.	2016-west-virginia-president-trump-vs-clinton	5	R-Solid	
+WI	Wisconsin	Wis.	2016-wisconsin-president-trump-vs-clinton	10	D-Lean	
+WY	Wyoming	Wyo.	2016-wyoming-president-trump-vs-clinton	3	R-Solid	

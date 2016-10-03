@@ -34,6 +34,10 @@ nav {
     white-space: nowrap;
     width: 4.5rem; // didn't calculate this one -- scraped it from the page
 
+    @media (max-width: 300px) {
+          margin-left: 45%;
+    }
+
     button {
       margin-right: .5rem;
     }
@@ -51,6 +55,15 @@ nav {
     width: 100%;
     font-family: $header-font-family;
     text-transform: uppercase;
+
+    @media (max-width: 380px) {
+    font-size: 1rem;
+    padding: 1.5rem .2rem;
+    }
+
+    @media (max-width: 300px) {
+    display: none;
+    }
 
     .dem { color: $strong-dem; }
     .gop { color: $strong-gop; }

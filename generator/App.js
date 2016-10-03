@@ -17,6 +17,7 @@ class App {
 
   build() {
     const asset_config = read_config('assets')
+    asset_config.base_path = this.config.base_path
     const asset_compiler = new AssetCompiler(asset_config)
     asset_compiler.build_all()
 
