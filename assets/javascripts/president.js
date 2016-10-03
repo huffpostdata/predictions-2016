@@ -1,11 +1,6 @@
 function formatHumanNumber(n) {
-  if (n < 1000) {
-    return String(n);
-  } else if (n < 1000000) {
-    return Math.floor(n / 1000) + ',' + (n % 1000);
-  } else {
-    return Math.floor(n / 1000000) + ',' + Math.floor((n % 1000000) / 1000) + ',' + (n % 1000);
-  }
+  return n.toFixed(0)
+        .replace(/(\d)(?=(\d{3})+$)/g, '$1,');
 }
 
 function handle_hover_on_vote_counts() {
