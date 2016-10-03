@@ -21,6 +21,7 @@
     "node-sass": "^3.5.3"
   },
   "devDependencies": {
+    "canvas": "^1.5.0",
     "chokidar": "^1.4.3",
     "compression": "^1.6.1",
     "express": "^4.13.4",

@@ -41,8 +41,14 @@ module.exports = class PageCompiler {
   render(key, object, data) {
     const template_key = object.template || key
 
-    const context = new PageContext(this, data)
-    const body = this.render_template(template_key, context)
+    let body
+
+    if (Buffer.isBuffer(data.model)) {
+      body = data.model
+    } else {
+      const context = new PageContext(this, data)
+      body = this.render_template(template_key, context)
+    }
 
     return {
       body: body,

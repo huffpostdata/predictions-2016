@@ -62,3 +62,7 @@ mobile-ad:
 
 mobile-ad-test:
   path: mobile-ad-test
+
+tiny-mobile-ad.png:
+  model: tiny_mobile_ad
+  content-type: image/png

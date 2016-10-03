@@ -1,5 +1,6 @@
 'use strict'
 
+const fs = require('fs')
 const moment = require('moment-timezone')
 
 const read_config = require('../generator/read_config')
@@ -89,5 +90,7 @@ module.exports = class Database {
       senate_seat_counts: this.senate.seat_counts,
       president_vote_counts: this.president.vote_counts
     }
+
+    this.tiny_mobile_ad = fs.readFileSync(`${__dirname}/../tiny-mobile-ad/output/${this.president.vote_counts.percent_clinton.toFixed(0)}.png`)
   }
 }
