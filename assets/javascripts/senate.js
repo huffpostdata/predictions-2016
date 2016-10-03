@@ -147,7 +147,7 @@ function tie_expanded_senate_races_to_hash() {
   }
 
   function on_scroll() {
-    on_scroll_or_resize_update_hash();
+    on_scroll_or_resize_update_inputs();
   }
 
   function reset_details_widths() {
@@ -165,10 +165,10 @@ function tie_expanded_senate_races_to_hash() {
     affix(null);
     reset_details_widths();
     reset_scroll_anchor_positions();
-    on_scroll_or_resize_update_hash();
+    on_scroll_or_resize_update_inputs();
   }
 
-  function on_scroll_or_resize_update_hash() {
+  function on_scroll_or_resize_update_inputs() {
     if (!is_desktop) return;
 
     // binary-search for first visible anchor
@@ -196,7 +196,6 @@ function tie_expanded_senate_races_to_hash() {
     if (scroll_anchor) {
       var input = scroll_anchor.parentNode.querySelector('input.expand');
       input.checked = true;
-      window.location.hash = '#expand-states:' + input.getAttribute('data-state-code');
 
       var li = input.parentNode;
       affix(li);
