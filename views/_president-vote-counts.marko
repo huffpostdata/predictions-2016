@@ -11,7 +11,7 @@ var vote_counts=data.model.vote_counts
     - (Historically, a few so-called <a href="https://en.wikipedia.org/wiki/Faithless_elector">faithless electors</a> have voted against popular opinion. They never changed the outcome of an election, so we don’t model them.)
 
   p
-    - We simulated a Nov. 8 election ${vote_counts.n_millions.toFixed(1)} million times using our <a href="#state-by-state-averages">state-by-state averages</a>. In <strong>${vote_counts.n_clinton_millions.toFixed(1)} million</strong> simulations, Hillary Clinton ended up with at least 270 electoral votes. Therefore, we say Clinton has a <strong>${vote_counts.percent_clinton.toFixed(1)} percent</strong> chance of becoming president.
+    - We simulated a Nov. 8 election ${vote_counts.n_millions.toFixed(0)} million times using our <a href="#state-by-state-averages">state-by-state averages</a>. In <strong>${vote_counts.n_clinton_millions.toFixed(1)} million</strong> simulations, Hillary Clinton ended up with at least 270 electoral votes. Therefore, we say Clinton has a <strong>${vote_counts.percent_clinton.toFixed(1)} percent</strong> chance of becoming president.
 
   .container
     .y-axis
