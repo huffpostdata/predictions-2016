@@ -164,7 +164,7 @@ changes.
 Most code changes don't change the model, and we don't want to wait hours before
 they show up online. So you can use this hack:
 
-On the server, run write this to `/opt/predictions-2016/.git/hooks/post-receive`:
+On the server, run this to `/opt/predictions-2016/.git/hooks/post-receive`:
 
 ```
 #!/bin/sh
