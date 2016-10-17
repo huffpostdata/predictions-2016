@@ -139,7 +139,7 @@ footer {
     .bar { background: $strong-gop; }
     strong { color: $strong-gop; }
     h4, strong { right: $image-size + .5rem; }
-    &::before { background-image: asset-url('digest', 'images/trump-bust.jpg'); }
+    &::before { right: 0; background-image: asset-url('digest', 'images/trump-bust.jpg'); }
   }
 
   .tie {
