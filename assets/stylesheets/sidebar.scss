@@ -23,6 +23,7 @@ h1, h2, h3, h4 {
   font-family: $header-font-family;
   text-transform: uppercase;
   margin: 0;
+  line-height: 1;
 }
 
 h1 {
@@ -37,7 +38,6 @@ h1 {
 h2 {
   font-size: 1.7rem;
   margin-top: 1rem;
-  border-bottom: 1px solid $very-very-muted-color;
 }
 
 h3 {
@@ -50,9 +50,11 @@ h1, h2, h3, h4, p, a {
 }
 
 p {
-  margin: 1rem auto;
-  line-height: 1.2rem;
+  margin: .5rem auto 1rem auto;
+  line-height: 1.2;
   max-width: 17rem;
+  font-size: .85rem;
+  color: $muted-color;
 }
 
 a {
@@ -60,18 +62,13 @@ a {
   text-decoration: underline;
 }
 
-body>a {
+footer, body>a {
   display: block;
   font-size: .7rem;
   text-transform: uppercase;
   margin: .5rem 0 0;
-}
-
-footer {
-  font-size: .85rem;
-  margin: 1rem 0 0;
-  font-style: italic;
   color: $muted-color;
+  text-align: center;
 }
 
 .president-summary {
@@ -339,114 +336,4 @@ h2.senate {
   .prob-dem .percent { background: $strong-dem; }
   .prob-tie .percent { background: $toss-up; }
   .prob-gop .percent { background: $strong-gop; }
-}
-
-.senate-races {
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li {
-    display: -webkit-flex;
-    display: flex;
-    &>* { -webkit-flex: 0 0 auto; flex: 0 0 auto; }
-
-    height: 2rem;
-    line-height: 2rem;
-  }
-
-  .legend {
-    margin: .75rem 0 0 $state-width;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: .6rem;
-    line-height: 1;
-
-    .label {
-      color: $muted-color;
-    }
-
-    .chances {
-      margin-top: .5rem;
-      display: -webkit-flex;
-      display: flex;
-      // Easy to position: the word "Chance" is bigger than "Dem" or "GOP", so Dem/GOP have same width
-      &>* { -webkit-flex: 1 1 auto; flex: 1 1 auto; }
-      -webkit-align-items: flex-end;
-      align-items: flex-end;
-      font-weight: bold;
-      line-height: .8rem;
-    }
-
-  }
-
-  .state-name {
-    font-family: $header-font-family;
-    font-weight: bold;
-    width: $state-width;
-  }
-
-  .bar {
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-    position: relative;
-    margin-left: .5rem;
-    margin-right: .5rem;
-
-    .border {
-      position: absolute;
-      z-index: 1;
-      top: 0;
-      height: 100%;
-      left: 50%;
-      margin-left: -.5px;
-      border-left: 1px solid $border-color;
-    }
-
-    &::before, &::after {
-      content: '';
-      display: block;
-      position: absolute;
-      width: 50%;
-      top: 30%;
-      height: 40%;
-    }
-
-    &::before {
-      background-color: $background-dem;
-      left: 0;
-    }
-
-    &::after {
-      background-color: $background-gop;
-      right: 0;
-    }
-
-    .marker {
-      position: absolute;
-      top: .4rem;
-      box-sizing: border-box;
-      height: 1.2rem;
-      margin-left: -.6rem;
-      width: 1.2rem;
-      border: 2px solid $background;
-      border-radius: .6rem;
-      z-index: 1;
-    }
-  }
-
-  .prob-dem, .prob-gop {
-    font-size: .8rem;
-    width: 2rem;
-    color: $very-muted-color;
-    text-align: center;
-  }
-
-  .lean-dem .marker { background: $strong-dem; }
-  .lean-gop .marker { background: $strong-gop; }
-  .toss-up .marker { background: $toss-up; }
-  .lean-dem .prob-dem, .toss-up .prob-dem { color: $strong-dem; font-weight: bold; }
-  .lean-gop .prob-gop, .toss-up .prob-gop { color: $strong-gop; font-weight: bold; }
 }

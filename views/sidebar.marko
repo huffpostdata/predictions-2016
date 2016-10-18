@@ -51,7 +51,6 @@ html lang="en"
 
     h2.senate - Senate Forecast
     p - Percent of simulations where each party gains control of Senate
-    a href="${data.path_to('senate')}" target="_blank" - How we calculate this »
 
     .senate-summary
       var seat_counts=data.model.senate_seat_counts
@@ -68,27 +67,7 @@ html lang="en"
         .name - GOP
         .icon
         .percent - ${Math.round(100 * seat_counts.prob_gop)}%
-
-    .senate-races
-      h3 - States Most Likely To Flip
-
-      .legend
-        .label - Win Probability
-        .chances
-          .lean-dem - Dem<br>Chance
-          .lean-tie - 50/50
-          .lean-gop - GOP<br>Chance
-
-      ul.senate-races
-        li.${race.lean_html_class} for(race in data.model.senate_races)
-          .state-name - ${race.state_name}
-          .prob-dem - ${Math.round(100 * race.dem_win_prob_with_undecided)}%
-          .bar
-            .border
-            .marker style="left: ${100 - 100 * race.dem_win_prob_with_undecided}%"
-          .prob-gop - ${Math.round(100 * (1 - race.dem_win_prob_with_undecided))}%
-
-    a href="${data.path_to('senate')}" target="_blank" - See all states »
+    a href="${data.path_to('senate')}" target="_blank" - How we calculate this »
 
     footer - Poll data from <a target="_blank" href="//elections.huffingtonpost.com/pollster">HuffPost Pollster</a>
 
