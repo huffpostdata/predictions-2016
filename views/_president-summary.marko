@@ -17,4 +17,7 @@ var vote_counts=data.model.vote_counts
         strong - ${vote_counts.percent_trump.toFixed(1)}%
   p.photo-credit - Photos: Getty
 
+  if(data.model.races.all.find(function(r) { return r.state_code == 'TN'; }).diff_xibar > 0)
+    p.error style="margin: 1rem; font-size; .95rem; color: red;" - <strong style="font-size: inherit;">Correction</strong>: Due to a temporary data entry error, Tennessee is appearing in Clinton's column. That's obviously incorrect. The error has been fixed and the forecast will update in a few hours. <small>(The overall probability of a Clinton win shouldn't change much.)</small>
+
   p.tie - In the event of a tie, the newly elected House of Representatives will elect the president, and the newly elected Senate will elect the vice president.
