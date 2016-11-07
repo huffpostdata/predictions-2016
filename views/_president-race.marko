@@ -67,6 +67,10 @@ li.${race.lean_html_class} data-state-code="${race.state_code}"
                         time datetime="${race.curve.updated_at.toISOString()}" - ${data.helpers.format_date(race.curve.updated_at)}
                         strong.spread - $!{race.curve.today_spread_html()}
 
+          <!-- emergency correction, 2016-11-07 -->
+          if(race.state_code == 'TN' && race.diff_xibar > 0)
+            p.error style="margin: 1rem; font-size; .95rem; color: red;" - <strong>Correction</strong>: this estimate is incorrect. The Pollster database temporarily reported an incorrect value for the latest SurveyMonkey poll. We are recalculating the estimate now and will update this page shortly.
+
           ol.calculations
             li - These simulations show a margin of error of <strong>${race.diff_margin.toFixed(1)} percentage points</strong>, 19 times out of 20.
             li - They also suggest voters are <span class="undecided">${race.undecided_xibar_100.toFixed(1)}% undecided</span>. We added <strong>${race.undecided_margin_boost.toFixed(1)} points</strong> to our state-level and national margins of error.
