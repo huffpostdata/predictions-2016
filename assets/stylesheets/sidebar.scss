@@ -261,6 +261,12 @@ h2.senate {
     text-transform: uppercase;
   }
 
+  .prob-gop .name {
+    // election-day HACK: "GOP" doesn't have enough room, and our predictions
+    // aren't going to change because this is election day. Hide "GOP".
+    visibility: hidden;
+  }
+
   .icon {
     height: 2rem;
     margin: .25rem 0;
