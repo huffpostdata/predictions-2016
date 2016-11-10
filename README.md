@@ -33,6 +33,8 @@ After the R script finishes, refresh the page to see the changes.
 | `forecast/senate-curves.tsv` | Prediction CSV for all states |
 | `forecast/senate-seat-counts.tsv` | Seat-count distribution CSV for senate |
 
+Full historical data: http://elections.huffingtonpost.com/2016/predictions/model-archives.tar.gz
+
 # Data pipeline
 
 Our R models crunch numbers for a long time. We save some data partway through.
